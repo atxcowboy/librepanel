@@ -1,76 +1,58 @@
-[![Froxlor-CI](https://github.com/Froxlor/Froxlor/actions/workflows/build-mariadb.yml/badge.svg?branch=main)](https://github.com/Froxlor/Froxlor/actions/workflows/build-mariadb.yml)
-[![Froxlor-CI](https://github.com/Froxlor/Froxlor/actions/workflows/build-mysql.yml/badge.svg?branch=main)](https://github.com/Froxlor/Froxlor/actions/workflows/build-mysql.yml)
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.froxlor.org)
+[![LibrePanel - Build (MariaDB)](https://github.com/atxcowboy/librepanel/actions/workflows/build-mariadb.yml/badge.svg?branch=main)](https://github.com/atxcowboy/librepanel/actions/workflows/build-mariadb.yml)
+[![LibrePanel - Build (MySQL)](https://github.com/atxcowboy/librepanel/actions/workflows/build-mysql.yml/badge.svg?branch=main)](https://github.com/atxcowboy/librepanel/actions/workflows/build-mysql.yml)
 
-# Froxlor
+# LibrePanel
 
-The server administration software for your needs.
-Developed by experienced server administrators, this panel simplifies the effort of managing your hosting platform.
+A modern, open-source hosting control panel, forked from Froxlor, and developed by the [Panomity GmbH](https://www.panomity.com). Its goal is to simplify the effort of managing your hosting platform while providing flexibility and transparency.
 
 ## Installation
 
 ### Fast install
-1. Ensure that your webserver serves /var/www/html
-2. Extract froxlor into /var/www/html
-3. Point your browser to http://[ip-of-webserver]/froxlor
-4. Follow the installer
-5. Login as administrator
+
+1. Ensure that your webserver serves `/var/www/html`.
+2. Extract LibrePanel into `/var/www/html` (for example into `/var/www/html/librepanel`).
+3. Point your browser to `http://[ip-of-webserver]/librepanel`.
+4. Follow the installer.
+5. Log in as administrator.
 6. Have fun!
 
-If you have chosen to do the configuration by hand during the installation, you have to complete some more steps:
+**Note:** If you choose manual configuration during installation, additional steps may be required:
 
-1. Adjust "System > Settings" according to your needs
-2. Choose your distribution under "System > Configuration"
-3. Follow the steps for your services
+1. Adjust **System > Settings** according to your needs.
+2. Choose your distribution under **System > Configuration**.
+3. Follow the steps for your services (web server, PHP, etc.).
 
 ### Detailed installation
-https://docs.froxlor.org/latest/general/installation/
 
-## Help
+Coming soon at [librepanel.com](https://librepanel.com/) (in development).  
+*(For reference to Froxlor’s docs, you may still look at [docs.froxlor.org](https://docs.froxlor.org/latest/general/installation/) until LibrePanel’s docs are fully available.)*
+
+## Help & Community
 
 You may find help in the following places:
 
-### Discord
+### GitHub
 
-The froxlor community discord server can be found here: https://discord.froxlor.org
+Issues and discussions can be found at our GitHub repository:  
+[https://github.com/atxcowboy/librepanel](https://github.com/atxcowboy/librepanel)
 
-### Forum
-
-The community is located on https://forum.froxlor.org/
-
-### Documentation
-
-The documentation may be found at https://docs.froxlor.org/
+*(Community forums, a dedicated Discord, or other support channels may be added as LibrePanel grows.)*
 
 ## License
 
-May be found in [COPYING](COPYING)
+LibrePanel is open-source software. See the [COPYING](COPYING) file for license details.
 
 ## Downloads
 
-### Tarball
-https://files.froxlor.org/releases/froxlor-latest.tar.gz [MD5](https://files.froxlor.org/releases/froxlor-latest.tar.gz.md5) [SHA1](https://files.froxlor.org/releases/froxlor-latest.tar.gz.sha1)
+*(As this is a new project/fork, official packages may still be in progress. Below is an example section for future reference.)*
 
-### Debian / Ubuntu repository
-
-[HowTo](https://docs.froxlor.org/latest/general/installation/apt-package.html)
-
-#### Debian
-
-```
-apt -y install apt-transport-https lsb-release ca-certificates curl gnupg
-curl -sSLo /usr/share/keyrings/deb.froxlor.org-froxlor.gpg https://deb.froxlor.org/froxlor.gpg
-sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.froxlor.org-froxlor.gpg] https://deb.froxlor.org/debian $(lsb_release -sc) main" > /etc/apt/sources.list.d/froxlor.list'
-```
-
-#### Ubuntu
-
-```
-apt -y install apt-transport-https lsb-release ca-certificates curl gnupg
-curl -sSLo /usr/share/keyrings/deb.froxlor.org-froxlor.gpg https://deb.froxlor.org/froxlor.gpg
-sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.froxlor.org-froxlor.gpg] https://deb.froxlor.org/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/froxlor.list'
-```
+- **Latest Tarball**  
+  *Coming soon at [librepanel.com](https://librepanel.com/downloads)*
+  
+- **Debian repository**  
+  *Planned for future release. Stay tuned!*
 
 ## Contributing
 
-[see here](.github/CONTRIBUTING.md)
+We welcome contributions! Check out our [CONTRIBUTING.md](.github/CONTRIBUTING.md) (to be updated) or open an issue/PR on GitHub.
+

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Mail;
+namespace LibrePanel\Cron\Mail;
 
 use Exception;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 
 class Rspamd
 {
@@ -38,9 +38,9 @@ class Rspamd
 
 	private string $frx_settings_file = "";
 
-	protected FroxlorLogger $logger;
+	protected LibrePanelLogger $logger;
 
-	public function __construct(FroxlorLogger $logger)
+	public function __construct(LibrePanelLogger $logger)
 	{
 		$this->logger = $logger;
 	}
@@ -51,7 +51,7 @@ class Rspamd
 	public function writeConfigs()
 	{
 		// tell the world what we are doing
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Task9 started - Rebuilding antispam configuration');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Task9 started - Rebuilding antispam configuration');
 
 		// get all email addresses
 		$antispam_stmt = Database::prepare("
@@ -61,17 +61,17 @@ class Rspamd
 		");
 		Database::pexecute($antispam_stmt);
 
-		$this->frx_settings_file = "#\n# Automatically generated file by froxlor. DO NOT EDIT manually as it will be overwritten!\n# Generated: " . date('d.m.Y H:i') . "\n#\n\n";
+		$this->frx_settings_file = "#\n# Automatically generated file by librepanel. DO NOT EDIT manually as it will be overwritten!\n# Generated: " . date('d.m.Y H:i') . "\n#\n\n";
 		while ($email = $antispam_stmt->fetch(\PDO::FETCH_ASSOC)) {
 			$this->generateEmailAddrConfig($email);
 		}
 
 		$antispam_cfg_file = FileDir::makeCorrectFile(Settings::Get('antispam.config_file'));
 		file_put_contents($antispam_cfg_file, $this->frx_settings_file);
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, $antispam_cfg_file . ' written');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, $antispam_cfg_file . ' written');
 		$this->writeDkimConfigs();
 		$this->reloadDaemon();
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Task9 finished');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Task9 finished');
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Rspamd
 	 */
 	public function writeDkimConfigs()
 	{
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Writing DKIM key-pairs');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Writing DKIM key-pairs');
 
 		$dkim_selector_map = "";
 		$result_domains_stmt = Database::query("
@@ -105,7 +105,7 @@ class Rspamd
 				$privkey_filename = FileDir::makeCorrectFile('/var/lib/rspamd/dkim/' . $domain['domain'] . '.dkim' . $domain['dkim_id'] . '.key');
 				$pubkey_filename = FileDir::makeCorrectFile('/var/lib/rspamd/dkim/' . $domain['domain'] . '.dkim' . $domain['dkim_id'] . '.txt');
 
-				$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Generating DKIM keys for "' . $domain['domain'] . '"');
+				$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Generating DKIM keys for "' . $domain['domain'] . '"');
 				$rsret = [];
 				FileDir::safe_exec(
 					'rspamadm dkim_keygen -d ' . escapeshellarg($domain['domain']) . ' -k ' . $privkey_filename . ' -s dkim' . $domain['dkim_id'] . ' -b ' . Settings::Get('antispam.dkim_keylength') . ' -o plain > ' . escapeshellarg($pubkey_filename),
@@ -113,7 +113,7 @@ class Rspamd
 					['>']
 				);
 				if (!file_exists($privkey_filename) || !file_exists($pubkey_filename)) {
-					$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'DKIM Keypair for domain "' . $domain['domain'] . '" was not generated successfully.');
+					$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'DKIM Keypair for domain "' . $domain['domain'] . '" was not generated successfully.');
 					continue;
 				}
 				$domain['dkim_privkey'] = file_get_contents($privkey_filename);
@@ -162,7 +162,7 @@ class Rspamd
 
 	private function generateEmailAddrConfig(array $email): void
 	{
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Generating antispam config for ' . $email['email']);
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Generating antispam config for ' . $email['email']);
 
 		$email['spam_tag_level'] = floatval($email['spam_tag_level']);
 		$email['spam_kill_level'] = $email['spam_kill_level'] == -1 ? "null" : floatval($email['spam_kill_level']);
@@ -210,9 +210,9 @@ class Rspamd
 		$cmdStatus = 1;
 		FileDir::safe_exec(escapeshellcmd($cmd), $cmdStatus);
 		if ($cmdStatus === 0) {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Antispam daemon reloaded');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Antispam daemon reloaded');
 		} else {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'Error while running `' . $cmd . '`: exit code (' . $cmdStatus . ') - please check your system logs');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'Error while running `' . $cmd . '`: exit code (' . $cmdStatus . ') - please check your system logs');
 		}
 	}
 }

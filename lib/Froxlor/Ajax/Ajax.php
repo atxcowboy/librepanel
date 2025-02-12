@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,31 +16,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Ajax;
+namespace LibrePanel\Ajax;
 
 use Exception;
 use DateTime;
-use Froxlor\Config\ConfigDisplay;
-use Froxlor\Config\ConfigParser;
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Http\HttpClient;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
-use Froxlor\UI\Listing;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Config\ConfigDisplay;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Http\HttpClient;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
+use LibrePanel\UI\Listing;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 
 class Ajax
 {
@@ -54,7 +54,7 @@ class Ajax
 	public function __construct()
 	{
 		$this->action = Request::any('action');
-		$this->theme = Request::any('theme', 'Froxlor');
+		$this->theme = Request::any('theme', 'LibrePanel');
 
 		UI::sendHeaders();
 		UI::sendSslHeaders();
@@ -109,7 +109,7 @@ class Ajax
 	{
 		UI::initTwig();
 
-		$feed = "https://inside.froxlor.org/news/";
+		$feed = "https://inside.librepanel.org/news/";
 
 		// Set custom feed if provided
 		$role = Request::get('role');
@@ -179,13 +179,13 @@ class Ajax
 	public function errorResponse($message, int $response_code = 500)
 	{
 		header("Content-Type: application/json");
-		return \Froxlor\Api\Response::jsonErrorResponse($message, $response_code);
+		return \LibrePanel\Api\Response::jsonErrorResponse($message, $response_code);
 	}
 
 	public function jsonResponse($value, int $response_code = 200)
 	{
 		header("Content-Type: application/json");
-		return \Froxlor\Api\Response::jsonResponse($value, $response_code);
+		return \LibrePanel\Api\Response::jsonResponse($value, $response_code);
 	}
 
 	private function getUpdateCheck()
@@ -194,10 +194,10 @@ class Ajax
 
 		try {
 			$force = Request::get('force', 0);
-			$json_result = \Froxlor\Api\Commands\Froxlor::getLocal($this->userinfo, ['force' => $force])->checkUpdate();
+			$json_result = \LibrePanel\Api\Commands\LibrePanel::getLocal($this->userinfo, ['force' => $force])->checkUpdate();
 			$result = json_decode($json_result, true)['data'];
-			$result['full_version'] = Froxlor::getFullVersion();
-			$result['dbversion'] = Froxlor::DBVERSION;
+			$result['full_version'] = LibrePanel::getFullVersion();
+			$result['dbversion'] = LibrePanel::DBVERSION;
 			$uc_data = Update::getUpdateCheckData();
 			$result['last_update_check'] = $uc_data['ts'];
 			$result['channel'] = Settings::Get('system.update_channel');
@@ -325,7 +325,7 @@ class Ajax
 			$daemon = Request::post('daemon', "");
 
 			// validate distribution config-xml exists
-			$config_dir = FileDir::makeCorrectDir(Froxlor::getInstallDir() . '/lib/configfiles/');
+			$config_dir = FileDir::makeCorrectDir(LibrePanel::getInstallDir() . '/lib/configfiles/');
 			if (!file_exists($config_dir . "/" . $distribution . ".xml")) {
 				return $this->errorResponse("Unknown distribution. The configuration could not be found.");
 			}
@@ -367,7 +367,7 @@ class Ajax
 			unset($params['action']);
 			unset($params['finish']);
 			unset($params['csrf_token']);
-			header('Content-disposition: attachment; filename=froxlor-config-' . time() . '.json');
+			header('Content-disposition: attachment; filename=librepanel-config-' . time() . '.json');
 			return $this->jsonResponse($params);
 		}
 		return $this->errorResponse('Not allowed', 403);

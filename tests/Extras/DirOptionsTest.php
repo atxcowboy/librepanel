@@ -1,15 +1,15 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\DirOptions;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\DirOptions;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\DirOptions
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\DirOptions
  */
 class DirOptionsTest extends TestCase
 {

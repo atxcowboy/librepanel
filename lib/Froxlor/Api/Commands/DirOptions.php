@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -144,7 +144,7 @@ class DirOptions extends ApiCommand implements ResourceEntity
 		];
 		Database::pexecute($stmt, $params, true, true);
 		$id = Database::lastInsertId();
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added directory-option for '" . $userpath . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added directory-option for '" . $userpath . "'");
 		Cronjob::inserttask(TaskId::REBUILD_VHOST);
 
 		$result = $this->apiCall('DirOptions.get', [
@@ -247,7 +247,7 @@ class DirOptions extends ApiCommand implements ResourceEntity
 		$params['id'] = $id;
 		$result = Database::pexecute_first($result_stmt, $params, true, true);
 		if ($result) {
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get directory options for '" . $result['path'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get directory options for '" . $result['path'] . "'");
 			return $this->response($result);
 		}
 		$key = "id #" . $id;
@@ -331,7 +331,7 @@ class DirOptions extends ApiCommand implements ResourceEntity
 				"id" => $id
 			];
 			Database::pexecute($stmt, $params, true, true);
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] edited directory options for '" . str_replace($customer['documentroot'], '/', $result['path']) . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] edited directory options for '" . str_replace($customer['documentroot'], '/', $result['path']) . "'");
 		}
 
 		$result = $this->apiCall('DirOptions.get', [
@@ -379,7 +379,7 @@ class DirOptions extends ApiCommand implements ResourceEntity
 		while ($row = $result_stmt->fetch(PDO::FETCH_ASSOC)) {
 			$result[] = $row;
 		}
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] list directory-options");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] list directory-options");
 		return $this->response([
 			'count' => count($result),
 			'list' => $result
@@ -461,12 +461,12 @@ class DirOptions extends ApiCommand implements ResourceEntity
 			// remove symlink
 			if (file_exists($perlsymlink)) {
 				FileDir::safe_exec('rm -f ' . escapeshellarg($perlsymlink));
-				$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_DEBUG, "[API] deleted suexecworkaround symlink '" . $perlsymlink . "'");
+				$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_DEBUG, "[API] deleted suexecworkaround symlink '" . $perlsymlink . "'");
 			}
 			// remove folder in suexec-path
 			if (file_exists($suexecpath)) {
 				FileDir::safe_exec('rm -rf ' . escapeshellarg($suexecpath));
-				$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_DEBUG, "[API] deleted suexecworkaround path '" . $suexecpath . "'");
+				$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_DEBUG, "[API] deleted suexecworkaround path '" . $suexecpath . "'");
 			}
 		}
 		$stmt = Database::prepare("
@@ -478,7 +478,7 @@ class DirOptions extends ApiCommand implements ResourceEntity
 			"customerid" => $customer_data['customerid'],
 			"id" => $id
 		], true, true);
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] deleted directory-option for '" . str_replace($customer_data['documentroot'], '/', $result['path']) . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] deleted directory-option for '" . str_replace($customer_data['documentroot'], '/', $result['path']) . "'");
 		Cronjob::inserttask(TaskId::REBUILD_VHOST);
 		return $this->response($result);
 	}

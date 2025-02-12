@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="froxlor" default="build">
+<project name="librepanel" default="build">
 
 	<!-- Use this when the tools are managed by Composer in ${basedir}/vendor/bin -->
 	<property name="pdepend" value="${basedir}/vendor/bin/pdepend" />
@@ -75,7 +75,7 @@
 		<apply executable="php" taskname="lint">
 			<arg value="-l" />
 
-			<fileset dir="${basedir}/lib/Froxlor">
+			<fileset dir="${basedir}/lib/LibrePanel">
 				<include name="**/*.php" />
 				<modified />
 			</fileset>
@@ -93,7 +93,7 @@
 		description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
 		<exec executable="${phploc}" taskname="phploc">
 			<arg value="--count-tests" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg path="${basedir}/tests" />
 		</exec>
 
@@ -108,7 +108,7 @@
 			<arg path="${basedir}/build/logs/phploc.csv" />
 			<arg value="--log-xml" />
 			<arg path="${basedir}/build/logs/phploc.xml" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg path="${basedir}/tests" />
 		</exec>
 
@@ -123,7 +123,7 @@
 				value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
 			<arg
 				value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 		</exec>
 
 		<property name="pdepend.done" value="true" />
@@ -132,7 +132,7 @@
 	<target name="phpmd" unless="phpmd.done"
 		description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
 		<exec executable="${phpmd}" taskname="phpmd">
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg value="text" />
 			<arg path="${basedir}/phpmd.xml" />
 		</exec>
@@ -143,7 +143,7 @@
 	<target name="phpmd-ci" unless="phpmd.done" depends="prepare"
 		description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
 		<exec executable="${phpmd}" taskname="phpmd">
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg value="xml" />
 			<arg path="${basedir}/phpmd.xml" />
 			<arg value="--reportfile" />
@@ -158,7 +158,7 @@
 		<exec executable="${phpcs}" taskname="phpcs">
 			<arg value="--standard=${basedir}/phpcs.xml" />
 			<arg value="--extensions=php" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg path="${basedir}/tests" />
 		</exec>
 
@@ -173,7 +173,7 @@
 				value="--report-file=${basedir}/build/logs/checkstyle-standard.xml" />
 			<arg value="--standard=${basedir}/phpcs.xml" />
 			<arg value="--extensions=php" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 			<arg path="${basedir}/tests" />
 		</exec>
 
@@ -185,7 +185,7 @@
 		description="Find php violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
 		<exec executable="${phpcs}" taskname="phpcompat">
 			<arg
-				line="--standard=PHPCompatibility --runtime-set testVersion 5.6 ${basedir}/lib/Froxlor ${basedir}/tests" />
+				line="--standard=PHPCompatibility --runtime-set testVersion 5.6 ${basedir}/lib/LibrePanel ${basedir}/tests" />
 		</exec>
 
 		<property name="phpcompat.done" value="true" />
@@ -197,7 +197,7 @@
 		<exec executable="${phpcs}" output="/dev/null"
 			taskname="phpcompat">
 			<arg
-				line="--standard=PHPCompatibility --runtime-set testVersion 5.6 --report=checkstyle --report-file=${basedir}/build/logs/checkstyle-compat.xml ${basedir}/lib/Froxlor ${basedir}/tests" />
+				line="--standard=PHPCompatibility --runtime-set testVersion 5.6 --report=checkstyle --report-file=${basedir}/build/logs/checkstyle-compat.xml ${basedir}/lib/LibrePanel ${basedir}/tests" />
 		</exec>
 
 		<property name="phpcompat.done" value="true" />
@@ -206,7 +206,7 @@
 	<target name="phpcpd" unless="phpcpd.done"
 		description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
 		<exec executable="${phpcpd}" taskname="phpcpd">
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 		</exec>
 
 		<property name="phpcpd.done" value="true" />
@@ -217,7 +217,7 @@
 		<exec executable="${phpcpd}" taskname="phpcpd">
 			<arg value="--log-pmd" />
 			<arg path="${basedir}/build/logs/pmd-cpd.xml" />
-			<arg path="${basedir}/lib/Froxlor" />
+			<arg path="${basedir}/lib/LibrePanel" />
 		</exec>
 
 		<property name="phpcpd.done" value="true" />
@@ -243,7 +243,7 @@
 			<arg value="--configuration" />
 			<arg path="${basedir}/phpunit.xml" />
 			<arg value="--testsuite" />
-			<arg value="froxlor" />
+			<arg value="librepanel" />
 			<arg value="--prepend" />
 			<arg path="${basedir}/tests/xdebug-filter.php" />
 		</exec>
@@ -259,7 +259,7 @@
 			<arg value="--configuration" />
 			<arg path="${basedir}/phpunit.xml" />
 			<arg value="--testsuite" />
-			<arg value="froxlor" />
+			<arg value="librepanel" />
 			<arg value="--no-coverage" />
 		</exec>
 

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Install\Update;
+use LibrePanel\Install\Update;
 
 $preconfig = [
 	'title' => '0.10.x updates',
@@ -33,7 +33,7 @@ $return = [];
 
 if (Update::versionInUpdate($current_db_version, '202004140')) {
 	$has_preconfig = true;
-	$description = 'Froxlor can now optionally validate the dns entries of domains that request Lets Encrypt certificates to reduce dns-related problems (e.g. freshly registered domain or updated a-record).';
+	$description = 'LibrePanel can now optionally validate the dns entries of domains that request Lets Encrypt certificates to reduce dns-related problems (e.g. freshly registered domain or updated a-record).';
 	$question = '<strong>Validate DNS of domains when using Lets Encrypt</strong>';
 	$return['system_le_domain_dnscheck'] = [
 		'type' => 'checkbox',

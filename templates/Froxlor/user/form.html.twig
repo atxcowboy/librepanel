@@ -1,4 +1,4 @@
-{% extends "Froxlor/userarea.html.twig" %}
+{% extends "LibrePanel/userarea.html.twig" %}
 
 {% block heading %}
 
@@ -46,7 +46,7 @@
 
 {% block content %}
 
-	{% import "Froxlor/form/form.html.twig" as form %}
+	{% import "LibrePanel/form/form.html.twig" as form %}
 
 	{{ form.form(formdata, formaction|default('#'), formdata.title, editid|default(''), false, idprefix|default('')) }}
 

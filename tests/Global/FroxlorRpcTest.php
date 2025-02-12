@@ -1,21 +1,21 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Database\Database;
-use Froxlor\Api\FroxlorRPC;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\LibrePanelRPC;
 
 /**
  *
- * @covers \Froxlor\Api\FroxlorRPC
+ * @covers \LibrePanel\Api\LibrePanelRPC
  */
-class FroxlorRpcTest extends TestCase
+class LibrePanelRpcTest extends TestCase
 {
 
 	public function testNoCredentialsGiven()
 	{
 		$this->expectExceptionCode(401);
 		$this->expectExceptionMessage("Unauthenticated. Please provide api user credentials.");
-		FroxlorRPC::validateRequest("");
+		LibrePanelRPC::validateRequest("");
 	}
 
 	public function testValidateAuthInvalid()
@@ -24,7 +24,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Invalid authorization credentials");
 		$_SERVER['PHP_AUTH_USER'] = 'asd';
 		$_SERVER['PHP_AUTH_PW'] = 'asd';
-		FroxlorRPC::validateRequest("");
+		LibrePanelRPC::validateRequest("");
 	}
 
 	public function testValidateAuthAllowFromInvalid()
@@ -35,7 +35,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Invalid authorization credentials");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest("");
+		LibrePanelRPC::validateRequest("");
 	}
 
 	public function testEmptyRequestBody()
@@ -45,7 +45,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Empty request body.");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest("");
+		LibrePanelRPC::validateRequest("");
 	}
 
 	public function testInvalidJSON()
@@ -54,7 +54,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Invalid JSON Format.");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest('asd');
+		LibrePanelRPC::validateRequest('asd');
 	}
 
 	public function testNoCommandGiven()
@@ -63,7 +63,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Please provide a command.");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest(json_encode(['cmd' => 'test']));
+		LibrePanelRPC::validateRequest(json_encode(['cmd' => 'test']));
 	}
 
 	public function testInvalidCommandGiven()
@@ -72,7 +72,7 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("The given command is invalid.");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest(json_encode(['command' => 'Froxlor']));
+		LibrePanelRPC::validateRequest(json_encode(['command' => 'LibrePanel']));
 	}
 
 	public function testUnknownCommandGiven()
@@ -81,15 +81,15 @@ class FroxlorRpcTest extends TestCase
 		$this->expectExceptionMessage("Unknown command");
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		FroxlorRPC::validateRequest(json_encode(['command' => 'SomeModule.cmd']));
+		LibrePanelRPC::validateRequest(json_encode(['command' => 'SomeModule.cmd']));
 	}
 
 	public function testCommandOk()
 	{
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = 'test';
-		$result = FroxlorRPC::validateRequest(json_encode(['command' => 'Froxlor.listFunctions']));
-		$this->assertEquals('Froxlor', $result['command']['class']);
+		$result = LibrePanelRPC::validateRequest(json_encode(['command' => 'LibrePanel.listFunctions']));
+		$this->assertEquals('LibrePanel', $result['command']['class']);
 		$this->assertEquals('listFunctions', $result['command']['method']);
 		$this->assertNull($result['params']);
 	}
@@ -98,7 +98,7 @@ class FroxlorRpcTest extends TestCase
 	{
 		$key = $this->generateKey();
 		$request = array(
-			'command' => 'Froxlor.listFunctions',
+			'command' => 'LibrePanel.listFunctions',
 			'params' => $key
 		);
 		$json_request = json_encode($request);
@@ -119,10 +119,10 @@ class FroxlorRpcTest extends TestCase
 			"countryName" => "DE",
 			"stateOrProvinceName" => "Hessen",
 			"localityName" => "Frankfurt",
-			"organizationName" => "Froxlor",
+			"organizationName" => "LibrePanel",
 			"organizationalUnitName" => "Testing",
 			"commonName" => "test2.local",
-			"emailAddress" => "team@froxlor.org"
+			"emailAddress" => "team@librepanel.org"
 		);
 
 		// generate key pair

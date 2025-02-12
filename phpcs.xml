@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="PSR2-Froxlor">
+<ruleset name="PSR2-LibrePanel">
 	<description>PSR2 with tabs instead of spaces.</description>
 	<config name="show_progress" value="1" />
 	<config name="ignore_warnings_on_exit" value="1" />
@@ -21,11 +21,11 @@
 	</rule>
 
 	<rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
-		<exclude-pattern>lib/Froxlor/Settings.php</exclude-pattern>
-		<exclude-pattern>lib/Froxlor/FileDir.php</exclude-pattern>
-		<exclude-pattern>lib/Froxlor/Validate/Validate.php</exclude-pattern>
-		<exclude-pattern>lib/Froxlor/Database/Database.php</exclude-pattern>
-		<exclude-pattern>lib/Froxlor/UI/Response.php</exclude-pattern>
+		<exclude-pattern>lib/LibrePanel/Settings.php</exclude-pattern>
+		<exclude-pattern>lib/LibrePanel/FileDir.php</exclude-pattern>
+		<exclude-pattern>lib/LibrePanel/Validate/Validate.php</exclude-pattern>
+		<exclude-pattern>lib/LibrePanel/Database/Database.php</exclude-pattern>
+		<exclude-pattern>lib/LibrePanel/UI/Response.php</exclude-pattern>
 	</rule>
 
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">

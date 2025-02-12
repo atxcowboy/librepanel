@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Database;
+namespace LibrePanel\Database;
 
 use Exception;
-use Froxlor\Database\Manager\DbManagerMySQL;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Database\Manager\DbManagerMySQL;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 use PDO;
 
 /**
@@ -42,7 +42,7 @@ class DbManager
 {
 
 	/**
-	 * FroxlorLogger object
+	 * LibrePanelLogger object
 	 *
 	 * @var object
 	 */
@@ -58,7 +58,7 @@ class DbManager
 	/**
 	 * main constructor
 	 *
-	 * @param FroxlorLogger $log
+	 * @param LibrePanelLogger $log
 	 */
 	public function __construct($log = null)
 	{
@@ -125,7 +125,7 @@ class DbManager
 			// require privileged access for target db-server
 			Database::needRoot(true, $dbserver['dbserver'], false);
 
-			$dbm = new DbManager(FroxlorLogger::getInstanceOf());
+			$dbm = new DbManager(LibrePanelLogger::getInstanceOf());
 			$users = $dbm->getManager()->getAllSqlUsers(false);
 
 			foreach ($databases[$dbserver['dbserver']] as $username) {
@@ -183,10 +183,10 @@ class DbManager
 			// get all usernames from db-manager
 			$allsqlusers = $this->getManager()->getAllSqlUsers();
 			// generate random username
-			$username = $loginname . '-' . substr(Froxlor::genSessionId(), 20, 3);
+			$username = $loginname . '-' . substr(LibrePanel::genSessionId(), 20, 3);
 			// check whether it exists on the DBMS
 			while (in_array($username, $allsqlusers)) {
-				$username = $loginname . '-' . substr(Froxlor::genSessionId(), 20, 3);
+				$username = $loginname . '-' . substr(LibrePanel::genSessionId(), 20, 3);
 			}
 		} elseif (strtoupper(Settings::Get('customer.mysqlprefix')) == 'DBNAME') {
 			$username = $loginname;
@@ -213,7 +213,7 @@ class DbManager
 		$this->getManager()->flushPrivileges();
 		Database::needRoot(false);
 
-		$this->log->logAction(FroxlorLogger::USR_ACTION, LOG_INFO, "created database '" . $username . "'");
+		$this->log->logAction(LibrePanelLogger::USR_ACTION, LOG_INFO, "created database '" . $username . "'");
 
 		return $username;
 	}

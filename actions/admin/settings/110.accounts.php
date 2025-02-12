@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -166,7 +166,7 @@ return [
 					'type' => 'text',
 					'default' => '',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkUsername'
 					],
 					'save_method' => 'storeSettingField'
@@ -178,7 +178,7 @@ return [
 					'type' => 'text',
 					'default' => '',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkUsername'
 					],
 					'save_method' => 'storeSettingField'
@@ -237,7 +237,7 @@ return [
 					'varname' => 'exportenabled',
 					'type' => 'checkbox',
 					'default' => false,
-					'cronmodule' => 'froxlor/export',
+					'cronmodule' => 'librepanel/export',
 					'save_method' => 'storeSettingField'
 				],
 				'system_createstdsubdom_default' => [

@@ -1,15 +1,15 @@
 <?php
 
-// include FroxlorAPI helper class
-require __DIR__ . '/FroxlorAPI.php';
+// include LibrePanelAPI helper class
+require __DIR__ . '/LibrePanelAPI.php';
 
-// create object of FroxlorAPI with URL, apikey and apisecret
-$fapi = new FroxlorAPI('http://127.0.0.1/api.php', 'your-api-key', 'your-api-secret');
+// create object of LibrePanelAPI with URL, apikey and apisecret
+$fapi = new LibrePanelAPI('http://127.0.0.1/api.php', 'your-api-key', 'your-api-secret');
 
 // customer data
 $data = [
 	'new_loginname' => 'test',
-	'email' => 'test@froxlor.org',
+	'email' => 'test@librepanel.org',
 	'firstname' => 'Test',
 	'name' => 'Testman',
 	'customernumber' => 1337,

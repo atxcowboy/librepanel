@@ -1,6 +1,6 @@
 <?php
 
-namespace Froxlor\Install;
+namespace LibrePanel\Install;
 
 class Requirements
 {

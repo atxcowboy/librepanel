@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Check;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Check;
+use LibrePanel\Validate\Validate;
 
 /**
  * @since 0.10.0
@@ -277,7 +277,7 @@ class EmailAccounts extends ApiCommand implements ResourceEntity
 				}
 
 				if ($_mailerror) {
-					$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
+					$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
 					Response::standardError('errorsendingmail', $email_full, true);
 				}
 
@@ -309,7 +309,7 @@ class EmailAccounts extends ApiCommand implements ResourceEntity
 					}
 
 					if ($_mailerror) {
-						$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
+						$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
 						Response::standardError([
 							'errorsendingmail'
 						], $alternative_email, true);
@@ -319,7 +319,7 @@ class EmailAccounts extends ApiCommand implements ResourceEntity
 				}
 			}
 
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added email account for '" . $result['email_full'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added email account for '" . $result['email_full'] . "'");
 			$result = $this->apiCall('Emails.get', [
 				'emailaddr' => $result['email_full']
 			]);
@@ -468,7 +468,7 @@ class EmailAccounts extends ApiCommand implements ResourceEntity
 			Admins::increaseUsage($customer['adminid'], 'email_quota_used', '', ($quota - $result['quota']));
 		}
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated email account '" . $result['email_full'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated email account '" . $result['email_full'] . "'");
 		$result = $this->apiCall('Emails.get', [
 			'emailaddr' => $result['email_full']
 		]);
@@ -574,7 +574,7 @@ class EmailAccounts extends ApiCommand implements ResourceEntity
 		Customers::decreaseUsage($customer['customerid'], 'email_accounts_used');
 		Customers::decreaseUsage($customer['customerid'], 'email_quota_used', '', $quota);
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_WARNING, "[API] deleted email account for '" . $result['email_full'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_WARNING, "[API] deleted email account for '" . $result['email_full'] . "'");
 		return $this->response($result);
 	}
 }

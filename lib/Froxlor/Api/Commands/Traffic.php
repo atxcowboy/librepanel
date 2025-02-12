@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
 use PDO;
 
 /**
@@ -166,7 +166,7 @@ class Traffic extends ApiCommand implements ResourceEntity
 			$row['mail'] *= 1024;
 			$result[] = $row;
 		}
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] list traffic");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] list traffic");
 		return $this->response([
 			'count' => count($result),
 			'list' => $result

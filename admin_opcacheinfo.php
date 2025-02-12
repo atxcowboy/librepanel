@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,13 +16,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
+ * @author     LibrePanel team <team@librepanel.org>
  * @author     Janos Muzsi <muzsij@hypernics.hu>
  * @author     Andrew Collington <andy@amnuts.com>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  *
  * Based on https://github.com/amnuts/opcache-gui, which is
  * licensed under the MIT licence, which can be viewed
@@ -32,16 +32,16 @@
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\FroxlorLogger;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
 
 if ($action == 'reset' && function_exists('opcache_reset') && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
 		opcache_reset();
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "reset OPcache");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "reset OPcache");
 		header('Location: ' . $linker->getLink([
 				'section' => 'opcacheinfo',
 				'page' => 'showinfo'
@@ -69,7 +69,7 @@ if (empty($ocEnabled)) {
 
 if ($page == 'showinfo' && $userinfo['change_serversettings'] == '1') {
 	$time = time();
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "viewed OPcache info");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "viewed OPcache info");
 
 	$opcache = (new \Amnuts\Opcache\Service())->getData();
 

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\System;
+namespace LibrePanel\Cron\System;
 
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\User;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\User;
 use PDO;
 
 class Extrausers
@@ -39,7 +39,7 @@ class Extrausers
 	{
 		// passwd
 		$passwd = '/var/lib/extrausers/passwd';
-		$sql = "SELECT customerid,username,'x' as password,uid,gid,'Froxlor User' as comment,homedir,shell, login_enabled FROM ftp_users ORDER BY uid, LENGTH(username) ASC";
+		$sql = "SELECT customerid,username,'x' as password,uid,gid,'LibrePanel User' as comment,homedir,shell, login_enabled FROM ftp_users ORDER BY uid, LENGTH(username) ASC";
 		$users_list = [];
 		self::generateFile($passwd, $sql, $cronlog, $users_list);
 
@@ -63,17 +63,17 @@ class Extrausers
 	private static function generateFile($file, $query, &$cronlog, &$result_list = null)
 	{
 		$type = basename($file);
-		$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Creating ' . $type . ' file');
+		$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Creating ' . $type . ' file');
 
 		if (!file_exists($file)) {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, $type . ' file does not yet exist');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, $type . ' file does not yet exist');
 			@mkdir(dirname($file), 0750, true);
 			touch($file);
 		}
 
 		$data_sel_stmt = Database::query($query);
 		$data_content = "";
-		$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Writing ' . $data_sel_stmt->rowCount() . ' entries to ' . $type . ' file');
+		$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Writing ' . $data_sel_stmt->rowCount() . ' entries to ' . $type . ' file');
 		while ($u = $data_sel_stmt->fetch(PDO::FETCH_ASSOC)) {
 			switch ($type) {
 				case 'passwd':
@@ -87,7 +87,7 @@ class Extrausers
 					if ($u['login_enabled'] != 'Y') {
 						$u['password'] = '*';
 						$u['shell'] = '/bin/false';
-						$u['comment'] = 'Locked Froxlor User';
+						$u['comment'] = 'Locked LibrePanel User';
 					}
 					$line = $u['username'] . ':' . $u['password'] . ':' . $u['uid'] . ':' . $u['gid'] . ':' . $u['comment'] . ':' . $u['homedir'] . ':' . $u['shell'] . PHP_EOL;
 					if (is_array($result_list)) {
@@ -105,21 +105,21 @@ class Extrausers
 		}
 
 		// check for local group to generate
-		if ($type == 'group' && Settings::Get('system.froxlorusergroup') != '') {
-			$guid = intval(Settings::Get('system.froxlorusergroup_gid'));
+		if ($type == 'group' && Settings::Get('system.librepanelusergroup') != '') {
+			$guid = intval(Settings::Get('system.librepanelusergroup_gid'));
 			if (empty($guid)) {
 				$guid = intval(Settings::Get('system.lastguid')) + 1;
 				Settings::Set('system.lastguid', $guid, true);
-				Settings::Set('system.froxlorusergroup_gid', $guid, true);
+				Settings::Set('system.librepanelusergroup_gid', $guid, true);
 			}
-			$line = Settings::Get('system.froxlorusergroup') . ':x:' . $guid . ':' . implode(',', $result_list) . PHP_EOL;
+			$line = Settings::Get('system.librepanelusergroup') . ':x:' . $guid . ':' . implode(',', $result_list) . PHP_EOL;
 			$data_content .= $line;
 		}
 
 		if (file_put_contents($file, $data_content) !== false) {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Succesfully wrote ' . $type . ' file');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Succesfully wrote ' . $type . ' file');
 		} else {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Error when writing ' . $type . ' file entries');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Error when writing ' . $type . ' file entries');
 		}
 	}
 

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +16,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor;
+namespace LibrePanel;
 
 use Exception;
-use Froxlor\Database\Database;
+use LibrePanel\Database\Database;
 use PDO;
 use PDOStatement;
 
@@ -135,7 +135,7 @@ class Settings
 			'display_php_errors' => false,
 		];
 
-		$configfile = Froxlor::getInstallDir() . '/lib/config.inc.php';
+		$configfile = LibrePanel::getInstallDir() . '/lib/config.inc.php';
 		if (@file_exists($configfile) && is_readable($configfile)) {
 			self::$conf = array_merge(self::$conf, include $configfile);
 		}

@@ -1,11 +1,11 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Cron\TaskId;
+use LibrePanel\Cron\TaskId;
 
 /**
  *
- * @covers \Froxlor\Cron\TaskId
+ * @covers \LibrePanel\Cron\TaskId
  */
 class TaskIDTest extends TestCase
 {
@@ -50,7 +50,7 @@ class TaskIDTest extends TestCase
 
 	public function testIdMappingCorrect() {
 		foreach($this->fixedids as $name => $expected) {
-			$result = constant("\Froxlor\Cron\TaskId::$name");
+			$result = constant("\LibrePanel\Cron\TaskId::$name");
 			$this->assertEquals( $expected, $result, "Task $name has bad mapping");
 		}
 	}

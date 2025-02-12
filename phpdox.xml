@@ -1,5 +1,5 @@
 <phpdox xmlns="http://xml.phpdox.net/config">
-	<project name="froxlor" source="${basedir}/lib/Froxlor"
+	<project name="librepanel" source="${basedir}/lib/LibrePanel"
 		workdir="${basedir}/build/phpdox">
 		<collector publiconly="true" backend="parser">
 			<include mask="*.php" />

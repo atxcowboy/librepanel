@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,15 +16,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Domain\Domain;
-use Froxlor\Settings;
+use LibrePanel\Domain\Domain;
+use LibrePanel\Settings;
 
 return [
 	'domain_edit' => [
@@ -122,19 +122,19 @@ return [
 						'visible' => (Settings::Get('system.bind_enable') == '0' && Settings::Get('spf.use_spf') == '1' && $result['isemaildomain'] == '1'),
 						'label' => lng('antispam.required_spf_dns'),
 						'type' => 'longtext',
-						'value' => (string)(new \Froxlor\Dns\DnsEntry('@', 'TXT', \Froxlor\Dns\Dns::encloseTXTContent(Settings::Get('spf.spf_entry'))))
+						'value' => (string)(new \LibrePanel\Dns\DnsEntry('@', 'TXT', \LibrePanel\Dns\Dns::encloseTXTContent(Settings::Get('spf.spf_entry'))))
 					],
 					'dmarc_entry' => [
 						'visible' => (Settings::Get('system.bind_enable') == '0' && Settings::Get('dmarc.use_dmarc') == '1' && $result['isemaildomain'] == '1'),
 						'label' => lng('antispam.required_dmarc_dns'),
 						'type' => 'longtext',
-						'value' => (string)(new \Froxlor\Dns\DnsEntry('_dmarc', 'TXT', \Froxlor\Dns\Dns::encloseTXTContent(Settings::Get('dmarc.dmarc_entry'))))
+						'value' => (string)(new \LibrePanel\Dns\DnsEntry('_dmarc', 'TXT', \LibrePanel\Dns\Dns::encloseTXTContent(Settings::Get('dmarc.dmarc_entry'))))
 					],
 					'dkim_entry' => [
 						'visible' => (Settings::Get('system.bind_enable') == '0' && Settings::Get('antispam.activated') == '1' && $result['dkim'] == '1' && $result['dkim_pubkey'] != ''),
 						'label' => lng('antispam.required_dkim_dns'),
 						'type' => 'longtext',
-						'value' => (string)(new \Froxlor\Dns\DnsEntry('dkim' . $result['dkim_id'] . '._domainkey', 'TXT', '"v=DKIM1; k=rsa; p='.trim($result['dkim_pubkey']).'"'))
+						'value' => (string)(new \LibrePanel\Dns\DnsEntry('dkim' . $result['dkim_id'] . '._domainkey', 'TXT', '"v=DKIM1; k=rsa; p='.trim($result['dkim_pubkey']).'"'))
 					],
 				]
 			],

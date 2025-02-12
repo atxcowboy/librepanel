@@ -1,8 +1,8 @@
-{% extends "Froxlor/base.html.twig" %}
+{% extends "LibrePanel/base.html.twig" %}
 
 {% block content %}
 	<div class="container max-w-lg flex align-content-center mt-5">
-		<img src="{{ basehref|default('') }}templates/Froxlor/assets/img/logo.png" class="mb-5" alt="{{ lng('install.slogan') }}"/>
+		<img src="{{ basehref|default('') }}templates/LibrePanel/assets/img/logo.png" class="mb-5" alt="{{ lng('install.slogan') }}"/>
 
 		{% if error is not null %}
 			<div class="alert alert-danger mb-4">{{ error }}</div>
@@ -45,7 +45,7 @@
 						<p class="lead">{{ section.description|raw }}</p>
 						<hr />
 
-						{% import "Froxlor/form/formfields.html.twig" as formfields %}
+						{% import "LibrePanel/form/formfields.html.twig" as formfields %}
 
 						{% for id, field in section.fields %}
 							{% if field.advanced is defined and field.advanced == true and extended == false %}

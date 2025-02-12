@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron;
+namespace LibrePanel\Cron;
 
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
 use PDO;
 
 class CronConfig
@@ -54,7 +54,7 @@ class CronConfig
 				// FreeBSD does not need a header as we are writing directly to the crontab
 				$cronfile = "\n";
 			} else {
-				$cronfile = "# automatically generated cron-configuration by froxlor\n";
+				$cronfile = "# automatically generated cron-configuration by librepanel\n";
 				$cronfile .= "# do not manually edit this file as it will be re-generated periodically.\n";
 				$cronfile .= "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\n#\n";
 			}
@@ -110,19 +110,19 @@ class CronConfig
 					}
 
 					// create entry-line
-					$cronfile .= "root " . $binpath . " " . FileDir::makeCorrectFile(Froxlor::getInstallDir() . "/bin/froxlor-cli") . " froxlor:cron " . escapeshellarg($row_cronentry['cronfile']) . " -q 1> /dev/null\n";
+					$cronfile .= "root " . $binpath . " " . FileDir::makeCorrectFile(LibrePanel::getInstallDir() . "/bin/librepanel-cli") . " librepanel:cron " . escapeshellarg($row_cronentry['cronfile']) . " -q 1> /dev/null\n";
 				}
 			}
 
 			// php sessionclean if enabled
 			if ((int)Settings::Get('phpfpm.enabled') == 1) {
 				$cronfile .= "# Look for and purge old sessions every 30 minutes" . PHP_EOL;
-				$cronfile .= "09,39 * * * * root " . $binpath . " " . FileDir::makeCorrectFile(Froxlor::getInstallDir() . "/bin/froxlor-cli") . " froxlor:php-sessionclean 1> /dev/null" . PHP_EOL;
+				$cronfile .= "09,39 * * * * root " . $binpath . " " . FileDir::makeCorrectFile(LibrePanel::getInstallDir() . "/bin/librepanel-cli") . " librepanel:php-sessionclean 1> /dev/null" . PHP_EOL;
 			}
 
 			if (FileDir::isFreeBSD()) {
 				// FreeBSD handles the cron-stuff in another way. We need to directly
-				// write to the crontab file as there is not cron.d/froxlor file
+				// write to the crontab file as there is not cron.d/librepanel file
 				// (settings for system.cronconfig should be set correctly of course)
 				$crontab = file_get_contents(Settings::Get("system.cronconfig"));
 
@@ -135,12 +135,12 @@ class CronConfig
 				$newcrontab = "";
 				foreach ($crontablines as $ctl) {
 					$ctl = trim($ctl);
-					if (!empty($ctl) && !preg_match("/(.*)froxlor\:cron(.*)/", $ctl)) {
+					if (!empty($ctl) && !preg_match("/(.*)librepanel\:cron(.*)/", $ctl)) {
 						$newcrontab .= $ctl . "\n";
 					}
 				}
 
-				// re-assemble old-content + new froxlor-content
+				// re-assemble old-content + new librepanel-content
 				$newcrontab .= $cronfile;
 
 				// now continue with writing the file

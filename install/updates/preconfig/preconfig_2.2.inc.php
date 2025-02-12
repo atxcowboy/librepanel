@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Install\Update;
+use LibrePanel\Install\Update;
 
 $preconfig = [
 	'title' => '2.2.x updates',
@@ -33,7 +33,7 @@ $return = [];
 
 if (Update::versionInUpdate($current_version, '2.2.0-dev1')) {
 	$has_preconfig = true;
-	$description = 'Froxlor now features antispam configurations using rspamd. Would you like to enable the antispam feature (required re-configuration of services)?<br><strong>ATTENTION:</strong> When not enabled and the former DomainKey feature was used, keep in mind that all existing domainkeys for all domain are being removed and the dkim-flag disabled for the domains.';
+	$description = 'LibrePanel now features antispam configurations using rspamd. Would you like to enable the antispam feature (required re-configuration of services)?<br><strong>ATTENTION:</strong> When not enabled and the former DomainKey feature was used, keep in mind that all existing domainkeys for all domain are being removed and the dkim-flag disabled for the domains.';
 	$question = '<strong>Enable antispam (recommended)</strong>&nbsp;';
 	$return['antispam_activated'] = [
 		'type' => 'checkbox',

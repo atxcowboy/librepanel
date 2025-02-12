@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,31 +16,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Ajax;
+namespace LibrePanel\Ajax;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Domains;
-use Froxlor\Api\Commands\EmailDomains;
-use Froxlor\Api\Commands\Emails;
-use Froxlor\Api\Commands\FpmDaemons;
-use Froxlor\Api\Commands\Ftps;
-use Froxlor\Api\Commands\HostingPlans;
-use Froxlor\Api\Commands\IpsAndPorts;
-use Froxlor\Api\Commands\Mysqls;
-use Froxlor\Api\Commands\PhpSettings;
-use Froxlor\Api\Commands\SubDomains;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\UI\Collection;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Domains;
+use LibrePanel\Api\Commands\EmailDomains;
+use LibrePanel\Api\Commands\Emails;
+use LibrePanel\Api\Commands\FpmDaemons;
+use LibrePanel\Api\Commands\Ftps;
+use LibrePanel\Api\Commands\HostingPlans;
+use LibrePanel\Api\Commands\IpsAndPorts;
+use LibrePanel\Api\Commands\Mysqls;
+use LibrePanel\Api\Commands\PhpSettings;
+use LibrePanel\Api\Commands\SubDomains;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Collection;
 
 class GlobalSearch
 {
@@ -62,7 +62,7 @@ class GlobalSearch
 						break;
 					}
 				}
-				$settings_data = PhpHelper::loadConfigArrayDir(Froxlor::getInstallDir() . '/actions/admin/settings/');
+				$settings_data = PhpHelper::loadConfigArrayDir(LibrePanel::getInstallDir() . '/actions/admin/settings/');
 				$results = [];
 				if (!isset($processed['settings'])) {
 					$processed['settings'] = [];
@@ -142,7 +142,7 @@ class GlobalSearch
 							],
 							'result_key' => 'loginname',
 							'result_format' => [
-								'title' => ['\\Froxlor\\User', 'getCorrectFullUserDetails'],
+								'title' => ['\\LibrePanel\\User', 'getCorrectFullUserDetails'],
 								'href' => 'admin_customers.php?page=customers&searchfield=c.loginname&searchtext='
 							]
 						],
@@ -156,7 +156,7 @@ class GlobalSearch
 							],
 							'result_key' => 'domain_ace',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'domain_ace',
 								'href' => 'admin_domains.php?page=domains&searchfield=d.domain_ace&searchtext='
 							]
@@ -172,7 +172,7 @@ class GlobalSearch
 							'result_key' => 'ip',
 							'result_groupkey' => 'ip',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'ip',
 								'href' => 'admin_ipsandports.php?page=ipsandports&searchfield=ip&searchtext='
 							]
@@ -186,7 +186,7 @@ class GlobalSearch
 							],
 							'result_key' => 'id',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'name',
 								'href' => 'admin_plans.php?page=overview&searchfield=id&searchtext='
 							]
@@ -201,7 +201,7 @@ class GlobalSearch
 							],
 							'result_key' => 'id',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'description',
 								'href' => 'admin_phpsettings.php?page=overview&searchfield=id&searchtext='
 							]
@@ -215,7 +215,7 @@ class GlobalSearch
 							],
 							'result_key' => 'id',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'description',
 								'href' => 'admin_phpsettings.php?page=fpmdaemons&searchfield=id&searchtext='
 							]
@@ -234,7 +234,7 @@ class GlobalSearch
 							],
 							'result_key' => 'loginname',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'name',
 								'href' => 'admin_admins.php?page=admins&searchfield=loginname&searchtext='
 							]
@@ -252,7 +252,7 @@ class GlobalSearch
 							],
 							'result_key' => 'domain_ace',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'domain_ace',
 								'href' => 'customer_domains.php?page=domains&searchfield=d.domain_ace&searchtext='
 							]
@@ -266,7 +266,7 @@ class GlobalSearch
 							],
 							'result_key' => 'email',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'email',
 								'href' => 'customer_email.php?page=email_domain&domainid={domainid}&searchfield=m.email&searchtext='
 							]
@@ -279,7 +279,7 @@ class GlobalSearch
 							],
 							'result_key' => 'domain',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'domain',
 								'href' => 'customer_email.php?page=emails&searchfield=d.domain&searchtext='
 							]
@@ -293,7 +293,7 @@ class GlobalSearch
 							],
 							'result_key' => 'databasename',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'databasename',
 								'href' => 'customer_mysql.php?page=mysqls&searchfield=databasename&searchtext='
 							]
@@ -307,7 +307,7 @@ class GlobalSearch
 							],
 							'result_key' => 'username',
 							'result_format' => [
-								'title' => ['\\Froxlor\\Ajax\\GlobalSearch', 'getFieldFromResult'],
+								'title' => ['\\LibrePanel\\Ajax\\GlobalSearch', 'getFieldFromResult'],
 								'title_args' => 'username',
 								'href' => 'customer_ftp.php?page=accounts&searchfield=username&searchtext='
 							]

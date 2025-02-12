@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,25 +16,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 
 /**
  * @since 0.10.0
@@ -121,7 +121,7 @@ class EmailForwarders extends ApiCommand implements ResourceEntity
 			// update customer usage
 			Customers::increaseUsage($customer['customerid'], 'email_forwarders_used');
 
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added email forwarder for '" . $result['email_full'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added email forwarder for '" . $result['email_full'] . "'");
 
 			$result = $this->apiCall('Emails.get', [
 				'emailaddr' => $result['email_full']
@@ -298,7 +298,7 @@ class EmailForwarders extends ApiCommand implements ResourceEntity
 			// update customer usage
 			Customers::decreaseUsage($customer['customerid'], 'email_forwarders_used');
 
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] deleted email forwarder for '" . $result['email_full'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] deleted email forwarder for '" . $result['email_full'] . "'");
 
 			$result = $this->apiCall('Emails.get', [
 				'emailaddr' => $result['email_full']

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,28 +16,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Database\IntegrityCheck;
-use Froxlor\FroxlorLogger;
-use Froxlor\Install\AutoUpdate;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
-use Froxlor\SImExporter;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\IntegrityCheck;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Install\AutoUpdate;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
+use LibrePanel\SImExporter;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\Validate\Validate;
 use PDO;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -48,13 +48,13 @@ use ReflectionMethod;
 /**
  * @since 0.10.0
  */
-class Froxlor extends ApiCommand
+class LibrePanel extends ApiCommand
 {
 
 	const UPDATE_CHECK_INTERVAL = 21600; // 6 hrs
 
 	/**
-	 * checks whether there is a newer version of froxlor available
+	 * checks whether there is a newer version of librepanel available
 	 *
 	 * @param bool $force optional, force live update-check
 	 *
@@ -73,7 +73,7 @@ class Froxlor extends ApiCommand
 
 			if (empty($uc_data) || empty($response) || $uc_data['ts'] + self::UPDATE_CHECK_INTERVAL < time() || $uc_data['channel'] != Settings::Get('system.update_channel') || $force_ucheck) {
 				// log our actions
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] checking for updates");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] checking for updates");
 
 				// check for new version
 				$aucheck = AutoUpdate::checkVersion();
@@ -133,7 +133,7 @@ class Froxlor extends ApiCommand
 	 * import settings
 	 *
 	 * @param string $json_str
-	 *            content of exported froxlor-settings json file
+	 *            content of exported librepanel-settings json file
 	 *
 	 * @access admin
 	 * @return string json-encoded bool
@@ -143,7 +143,7 @@ class Froxlor extends ApiCommand
 	{
 		if ($this->isAdmin() && $this->getUserDetail('change_serversettings')) {
 			$json_str = $this->getParam('json_str');
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "User " . $this->getUserDetail('loginname') . " imported settings");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "User " . $this->getUserDetail('loginname') . " imported settings");
 			try {
 				SImExporter::import($json_str);
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
@@ -170,7 +170,7 @@ class Froxlor extends ApiCommand
 	public function exportSettings()
 	{
 		if ($this->isAdmin() && $this->getUserDetail('change_serversettings')) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "User " . $this->getUserDetail('loginname') . " exported settings");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "User " . $this->getUserDetail('loginname') . " exported settings");
 			$json_export = SImExporter::export();
 			return $this->response($json_export);
 		}
@@ -249,14 +249,14 @@ class Froxlor extends ApiCommand
 			if (is_null($oldvalue)) {
 				throw new Exception("Setting '" . $setting . "' could not be found");
 			}
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] Changing setting '" . $setting . "' from '" . $oldvalue . "' to '" . $value . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] Changing setting '" . $setting . "' from '" . $oldvalue . "' to '" . $value . "'");
 			return $this->response(Settings::Set($setting, $value, true));
 		}
 		throw new Exception("Not allowed to execute given command.", 403);
 	}
 
 	/**
-	 * returns a random password based on froxlor settings for min-length, included characters, etc.
+	 * returns a random password based on librepanel settings for min-length, included characters, etc.
 	 *
 	 * @param int $length
 	 *            optional length of password, defaults to 0 (panel.password_min_length)
@@ -337,7 +337,7 @@ class Froxlor extends ApiCommand
 			]);
 
 			return $this->response([
-				'base' => 'https://' . Settings::Get('system.hostname') . '/' . (Settings::Get('system.froxlordirectlyviahostname') != 1 ? basename(\Froxlor\Froxlor::getInstallDir()) . '/' : ''),
+				'base' => 'https://' . Settings::Get('system.hostname') . '/' . (Settings::Get('system.librepaneldirectlyviahostname') != 1 ? basename(\LibrePanel\LibrePanel::getInstallDir()) . '/' : ''),
 				'uri' => 'index.php?action=ll&ln=' . $customer['loginname'] . '&h=' . $hash
 			]);
 		}
@@ -345,7 +345,7 @@ class Froxlor extends ApiCommand
 	}
 
 	/**
-	 * can be used to remotely run the integritiy checks froxlor implements
+	 * can be used to remotely run the integritiy checks librepanel implements
 	 *
 	 * @access admin
 	 * @return string
@@ -400,7 +400,7 @@ class Froxlor extends ApiCommand
 			}
 		} else {
 			// check all the modules
-			$path = \Froxlor\Froxlor::getInstallDir() . '/lib/Froxlor/Api/Commands/';
+			$path = \LibrePanel\LibrePanel::getInstallDir() . '/lib/LibrePanel/Api/Commands/';
 			// valid directory?
 			if (is_dir($path)) {
 				// create RecursiveIteratorIterator

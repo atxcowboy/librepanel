@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,29 +16,29 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -261,7 +261,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 					Customers::increaseUsage($customer['customerid'], 'ftp_lastaccountnumber');
 				}
 
-				$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added ftp-account '" . $username . " (" . $path . ")'");
+				$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added ftp-account '" . $username . " (" . $path . ")'");
 				Cronjob::inserttask(TaskId::CREATE_FTP);
 
 				if ($sendinfomail == 1) {
@@ -300,13 +300,13 @@ class Ftps extends ApiCommand implements ResourceEntity
 					}
 
 					if ($_mailerror) {
-						$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
+						$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
 						Response::standardError('errorsendingmail', $customer['email'], true);
 					}
 
 					$this->mailer()->clearAddresses();
 				}
-				$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added ftp-user '" . $username . "'");
+				$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added ftp-user '" . $username . "'");
 
 				$result = $this->apiCall('Ftps.get', [
 					'username' => $username
@@ -371,7 +371,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 		$params['idun'] = ($id <= 0 ? $username : $id);
 		$result = Database::pexecute_first($result_stmt, $params, true, true);
 		if ($result) {
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get ftp-user '" . $result['username'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get ftp-user '" . $result['username'] . "'");
 			return $this->response($result);
 		}
 		$key = ($id > 0 ? "id #" . $id : "username '" . $username . "'");
@@ -464,7 +464,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 				"id" => $id,
 				"password" => $cryptPassword
 			], true, true);
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-account password for '" . $result['username'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-account password for '" . $result['username'] . "'");
 		}
 
 		// path update?
@@ -482,7 +482,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 					"customerid" => $customer['customerid'],
 					"id" => $id
 				], true, true);
-				$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-account homdir for '" . $result['username'] . "'");
+				$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-account homdir for '" . $result['username'] . "'");
 			}
 		}
 		// it's the task for "new ftp" but that will
@@ -506,7 +506,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 		$result = $this->apiCall('Ftps.get', [
 			'username' => $result['username']
 		]);
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-user '" . $result['username'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated ftp-user '" . $result['username'] . "'");
 		return $this->response($result);
 	}
 
@@ -545,7 +545,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 		while ($row = $result_stmt->fetch(PDO::FETCH_ASSOC)) {
 			$result[] = $row;
 		}
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] list ftp-users");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] list ftp-users");
 		return $this->response([
 			'count' => count($result),
 			'list' => $result
@@ -682,7 +682,7 @@ class Ftps extends ApiCommand implements ResourceEntity
 		$resetaccnumber = ($customer_data['ftps_used'] == '1') ? " , `ftp_lastaccountnumber`='0'" : '';
 		Customers::decreaseUsage($customer_data['customerid'], 'ftps_used', $resetaccnumber);
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_WARNING, "[API] deleted ftp-user '" . $result['username'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_WARNING, "[API] deleted ftp-user '" . $result['username'] . "'");
 		return $this->response($result);
 	}
 }

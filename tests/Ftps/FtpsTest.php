@@ -1,18 +1,18 @@
 <?php
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Ftps;
-use Froxlor\Froxlor;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Ftps;
+use LibrePanel\LibrePanel;
 use PHPUnit\Framework\TestCase;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Admins
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Ftps
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Admins
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Ftps
  */
 class FtpsTest extends TestCase
 {
@@ -177,7 +177,7 @@ class FtpsTest extends TestCase
 
 		$customer_userdata['documentroot'] = sys_get_temp_dir() . '/';
 		@unlink($customer_userdata['documentroot'] . '/frx');
-		symlink(Froxlor::getInstallDir(), $customer_userdata['documentroot'] . '/frx');
+		symlink(LibrePanel::getInstallDir(), $customer_userdata['documentroot'] . '/frx');
 
 		$data = [
 			'ftp_password' => 'h4xXx0r',

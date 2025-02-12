@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +16,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\FileDir;
-use Froxlor\Install\AutoUpdate;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\FileDir;
+use LibrePanel\Install\AutoUpdate;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
 
 if ($page != 'error') {
 	// check for webupdate to be enabled
@@ -48,7 +48,7 @@ if ($page != 'error') {
 // display initial version check
 if ($page == 'overview') {
 	// log our actions
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "checking auto-update");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "checking auto-update");
 
 	// check for new version
 	try {
@@ -61,7 +61,7 @@ if ($page == 'overview') {
 
 		// anzeige über version-status mit ggfls. formular
 		// zum update schritt #1 -> download
-		$text = lng('admin.newerversionavailable') . ' ' . lng('admin.newerversiondetails', [AutoUpdate::getFromResult('version'), Froxlor::VERSION]);
+		$text = lng('admin.newerversionavailable') . ' ' . lng('admin.newerversiondetails', [AutoUpdate::getFromResult('version'), LibrePanel::VERSION]);
 
 		$upd_formfield = [
 			'updates' => [
@@ -133,8 +133,8 @@ elseif ($page == 'getdownload') {
 elseif ($page == 'extract') {
 	if (Request::post('send') == 'send') {
 		$toExtract = Request::post('archive');
-		$localArchive = FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/updates/' . $toExtract);
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "Extracting " . $localArchive . " to " . Froxlor::getInstallDir());
+		$localArchive = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/updates/' . $toExtract);
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "Extracting " . $localArchive . " to " . LibrePanel::getInstallDir());
 		$result = AutoUpdate::extractZip($localArchive);
 		if ($result > 0) {
 			// error
@@ -147,7 +147,7 @@ elseif ($page == 'extract') {
 		Response::redirectTo('admin_updates.php');
 	} else {
 		$toExtract = Request::get('archive');
-		$localArchive = FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/updates/' . $toExtract);
+		$localArchive = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/updates/' . $toExtract);
 	}
 
 	if (!file_exists($localArchive)) {
@@ -198,7 +198,7 @@ elseif ($page == 'error') {
 	// 2 = no Zlib
 	// 3 = custom version detected
 	// 4 = could not store archive to local hdd
-	// 5 = some weird value came from version.froxlor.org
+	// 5 = some weird value came from version.librepanel.org
 	// 6 = download without valid version
 	// 7 = local archive does not exist
 	// 8 = could not extract archive

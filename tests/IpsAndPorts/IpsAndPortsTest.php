@@ -1,15 +1,15 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\IpsAndPorts;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\IpsAndPorts;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\IpsAndPorts
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\IpsAndPorts
  */
 class IpsAndPortsTest extends TestCase
 {

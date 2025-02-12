@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\IPTools;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\IPTools;
 
 if (!defined('_CRON_UPDATE')) {
 	if (!defined('AREA') || (defined('AREA') && AREA != 'admin') || !isset($userinfo['loginname']) || (isset($userinfo['loginname']) && $userinfo['loginname'] == '')) {
@@ -38,7 +38,7 @@ if (!defined('_CRON_UPDATE')) {
 	}
 }
 
-if (Froxlor::isFroxlorVersion('0.9.40.1')) {
+if (LibrePanel::isLibrePanelVersion('0.9.40.1')) {
 	Update::showUpdateStep("Updating from 0.9.40.1 to 0.10.0-rc1", false);
 
 	Update::showUpdateStep("Adding new api keys table");
@@ -83,19 +83,19 @@ if (Froxlor::isFroxlorVersion('0.9.40.1')) {
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToVersion('0.10.0-rc1');
+	LibrePanel::updateToVersion('0.10.0-rc1');
 }
 
-if (Froxlor::isDatabaseVersion('201809280')) {
+if (LibrePanel::isDatabaseVersion('201809280')) {
 
 	Update::showUpdateStep("Adding dhparams-file setting");
 	Settings::AddNew("system.dhparams_file", '');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201811180');
+	LibrePanel::updateToDbVersion('201811180');
 }
 
-if (Froxlor::isDatabaseVersion('201811180')) {
+if (LibrePanel::isDatabaseVersion('201811180')) {
 
 	Update::showUpdateStep("Adding new settings for 2FA");
 	Settings::AddNew('2fa.enabled', '1');
@@ -111,68 +111,68 @@ if (Froxlor::isDatabaseVersion('201811180')) {
 	Database::query("ALTER TABLE `" . TABLE_PANEL_CUSTOMERS . "` ADD `data_2fa` varchar(500) NOT NULL default '' AFTER `type_2fa`;");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201811300');
+	LibrePanel::updateToDbVersion('201811300');
 }
 
-if (Froxlor::isDatabaseVersion('201811300')) {
+if (LibrePanel::isDatabaseVersion('201811300')) {
 
 	Update::showUpdateStep("Adding new logview-flag to customers");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_CUSTOMERS . "` ADD `logviewenabled` tinyint(1) NOT NULL default '0';");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201812010');
+	LibrePanel::updateToDbVersion('201812010');
 }
 
-if (Froxlor::isDatabaseVersion('201812010')) {
+if (LibrePanel::isDatabaseVersion('201812010')) {
 
 	Update::showUpdateStep("Adding new is_configured-flag");
 	// updated systems are already configured (most likely :P)
 	Settings::AddNew('panel.is_configured', '1');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201812100');
+	LibrePanel::updateToDbVersion('201812100');
 }
 
-if (Froxlor::isDatabaseVersion('201812100')) {
+if (LibrePanel::isDatabaseVersion('201812100')) {
 
 	Update::showUpdateStep("Adding fields writeaccesslog and writeerrorlog for domains");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `writeaccesslog` tinyint(1) NOT NULL default '1';");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `writeerrorlog` tinyint(1) NOT NULL default '1';");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201812180');
+	LibrePanel::updateToDbVersion('201812180');
 }
 
-if (Froxlor::isDatabaseVersion('201812180')) {
+if (LibrePanel::isDatabaseVersion('201812180')) {
 
 	Update::showUpdateStep("Updating cronjob table");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_CRONRUNS . "` ADD `cronclass` varchar(500) NOT NULL AFTER `cronfile`");
 	$upd_stmt = Database::prepare("UPDATE `" . TABLE_PANEL_CRONRUNS . "` SET `cronclass`  = :cc WHERE `cronfile` = :cf");
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\System\\TasksCron',
+		'cc' => '\\LibrePanel\\Cron\\System\\TasksCron',
 		'cf' => 'tasks'
 	));
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\Traffic\\TrafficCron',
+		'cc' => '\\LibrePanel\\Cron\\Traffic\\TrafficCron',
 		'cf' => 'traffic'
 	));
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\Traffic\\ReportsCron',
+		'cc' => '\\LibrePanel\\Cron\\Traffic\\ReportsCron',
 		'cf' => 'usage_report'
 	));
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\System\\MailboxsizeCron',
+		'cc' => '\\LibrePanel\\Cron\\System\\MailboxsizeCron',
 		'cf' => 'mailboxsize'
 	));
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\Http\\LetsEncrypt\\LetsEncrypt',
+		'cc' => '\\LibrePanel\\Cron\\Http\\LetsEncrypt\\LetsEncrypt',
 		'cf' => 'letsencrypt'
 	));
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\System\\BackupCron',
+		'cc' => '\\LibrePanel\\Cron\\System\\BackupCron',
 		'cf' => 'backup'
 	));
-	Database::query("DELETE FROM `" . TABLE_PANEL_CRONRUNS . "` WHERE `module` = 'froxlor/ticket'");
+	Database::query("DELETE FROM `" . TABLE_PANEL_CRONRUNS . "` WHERE `module` = 'librepanel/ticket'");
 	Update::lastStepStatus(0);
 
 	Update::showUpdateStep("Removing ticketsystem");
@@ -200,25 +200,25 @@ if (Froxlor::isDatabaseVersion('201812180')) {
 	));
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201812190');
+	LibrePanel::updateToDbVersion('201812190');
 }
 
-if (Froxlor::isDatabaseVersion('201812190')) {
+if (LibrePanel::isDatabaseVersion('201812190')) {
 
 	Update::showUpdateStep("Adding new webserver error-log-level setting");
-	Settings::AddNew('system.errorlog_level', (\Froxlor\Settings::Get('system.webserver') == 'nginx' ? 'error' : 'warn'));
+	Settings::AddNew('system.errorlog_level', (\LibrePanel\Settings::Get('system.webserver') == 'nginx' ? 'error' : 'warn'));
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201902120');
+	LibrePanel::updateToDbVersion('201902120');
 }
 
-if (Froxlor::isDatabaseVersion('201902120')) {
+if (LibrePanel::isDatabaseVersion('201902120')) {
 
 	Update::showUpdateStep("Adding new ECC / ECDSA setting for Let's Encrypt");
 	Settings::AddNew('system.leecc', '0');
 	$upd_stmt = Database::prepare("UPDATE `" . TABLE_PANEL_CRONRUNS . "` SET `cronclass`  = :cc WHERE `cronfile` = :cf");
 	Database::pexecute($upd_stmt, array(
-		'cc' => '\\Froxlor\\Cron\\Http\\LetsEncrypt\\AcmeSh',
+		'cc' => '\\LibrePanel\\Cron\\Http\\LetsEncrypt\\AcmeSh',
 		'cf' => 'letsencrypt'
 	));
 	Settings::Set('system.letsencryptkeysize', '4096', true);
@@ -235,8 +235,8 @@ if (Froxlor::isDatabaseVersion('201902120')) {
 		$domain_in = substr($domain_in, 0, -1);
 		Database::query("DELETE FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` WHERE `domainid` IN (" . $domain_in . ")");
 	}
-	// check for froxlor domain using let's encrypt
-	if (Settings::Get('system.le_froxlor_enabled') == 1) {
+	// check for librepanel domain using let's encrypt
+	if (Settings::Get('system.le_librepanel_enabled') == 1) {
 		Database::query("DELETE FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` WHERE `domainid` = '0'");
 	}
 	Update::lastStepStatus(0);
@@ -245,26 +245,26 @@ if (Froxlor::isDatabaseVersion('201902120')) {
 	Cronjob::inserttask('1');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201902170');
+	LibrePanel::updateToDbVersion('201902170');
 }
 
-if (Froxlor::isDatabaseVersion('201902170')) {
+if (LibrePanel::isDatabaseVersion('201902170')) {
 
-	Update::showUpdateStep("Adding new froxlor vhost domain alias setting");
-	Settings::AddNew('system.froxloraliases', "");
+	Update::showUpdateStep("Adding new librepanel vhost domain alias setting");
+	Settings::AddNew('system.librepanelaliases', "");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201902210');
+	LibrePanel::updateToDbVersion('201902210');
 }
 
-if (Froxlor::isDatabaseVersion('201902210')) {
+if (LibrePanel::isDatabaseVersion('201902210')) {
 
 	// set correct version for people that have tested 0.10.0 before
-	Froxlor::updateToVersion('0.10.0-rc1');
-	Froxlor::updateToDbVersion('201904100');
+	LibrePanel::updateToVersion('0.10.0-rc1');
+	LibrePanel::updateToDbVersion('201904100');
 }
 
-if (Froxlor::isDatabaseVersion('201904100')) {
+if (LibrePanel::isDatabaseVersion('201904100')) {
 
 	Update::showUpdateStep("Converting all MyISAM tables to InnoDB");
 	Database::needRoot(true);
@@ -276,25 +276,25 @@ if (Froxlor::isDatabaseVersion('201904100')) {
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201904250');
+	LibrePanel::updateToDbVersion('201904250');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.0-rc1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.0-rc1')) {
 	Update::showUpdateStep("Updating from 0.10.0-rc1 to 0.10.0-rc2", false);
-	Froxlor::updateToVersion('0.10.0-rc2');
+	LibrePanel::updateToVersion('0.10.0-rc2');
 }
 
-if (Froxlor::isDatabaseVersion('201904250')) {
+if (LibrePanel::isDatabaseVersion('201904250')) {
 
 	Update::showUpdateStep("Adding new settings for CAA");
 	Settings::AddNew('caa.caa_entry', '');
 	Settings::AddNew('system.dns_createcaaentry', 1);
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201907270');
+	LibrePanel::updateToDbVersion('201907270');
 }
 
-if (Froxlor::isDatabaseVersion('201907270')) {
+if (LibrePanel::isDatabaseVersion('201907270')) {
 
 	Update::showUpdateStep("Cleaning up old files");
 	$to_clean = array(
@@ -303,7 +303,7 @@ if (Froxlor::isDatabaseVersion('201907270')) {
 		"admin_tickets.php",
 		"customer_tickets.php",
 		"install/scripts/language-check.php",
-		"install/updates/froxlor/upgrade_syscp.inc.php",
+		"install/updates/librepanel/upgrade_syscp.inc.php",
 		"lib/classes",
 		"lib/configfiles/precise.xml",
 		"lib/cron_init.php",
@@ -322,7 +322,7 @@ if (Froxlor::isDatabaseVersion('201907270')) {
 	$exec_allowed = !in_array('exec', $disabled);
 	$del_list = "";
 	foreach ($to_clean as $filedir) {
-		$complete_filedir = Froxlor::getInstallDir() . $filedir;
+		$complete_filedir = LibrePanel::getInstallDir() . $filedir;
 		if (file_exists($complete_filedir)) {
 			if ($exec_allowed) {
 				FileDir::safe_exec("rm -rf " . escapeshellarg($complete_filedir));
@@ -342,48 +342,48 @@ if (Froxlor::isDatabaseVersion('201907270')) {
 		}
 	}
 
-	Froxlor::updateToDbVersion('201909150');
+	LibrePanel::updateToDbVersion('201909150');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.0-rc2')) {
+if (LibrePanel::isLibrePanelVersion('0.10.0-rc2')) {
 	Update::showUpdateStep("Updating from 0.10.0-rc2 to 0.10.0 final", false);
-	Froxlor::updateToVersion('0.10.0');
+	LibrePanel::updateToVersion('0.10.0');
 }
 
-if (Froxlor::isDatabaseVersion('201909150')) {
+if (LibrePanel::isDatabaseVersion('201909150')) {
 
 	Update::showUpdateStep("Adding TLSv1.3-cipherlist setting");
 	Settings::AddNew("system.tlsv13_cipher_list", '');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201910030');
+	LibrePanel::updateToDbVersion('201910030');
 }
 
-if (Froxlor::isDatabaseVersion('201910030')) {
+if (LibrePanel::isDatabaseVersion('201910030')) {
 
 	Update::showUpdateStep("Adding field api_allowed to admins and customers");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_ADMINS . "` ADD `api_allowed` tinyint(1) NOT NULL default '1';");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_CUSTOMERS . "` ADD `api_allowed` tinyint(1) NOT NULL default '1';");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201910090');
+	LibrePanel::updateToDbVersion('201910090');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.0')) {
+if (LibrePanel::isLibrePanelVersion('0.10.0')) {
 	Update::showUpdateStep("Updating from 0.10.0 to 0.10.1 final", false);
-	Froxlor::updateToVersion('0.10.1');
+	LibrePanel::updateToVersion('0.10.1');
 }
 
-if (Froxlor::isDatabaseVersion('201910090')) {
+if (LibrePanel::isDatabaseVersion('201910090')) {
 
 	Update::showUpdateStep("Adjusting Let's Encrypt API setting");
 	Settings::Set("system.leapiversion", '2');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201910110');
+	LibrePanel::updateToDbVersion('201910110');
 }
 
-if (Froxlor::isDatabaseVersion('201910110')) {
+if (LibrePanel::isDatabaseVersion('201910110')) {
 
 	Update::showUpdateStep("Adding new settings for ssl-vhost default content");
 	Settings::AddNew("system.default_sslvhostconf", '');
@@ -403,7 +403,7 @@ if (Froxlor::isDatabaseVersion('201910110')) {
 	Update::lastStepStatus(0);
 
 	// select all ips/ports with specialsettings and SSL enabled to include the specialsettings in the ssl-vhost
-	// because the former implementation included it and users might rely on that, see https://github.com/Froxlor/Froxlor/issues/727
+	// because the former implementation included it and users might rely on that, see https://github.com/LibrePanel/LibrePanel/issues/727
 	$sel_stmt = Database::prepare("SELECT * FROM `" . TABLE_PANEL_IPSANDPORTS . "` WHERE `specialsettings` <> '' AND `ssl` = '1'");
 	Database::pexecute($sel_stmt);
 	$upd_stmt = Database::prepare("UPDATE `" . TABLE_PANEL_IPSANDPORTS . "` SET `include_specialsettings` = '1' WHERE `id` = :id");
@@ -437,15 +437,15 @@ if (Froxlor::isDatabaseVersion('201910110')) {
 		Update::lastStepStatus(0);
 	}
 
-	Froxlor::updateToDbVersion('201910120');
+	LibrePanel::updateToDbVersion('201910120');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.1')) {
 	Update::showUpdateStep("Updating from 0.10.1 to 0.10.2", false);
-	Froxlor::updateToVersion('0.10.2');
+	LibrePanel::updateToVersion('0.10.2');
 }
 
-if (Froxlor::isDatabaseVersion('201910120')) {
+if (LibrePanel::isDatabaseVersion('201910120')) {
 
 	Update::showUpdateStep("Adding new TLS options to domains-table");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `override_tls` tinyint(1) DEFAULT '0' AFTER `writeerrorlog`;");
@@ -454,25 +454,25 @@ if (Froxlor::isDatabaseVersion('201910120')) {
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `tlsv13_cipher_list` text AFTER `ssl_cipher_list`;");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201910200');
+	LibrePanel::updateToDbVersion('201910200');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.2')) {
+if (LibrePanel::isLibrePanelVersion('0.10.2')) {
 	Update::showUpdateStep("Updating from 0.10.2 to 0.10.3", false);
-	Froxlor::updateToVersion('0.10.3');
+	LibrePanel::updateToVersion('0.10.3');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.3')) {
+if (LibrePanel::isLibrePanelVersion('0.10.3')) {
 	Update::showUpdateStep("Updating from 0.10.3 to 0.10.4", false);
-	Froxlor::updateToVersion('0.10.4');
+	LibrePanel::updateToVersion('0.10.4');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.4')) {
+if (LibrePanel::isLibrePanelVersion('0.10.4')) {
 	Update::showUpdateStep("Updating from 0.10.4 to 0.10.5", false);
-	Froxlor::updateToVersion('0.10.5');
+	LibrePanel::updateToVersion('0.10.5');
 }
 
-if (Froxlor::isDatabaseVersion('201910200')) {
+if (LibrePanel::isDatabaseVersion('201910200')) {
 
 	Update::showUpdateStep("Optimizing customer and admin table for size");
 	// ALTER TABLE `panel_customers` CHANGE `name` `name` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
@@ -489,75 +489,75 @@ if (Froxlor::isDatabaseVersion('201910200')) {
 	Database::query("ALTER TABLE `" . TABLE_PANEL_ADMINS . "` CHANGE `data_2fa` `data_2fa` varchar(25) NOT NULL default '';");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('201911130');
+	LibrePanel::updateToDbVersion('201911130');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.5')) {
+if (LibrePanel::isLibrePanelVersion('0.10.5')) {
 	Update::showUpdateStep("Updating from 0.10.5 to 0.10.6", false);
-	Froxlor::updateToVersion('0.10.6');
+	LibrePanel::updateToVersion('0.10.6');
 }
 
-if (Froxlor::isDatabaseVersion('201911130')) {
+if (LibrePanel::isDatabaseVersion('201911130')) {
 	Update::showUpdateStep("Adding new settings for domain edit form default values");
 	Settings::AddNew("system.apply_specialsettings_default", '1');
 	Settings::AddNew("system.apply_phpconfigs_default", '1');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('201911220');
+	LibrePanel::updateToDbVersion('201911220');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.6')) {
+if (LibrePanel::isLibrePanelVersion('0.10.6')) {
 	Update::showUpdateStep("Updating from 0.10.6 to 0.10.7", false);
-	Froxlor::updateToVersion('0.10.7');
+	LibrePanel::updateToVersion('0.10.7');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.7')) {
+if (LibrePanel::isLibrePanelVersion('0.10.7')) {
 	Update::showUpdateStep("Updating from 0.10.7 to 0.10.8", false);
-	Froxlor::updateToVersion('0.10.8');
+	LibrePanel::updateToVersion('0.10.8');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.8')) {
+if (LibrePanel::isLibrePanelVersion('0.10.8')) {
 	Update::showUpdateStep("Updating from 0.10.8 to 0.10.9", false);
-	Froxlor::updateToVersion('0.10.9');
+	LibrePanel::updateToVersion('0.10.9');
 }
 
-if (Froxlor::isDatabaseVersion('201911220')) {
+if (LibrePanel::isDatabaseVersion('201911220')) {
 	Update::showUpdateStep("Adding enhanced SSL control over domains");
 	// customer domains
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `ssl_enabled` tinyint(1) DEFAULT '1';");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `ssl_honorcipherorder` tinyint(1) DEFAULT '0' AFTER `ssl_enabled`;");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `ssl_sessiontickets` tinyint(1) DEFAULT '1' AFTER `ssl_honorcipherorder`;");
-	// as setting for froxlor vhost
+	// as setting for librepanel vhost
 	Settings::AddNew("system.honorcipherorder", '0');
 	Settings::AddNew("system.sessiontickets", '1');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('201912100');
+	LibrePanel::updateToDbVersion('201912100');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.9')) {
+if (LibrePanel::isLibrePanelVersion('0.10.9')) {
 	Update::showUpdateStep("Updating from 0.10.9 to 0.10.10", false);
-	Froxlor::updateToVersion('0.10.10');
+	LibrePanel::updateToVersion('0.10.10');
 }
 
-if (Froxlor::isDatabaseVersion('201912100')) {
+if (LibrePanel::isDatabaseVersion('201912100')) {
 	Update::showUpdateStep("Adding option to disable SSL sessiontickets for older systems");
 	Settings::AddNew("system.sessionticketsenabled", '1');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('201912310');
+	LibrePanel::updateToDbVersion('201912310');
 }
 
-if (Froxlor::isDatabaseVersion('201912310')) {
+if (LibrePanel::isDatabaseVersion('201912310')) {
 	Update::showUpdateStep("Adding custom phpfpm pool configuration field");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_FPMDAEMONS . "` ADD `custom_config` text AFTER `limit_extensions`;");
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('201912311');
+	LibrePanel::updateToDbVersion('201912311');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.10')) {
+if (LibrePanel::isLibrePanelVersion('0.10.10')) {
 	Update::showUpdateStep("Updating from 0.10.10 to 0.10.11", false);
-	Froxlor::updateToVersion('0.10.11');
+	LibrePanel::updateToVersion('0.10.11');
 }
 
-if (Froxlor::isDatabaseVersion('201912311')) {
+if (LibrePanel::isDatabaseVersion('201912311')) {
 	Update::showUpdateStep("Migrate logfiles_format setting");
 	$current_format = Settings::Set('system.logfiles_format');
 	if (!empty($current_format)) {
@@ -566,27 +566,27 @@ if (Froxlor::isDatabaseVersion('201912311')) {
 	} else {
 		Update::lastStepStatus(0, 'not needed');
 	}
-	Froxlor::updateToDbVersion('201912312');
+	LibrePanel::updateToDbVersion('201912312');
 }
 
-if (Froxlor::isDatabaseVersion('201912312')) {
+if (LibrePanel::isDatabaseVersion('201912312')) {
 	Update::showUpdateStep("Adding option change awstats LogFormat");
 	Settings::AddNew("system.awstats_logformat", '1');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('201912313');
+	LibrePanel::updateToDbVersion('201912313');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.11')) {
+if (LibrePanel::isLibrePanelVersion('0.10.11')) {
 	Update::showUpdateStep("Updating from 0.10.11 to 0.10.12", false);
-	Froxlor::updateToVersion('0.10.12');
+	LibrePanel::updateToVersion('0.10.12');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.12')) {
+if (LibrePanel::isLibrePanelVersion('0.10.12')) {
 	Update::showUpdateStep("Updating from 0.10.12 to 0.10.13", false);
-	Froxlor::updateToVersion('0.10.13');
+	LibrePanel::updateToVersion('0.10.13');
 }
 
-if (Froxlor::isDatabaseVersion('201912313')) {
+if (LibrePanel::isDatabaseVersion('201912313')) {
 	Update::showUpdateStep("Adding new field to domains table");
 	Database::query("ALTER TABLE `" . TABLE_PANEL_DOMAINS . "` ADD `domain_ace` varchar(255) NOT NULL default '' AFTER `domain`;");
 	Update::lastStepStatus(0);
@@ -595,7 +595,7 @@ if (Froxlor::isDatabaseVersion('201912313')) {
 	$upd_stmt = Database::prepare("UPDATE `" . TABLE_PANEL_DOMAINS . "` SET `domain_ace` = :ace WHERE `id` = :domainid");
 	$sel_stmt = Database::prepare("SELECT id, domain FROM `" . TABLE_PANEL_DOMAINS . "` ORDER BY id ASC");
 	Database::pexecute($sel_stmt);
-	$idna_convert = new \Froxlor\Idna\IdnaWrapper();
+	$idna_convert = new \LibrePanel\Idna\IdnaWrapper();
 	while ($domain = $sel_stmt->fetch(\PDO::FETCH_ASSOC)) {
 		Database::pexecute($upd_stmt, [
 			'ace' => $idna_convert->decode($domain['domain']),
@@ -604,35 +604,35 @@ if (Froxlor::isDatabaseVersion('201912313')) {
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202002290');
+	LibrePanel::updateToDbVersion('202002290');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.13')) {
+if (LibrePanel::isLibrePanelVersion('0.10.13')) {
 	Update::showUpdateStep("Updating from 0.10.13 to 0.10.14", false);
-	Froxlor::updateToVersion('0.10.14');
+	LibrePanel::updateToVersion('0.10.14');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.14')) {
+if (LibrePanel::isLibrePanelVersion('0.10.14')) {
 	Update::showUpdateStep("Updating from 0.10.14 to 0.10.15", false);
-	Froxlor::updateToVersion('0.10.15');
+	LibrePanel::updateToVersion('0.10.15');
 }
 
-if (Froxlor::isDatabaseVersion('202002290')) {
+if (LibrePanel::isDatabaseVersion('202002290')) {
 	Update::showUpdateStep("Adding new setting to validate DNS when using Let's Encrypt");
 	Database::query("DELETE FROM `" . TABLE_PANEL_SETTINGS . "` WHERE `settinggroup` = 'system' AND `varname` = 'disable_le_selfcheck'");
 	$le_domain_dnscheck = isset($_POST['system_le_domain_dnscheck']) ? (int) $_POST['system_le_domain_dnscheck'] : '1';
 	Settings::AddNew("system.le_domain_dnscheck", $le_domain_dnscheck);
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202004140');
+	LibrePanel::updateToDbVersion('202004140');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.15')) {
+if (LibrePanel::isLibrePanelVersion('0.10.15')) {
 	Update::showUpdateStep("Updating from 0.10.15 to 0.10.16", false);
-	Froxlor::updateToVersion('0.10.16');
+	LibrePanel::updateToVersion('0.10.16');
 }
 
-if (Froxlor::isDatabaseVersion('202004140')) {
+if (LibrePanel::isDatabaseVersion('202004140')) {
 
 	Update::showUpdateStep("Adding unique key on domainid field in domain ssl table");
 	// check for duplicate entries prior to set a unique key to avoid errors on update
@@ -646,25 +646,25 @@ if (Froxlor::isDatabaseVersion('202004140')) {
 	Database::query("ALTER TABLE `domain_ssl_settings` ADD UNIQUE(`domainid`)");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202005150');
+	LibrePanel::updateToDbVersion('202005150');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.16')) {
+if (LibrePanel::isLibrePanelVersion('0.10.16')) {
 	Update::showUpdateStep("Updating from 0.10.16 to 0.10.17", false);
-	Froxlor::updateToVersion('0.10.17');
+	LibrePanel::updateToVersion('0.10.17');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.17')) {
+if (LibrePanel::isLibrePanelVersion('0.10.17')) {
 	Update::showUpdateStep("Updating from 0.10.17 to 0.10.18", false);
-	Froxlor::updateToVersion('0.10.18');
+	LibrePanel::updateToVersion('0.10.18');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.18')) {
+if (LibrePanel::isLibrePanelVersion('0.10.18')) {
 	Update::showUpdateStep("Updating from 0.10.18 to 0.10.19", false);
-	Froxlor::updateToVersion('0.10.19');
+	LibrePanel::updateToVersion('0.10.19');
 }
 
-if (Froxlor::isDatabaseVersion('202005150')) {
+if (LibrePanel::isDatabaseVersion('202005150')) {
 
 	Update::showUpdateStep("Add new performance indexes", true);
 	Database::query("ALTER TABLE panel_customers ADD INDEX guid (guid);");
@@ -675,86 +675,86 @@ if (Froxlor::isDatabaseVersion('202005150')) {
 	Database::query("ALTER TABLE ftp_groups ADD INDEX gid (gid);");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202007240');
+	LibrePanel::updateToDbVersion('202007240');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.19')) {
+if (LibrePanel::isLibrePanelVersion('0.10.19')) {
 	Update::showUpdateStep("Updating from 0.10.19 to 0.10.20", false);
-	Froxlor::updateToVersion('0.10.20');
+	LibrePanel::updateToVersion('0.10.20');
 }
 
-if (Froxlor::isDatabaseVersion('202007240')) {
+if (LibrePanel::isDatabaseVersion('202007240')) {
 
 	Update::showUpdateStep("Removing old unused table", true);
 	Database::query("DROP TABLE IF EXISTS `panel_diskspace_admins`;");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202009070');
+	LibrePanel::updateToDbVersion('202009070');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.20')) {
+if (LibrePanel::isLibrePanelVersion('0.10.20')) {
 	Update::showUpdateStep("Updating from 0.10.20 to 0.10.21", false);
-	Froxlor::updateToVersion('0.10.21');
+	LibrePanel::updateToVersion('0.10.21');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.21')) {
+if (LibrePanel::isLibrePanelVersion('0.10.21')) {
 
 	Update::showUpdateStep("Adding settings for ssl-vhost default content if not updated from db-version 201910110", true);
 	Settings::AddNew("system.default_sslvhostconf", '');
 	Update::lastStepStatus(0);
 
 	Update::showUpdateStep("Updating from 0.10.21 to 0.10.22", false);
-	Froxlor::updateToVersion('0.10.22');
+	LibrePanel::updateToVersion('0.10.22');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.22')) {
+if (LibrePanel::isLibrePanelVersion('0.10.22')) {
 	Update::showUpdateStep("Updating from 0.10.22 to 0.10.23", false);
-	Froxlor::updateToVersion('0.10.23');
+	LibrePanel::updateToVersion('0.10.23');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.23')) {
+if (LibrePanel::isLibrePanelVersion('0.10.23')) {
 	Update::showUpdateStep("Updating from 0.10.23 to 0.10.23.1", false);
-	Froxlor::updateToVersion('0.10.23.1');
+	LibrePanel::updateToVersion('0.10.23.1');
 }
 
-if (Froxlor::isDatabaseVersion('202009070')) {
+if (LibrePanel::isDatabaseVersion('202009070')) {
 
 	Update::showUpdateStep("Adding setting to hide incompatible settings", true);
 	Settings::AddNew("system.hide_incompatible_settings", '0');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202012300');
+	LibrePanel::updateToDbVersion('202012300');
 }
 
-if (Froxlor::isDatabaseVersion('202012300')) {
+if (LibrePanel::isDatabaseVersion('202012300')) {
 
 	Update::showUpdateStep("Adding setting for DKIM private key extension/suffix", true);
 	Settings::AddNew("dkim.privkeysuffix", '.priv');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202101200');
+	LibrePanel::updateToDbVersion('202101200');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.23.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.23.1')) {
 	Update::showUpdateStep("Updating from 0.10.23.1 to 0.10.24", false);
-	Froxlor::updateToVersion('0.10.24');
+	LibrePanel::updateToVersion('0.10.24');
 }
 
-if (Froxlor::isDatabaseVersion('202101200')) {
+if (LibrePanel::isDatabaseVersion('202101200')) {
 
 	Update::showUpdateStep("Adding setting for mail address used in SOA records", true);
 	Settings::AddNew("system.soaemail", '');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202102200');
+	LibrePanel::updateToDbVersion('202102200');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.24')) {
+if (LibrePanel::isLibrePanelVersion('0.10.24')) {
 	Update::showUpdateStep("Updating from 0.10.24 to 0.10.25", false);
-	Froxlor::updateToVersion('0.10.25');
+	LibrePanel::updateToVersion('0.10.25');
 }
 
-if (Froxlor::isDatabaseVersion('202102200') || Froxlor::isDatabaseVersion('202103030')) {
+if (LibrePanel::isDatabaseVersion('202102200') || LibrePanel::isDatabaseVersion('202103030')) {
 
 	Update::showUpdateStep("Refactoring columns from large tables", true);
 	Database::query("ALTER TABLE panel_domains CHANGE `ssl_protocols` `ssl_protocols` varchar(255) NOT NULL DEFAULT '';");
@@ -785,10 +785,10 @@ if (Froxlor::isDatabaseVersion('202102200') || Froxlor::isDatabaseVersion('20210
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202103110');
+	LibrePanel::updateToDbVersion('202103110');
 }
 
-if (Froxlor::isDatabaseVersion('202103110')) {
+if (LibrePanel::isDatabaseVersion('202103110')) {
 
 	Update::showUpdateStep("Adding settings for imprint, terms of use and privacy policy URLs", true);
 	Settings::AddNew("panel.imprint_url", '');
@@ -796,24 +796,24 @@ if (Froxlor::isDatabaseVersion('202103110')) {
 	Settings::AddNew("panel.privacy_url", '');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202103240');
+	LibrePanel::updateToDbVersion('202103240');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.25')) {
+if (LibrePanel::isLibrePanelVersion('0.10.25')) {
 	Update::showUpdateStep("Updating from 0.10.25 to 0.10.26", false);
-	Froxlor::updateToVersion('0.10.26');
+	LibrePanel::updateToVersion('0.10.26');
 }
 
-if (Froxlor::isDatabaseVersion('202103240')) {
+if (LibrePanel::isDatabaseVersion('202103240')) {
 
 	Update::showUpdateStep("Adding setting for default serveralias value for new domains", true);
 	Settings::AddNew("system.domaindefaultalias", '0');
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202106160');
+	LibrePanel::updateToDbVersion('202106160');
 }
 
-if (Froxlor::isDatabaseVersion('202106160')) {
+if (LibrePanel::isDatabaseVersion('202106160')) {
 
 	Update::showUpdateStep("Adjusting Let's Encrypt endpoint configuration to support ZeroSSL", true);
 	if (Settings::Get('system.letsencryptca') == 'testing') {
@@ -823,21 +823,21 @@ if (Froxlor::isDatabaseVersion('202106160')) {
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202106270');
+	LibrePanel::updateToDbVersion('202106270');
 }
 
-if (Froxlor::isDatabaseVersion('202106270')) {
+if (LibrePanel::isDatabaseVersion('202106270')) {
 	Update::showUpdateStep("Adding custom logo image settings", true);
 	Settings::AddNew("panel.logo_image_header", '');
 	Settings::AddNew("panel.logo_image_login", '');
 	Update::lastStepStatus(0);
 
 	// Migrating old custom logo over, if exists
-	$custom_logo_file_old = Froxlor::getInstallDir() . '/templates/Sparkle/assets/img/logo_custom.png';
+	$custom_logo_file_old = LibrePanel::getInstallDir() . '/templates/Sparkle/assets/img/logo_custom.png';
 	if (file_exists($custom_logo_file_old)) {
 		Update::showUpdateStep("Migrating existing custom logo to new settings", true);
 
-		$path = Froxlor::getInstallDir() . '/img/';
+		$path = LibrePanel::getInstallDir() . '/img/';
 		if (!is_dir($path) && !mkdir($path, 0775)) {
 			throw new \Exception("img directory does not exist and cannot be created");
 		}
@@ -860,30 +860,30 @@ if (Froxlor::isDatabaseVersion('202106270')) {
 		Update::lastStepStatus(0);
 	}
 
-	Froxlor::updateToDbVersion('202107070');
+	LibrePanel::updateToDbVersion('202107070');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.26')) {
+if (LibrePanel::isLibrePanelVersion('0.10.26')) {
 	Update::showUpdateStep("Updating from 0.10.26 to 0.10.27", false);
-	Froxlor::updateToVersion('0.10.27');
+	LibrePanel::updateToVersion('0.10.27');
 }
 
-if (Froxlor::isDatabaseVersion('202107070')) {
+if (LibrePanel::isDatabaseVersion('202107070')) {
 	Update::showUpdateStep("Adding settings to overwrite theme- or custom theme-logo with the new logo settings", true);
 	Settings::AddNew("panel.logo_overridetheme", '0');
 	Settings::AddNew("panel.logo_overridecustom", '0');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202107200');
+	LibrePanel::updateToDbVersion('202107200');
 }
 
-if (Froxlor::isDatabaseVersion('202107200')) {
+if (LibrePanel::isDatabaseVersion('202107200')) {
 	Update::showUpdateStep("Adding settings to define default value of 'create std-subdomain' when creating a customer", true);
 	Settings::AddNew("system.createstdsubdom_default", '1');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202107210');
+	LibrePanel::updateToDbVersion('202107210');
 }
 
-if (Froxlor::isDatabaseVersion('202107210')) {
+if (LibrePanel::isDatabaseVersion('202107210')) {
 	Update::showUpdateStep("Normalizing ipv6 for correct comparison", true);
 	$result_stmt = Database::prepare(
 		"
@@ -901,122 +901,122 @@ if (Froxlor::isDatabaseVersion('202107210')) {
 		}
 	}
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202107260');
+	LibrePanel::updateToDbVersion('202107260');
 }
 
-if (Froxlor::isDatabaseVersion('202107260')) {
+if (LibrePanel::isDatabaseVersion('202107260')) {
 	Update::showUpdateStep("Removing setting for search-engine allow yes/no", true);
 	Database::query("DELETE FROM `" . TABLE_PANEL_SETTINGS . "` WHERE `settinggroup` = 'panel' AND `varname` = 'no_robots'");
 	Update::lastStepStatus(0);
-	Update::showUpdateStep("Adding setting to have all froxlor customers in a local group", true);
-	Settings::AddNew("system.froxlorusergroup", '');
-	Settings::AddNew("system.froxlorusergroup_gid", '');
+	Update::showUpdateStep("Adding setting to have all librepanel customers in a local group", true);
+	Settings::AddNew("system.librepanelusergroup", '');
+	Settings::AddNew("system.librepanelusergroup_gid", '');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202107300');
+	LibrePanel::updateToDbVersion('202107300');
 }
 
-if (Froxlor::isDatabaseVersion('202107300')) {
+if (LibrePanel::isDatabaseVersion('202107300')) {
 	Update::showUpdateStep("Adds the possibility to select the PowerDNS Operation Mode", true);
 	Settings::AddNew("system.powerdns_mode", 'Native');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202108180');
+	LibrePanel::updateToDbVersion('202108180');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.27')) {
+if (LibrePanel::isLibrePanelVersion('0.10.27')) {
 	Update::showUpdateStep("Updating from 0.10.27 to 0.10.28", false);
-	Froxlor::updateToVersion('0.10.28');
+	LibrePanel::updateToVersion('0.10.28');
 }
 
-if (Froxlor::isDatabaseVersion('202108180')) {
+if (LibrePanel::isDatabaseVersion('202108180')) {
 	Update::showUpdateStep("Adding czech language file", true);
 	Database::query("INSERT INTO `panel_languages` SET `language` = '&#268;esk&aacute; republika', `iso` = 'cs', `file` = 'lng/czech.lng.php'");
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202109040');
+	LibrePanel::updateToDbVersion('202109040');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.28')) {
+if (LibrePanel::isLibrePanelVersion('0.10.28')) {
 	Update::showUpdateStep("Updating from 0.10.28 to 0.10.29", false);
-	Froxlor::updateToVersion('0.10.29');
+	LibrePanel::updateToVersion('0.10.29');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.29')) {
+if (LibrePanel::isLibrePanelVersion('0.10.29')) {
 	Update::showUpdateStep("Updating from 0.10.29 to 0.10.29.1", false);
-	Froxlor::updateToVersion('0.10.29.1');
+	LibrePanel::updateToVersion('0.10.29.1');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.29.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.29.1')) {
 	Update::showUpdateStep("Updating from 0.10.29.1 to 0.10.30", false);
-	Froxlor::updateToVersion('0.10.30');
+	LibrePanel::updateToVersion('0.10.30');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.30')) {
+if (LibrePanel::isLibrePanelVersion('0.10.30')) {
 	Update::showUpdateStep("Updating from 0.10.30 to 0.10.31", false);
-	Froxlor::updateToVersion('0.10.31');
+	LibrePanel::updateToVersion('0.10.31');
 }
 
-if (Froxlor::isDatabaseVersion('202109040')) {
+if (LibrePanel::isDatabaseVersion('202109040')) {
 	Update::showUpdateStep("Add setting for acme.sh install location", true);
 	Settings::AddNew("system.acmeshpath", '/root/.acme.sh/acme.sh');
 	Update::lastStepStatus(0);
-	Froxlor::updateToDbVersion('202112310');
+	LibrePanel::updateToDbVersion('202112310');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.31')) {
+if (LibrePanel::isLibrePanelVersion('0.10.31')) {
 	Update::showUpdateStep("Updating from 0.10.31 to 0.10.32", false);
-	Froxlor::updateToVersion('0.10.32');
+	LibrePanel::updateToVersion('0.10.32');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.32')) {
+if (LibrePanel::isLibrePanelVersion('0.10.32')) {
 	Update::showUpdateStep("Updating from 0.10.32 to 0.10.33", false);
-	Froxlor::updateToVersion('0.10.33');
+	LibrePanel::updateToVersion('0.10.33');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.33')) {
+if (LibrePanel::isLibrePanelVersion('0.10.33')) {
 	Update::showUpdateStep("Updating from 0.10.33 to 0.10.34", false);
-	Froxlor::updateToVersion('0.10.34');
+	LibrePanel::updateToVersion('0.10.34');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.34')) {
+if (LibrePanel::isLibrePanelVersion('0.10.34')) {
 	Update::showUpdateStep("Updating from 0.10.34 to 0.10.34.1", false);
-	Froxlor::updateToVersion('0.10.34.1');
+	LibrePanel::updateToVersion('0.10.34.1');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.34.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.34.1')) {
 	Update::showUpdateStep("Updating from 0.10.34.1 to 0.10.35", false);
-	Froxlor::updateToVersion('0.10.35');
+	LibrePanel::updateToVersion('0.10.35');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.35')) {
+if (LibrePanel::isLibrePanelVersion('0.10.35')) {
 	Update::showUpdateStep("Updating from 0.10.35 to 0.10.35.1", false);
-	Froxlor::updateToVersion('0.10.35.1');
+	LibrePanel::updateToVersion('0.10.35.1');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.35.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.35.1')) {
 	Update::showUpdateStep("Updating from 0.10.35.1 to 0.10.36", false);
-	Froxlor::updateToVersion('0.10.36');
+	LibrePanel::updateToVersion('0.10.36');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.36')) {
+if (LibrePanel::isLibrePanelVersion('0.10.36')) {
 	Update::showUpdateStep("Updating from 0.10.36 to 0.10.37", false);
-	Froxlor::updateToVersion('0.10.37');
+	LibrePanel::updateToVersion('0.10.37');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.37')) {
+if (LibrePanel::isLibrePanelVersion('0.10.37')) {
 	Update::showUpdateStep("Updating from 0.10.37 to 0.10.38", false);
-	Froxlor::updateToVersion('0.10.38');
+	LibrePanel::updateToVersion('0.10.38');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.38')) {
+if (LibrePanel::isLibrePanelVersion('0.10.38')) {
 	Update::showUpdateStep("Updating from 0.10.38 to 0.10.38.1", false);
-	Froxlor::updateToVersion('0.10.38.1');
+	LibrePanel::updateToVersion('0.10.38.1');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.38.1')) {
+if (LibrePanel::isLibrePanelVersion('0.10.38.1')) {
 	Update::showUpdateStep("Updating from 0.10.38.1 to 0.10.38.2", false);
-	Froxlor::updateToVersion('0.10.38.2');
+	LibrePanel::updateToVersion('0.10.38.2');
 }
 
-if (Froxlor::isFroxlorVersion('0.10.38.2')) {
+if (LibrePanel::isLibrePanelVersion('0.10.38.2')) {
 	Update::showUpdateStep("Updating from 0.10.38.2 to 0.10.38.3", false);
-	Froxlor::updateToVersion('0.10.38.3');
+	LibrePanel::updateToVersion('0.10.38.3');
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,28 +16,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Settings;
+namespace LibrePanel\Settings;
 
 use Exception;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\IPTools;
-use Froxlor\UI\Request;
-use Froxlor\Validate\Validate;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\IPTools;
+use LibrePanel\UI\Request;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 class Store
@@ -53,11 +53,11 @@ class Store
 			&& $fielddata['settinggroup'] == 'system'
 			&& isset($fielddata['varname'])
 		) {
-			if ($fielddata['varname'] == 'le_froxlor_enabled' && $newfieldvalue == '0') {
+			if ($fielddata['varname'] == 'le_librepanel_enabled' && $newfieldvalue == '0') {
 				Database::query("
 					DELETE FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` WHERE `domainid` = '0'
 				");
-			} elseif ($fielddata['varname'] == 'froxloraliases' && $newfieldvalue != $fielddata['value']) {
+			} elseif ($fielddata['varname'] == 'librepanelaliases' && $newfieldvalue != $fielddata['value']) {
 				Database::query("
 					UPDATE `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` SET `validtodate`= NULL WHERE `domainid` = '0'
 				");
@@ -364,7 +364,7 @@ class Store
 
 			// be aware that ipv6 addresses are enclosed in [ ] when passed here
 			$mysql_access_host_array = array_map([
-				'\\Froxlor\\Settings\\Store',
+				'\\LibrePanel\\Settings\\Store',
 				'cleanMySQLAccessHost'
 			], $mysql_access_host_array);
 
@@ -438,7 +438,7 @@ class Store
 	{
 		if (isset($fielddata['settinggroup'], $fielddata['varname']) && is_array($fielddata) && $fielddata['settinggroup'] !== '' && $fielddata['varname'] !== '') {
 			$save_to = null;
-			$path = Froxlor::getInstallDir() . '/img/';
+			$path = LibrePanel::getInstallDir() . '/img/';
 			$path = FileDir::makeCorrectDir($path);
 
 			// New file?
@@ -484,7 +484,7 @@ class Store
 
 			// Delete file?
 			if ($fielddata['value'] !== "" && array_key_exists($fieldname . '_delete', $_POST) && Request::post($fieldname . '_delete')) {
-				@unlink(Froxlor::getInstallDir() . '/' . explode('?', $fielddata['value'], 2)[0]);
+				@unlink(LibrePanel::getInstallDir() . '/' . explode('?', $fielddata['value'], 2)[0]);
 				$save_to = '';
 			}
 

@@ -2,7 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" colors="false" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" bootstrap="tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage processUncoveredFiles="true">
     <include>
-      <directory suffix=".php">./lib/Froxlor</directory>
+      <directory suffix=".php">./lib/LibrePanel</directory>
     </include>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
@@ -11,7 +11,7 @@
     </report>
   </coverage>
   <testsuites>
-    <testsuite name="froxlor">
+    <testsuite name="librepanel">
       <!-- we need to specify the order of the tests for dependency-reasons -->
       <directory>tests/Global</directory>
       <directory>tests/Admins</directory>
@@ -29,7 +29,7 @@
       <directory>tests/Mysqls</directory>
       <directory>tests/PhpAndFpm</directory>
       <directory>tests/Traffic</directory>
-      <directory>tests/Froxlor</directory>
+      <directory>tests/LibrePanel</directory>
       <directory>tests/Cron</directory>
     </testsuite>
   </testsuites>

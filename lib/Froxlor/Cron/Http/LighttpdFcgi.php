@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\Php\PhpInterface;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Settings;
+use LibrePanel\Cron\Http\Php\PhpInterface;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\Settings;
 
 class LighttpdFcgi extends Lighttpd
 {
@@ -36,7 +36,7 @@ class LighttpdFcgi extends Lighttpd
 	public function createOwnVhostStarter()
 	{
 		if (Settings::Get('phpfpm.enabled') == '1' && Settings::Get('phpfpm.enabled_ownvhost') == '1') {
-			$mypath = FileDir::makeCorrectDir(dirname(__FILE__, 3)); // /var/www/froxlor, needed for chown
+			$mypath = FileDir::makeCorrectDir(dirname(__FILE__, 3)); // /var/www/librepanel, needed for chown
 
 			$user = Settings::Get('phpfpm.vhost_httpuser');
 			$group = Settings::Get('phpfpm.vhost_httpgroup');
@@ -60,7 +60,7 @@ class LighttpdFcgi extends Lighttpd
 				'guid' => $user,
 				'openbasedir' => 0,
 				'email' => Settings::Get('panel.adminmail'),
-				'loginname' => 'froxlor.panel',
+				'loginname' => 'librepanel.panel',
 				'documentroot' => $mypath,
 				'customerroot' => $mypath,
 				'fpm_config_id' => isset($fpm_config['id']) ? $fpm_config['id'] : 1

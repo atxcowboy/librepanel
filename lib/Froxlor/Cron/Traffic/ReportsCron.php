@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,37 +16,37 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Traffic;
+namespace LibrePanel\Cron\Traffic;
 
 /**
  * @author        Florian Lippert <flo@syscp.org> (2003-2009)
- * @author        Froxlor team <team@froxlor.org> (2010-)
+ * @author        LibrePanel team <team@librepanel.org> (2010-)
  */
 
 use Exception;
-use Froxlor\Cron\FroxlorCron;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Mailer;
-use Froxlor\User;
-use Froxlor\Language;
+use LibrePanel\Cron\LibrePanelCron;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Mailer;
+use LibrePanel\User;
+use LibrePanel\Language;
 use PDO;
 
-class ReportsCron extends FroxlorCron
+class ReportsCron extends LibrePanelCron
 {
 
 	public static function run()
 	{
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Web- and Traffic-usage reporting started...');
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Web- and Traffic-usage reporting started...');
 		$yesterday = time() - (60 * 60 * 24);
 
 		/**
@@ -150,7 +150,7 @@ class ReportsCron extends FroxlorCron
 					}
 
 					if ($_mailerror) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
 						echo 'Error sending mail: ' . $mailerr_msg . "\n";
 					}
 
@@ -234,7 +234,7 @@ class ReportsCron extends FroxlorCron
 					}
 
 					if ($_mailerror) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
 						echo "Error sending mail: " . $mailerr_msg . "\n";
 					}
 
@@ -316,7 +316,7 @@ class ReportsCron extends FroxlorCron
 					}
 
 					if ($_mailerror) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
 						echo 'Error sending mail: ' . $mailerr_msg . "\n";
 					}
 
@@ -424,7 +424,7 @@ class ReportsCron extends FroxlorCron
 					}
 
 					if ($_mailerror) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
 						echo "Error sending mail: " . $mailerr_msg . "\n";
 					}
 
@@ -499,7 +499,7 @@ class ReportsCron extends FroxlorCron
 					}
 
 					if ($_mailerror) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
 						echo "Error sending mail: " . $mailerr_msg . "\n";
 					}
 

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,32 +16,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Traffic;
+namespace LibrePanel\Cron\Traffic;
 
 /**
  * @author        Florian Lippert <flo@syscp.org> (2003-2009)
- * @author        Froxlor team <team@froxlor.org> (2010-)
+ * @author        LibrePanel team <team@librepanel.org> (2010-)
  */
 
-use Froxlor\Cron\Forkable;
-use Froxlor\Cron\FroxlorCron;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Http\Statistics;
-use Froxlor\MailLogParser;
-use Froxlor\Settings;
+use LibrePanel\Cron\Forkable;
+use LibrePanel\Cron\LibrePanelCron;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Http\Statistics;
+use LibrePanel\MailLogParser;
+use LibrePanel\Settings;
 use PDO;
 
-class TrafficCron extends FroxlorCron
+class TrafficCron extends LibrePanelCron
 {
 	use Forkable;
 
@@ -55,7 +55,7 @@ class TrafficCron extends FroxlorCron
 		/**
 		 * TRAFFIC AND DISKUSAGE MEASURE
 		 */
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Traffic run started...');
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Traffic run started...');
 		$admin_traffic = [];
 		$domainlist = [];
 		$speciallogfile_domainlist = [];
@@ -122,10 +122,10 @@ class TrafficCron extends FroxlorCron
 				if ($mysql_usage_row) {
 					$mysqlusage_all[$row_database['customerid']] += floatval($mysql_usage_row['customerusage']);
 				} else {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, "Cannot get usage for database " . $row_database['databasename'] . ".");
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, "Cannot get usage for database " . $row_database['databasename'] . ".");
 				}
 			} else {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Seems like the database " . $row_database['databasename'] . " had been removed manually.");
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Seems like the database " . $row_database['databasename'] . " had been removed manually.");
 			}
 		}
 
@@ -158,7 +158,7 @@ class TrafficCron extends FroxlorCron
 			/**
 			 * HTTP-Traffic
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'http traffic for ' . $row['loginname'] . ' started...');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'http traffic for ' . $row['loginname'] . ' started...');
 			$httptraffic = 0;
 
 			if (isset($domainlist[$row['customerid']]) && is_array($domainlist[$row['customerid']]) && count($domainlist[$row['customerid']]) != 0) {
@@ -222,7 +222,7 @@ class TrafficCron extends FroxlorCron
 			/**
 			 * FTP-Traffic
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'ftp traffic for ' . $row['loginname'] . ' started...');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'ftp traffic for ' . $row['loginname'] . ' started...');
 			$ftptraffic_stmt = Database::prepare("
 				SELECT SUM(`up_bytes`) AS `up_bytes_sum`, SUM(`down_bytes`) AS `down_bytes_sum`
 				FROM `" . TABLE_FTP_USERS . "` WHERE `customerid` = :customerid
@@ -250,7 +250,7 @@ class TrafficCron extends FroxlorCron
 			 */
 			$mailtraffic = 0;
 			if (Settings::Get("system.mailtraffic_enabled")) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'mail traffic usage for ' . $row['loginname'] . " started...");
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'mail traffic usage for ' . $row['loginname'] . " started...");
 
 				$domains_stmt = Database::prepare("SELECT domain FROM `" . TABLE_PANEL_DOMAINS . "` WHERE `customerid` = :cid");
 				Database::pexecute($domains_stmt, [
@@ -302,7 +302,7 @@ class TrafficCron extends FroxlorCron
 			/**
 			 * Total Traffic
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'total traffic for ' . $row['loginname'] . ' started');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'total traffic for ' . $row['loginname'] . ' started');
 			$current_traffic = [];
 			$current_traffic['http'] = floatval($httptraffic);
 			$current_traffic['ftp_up'] = floatval(($ftptraffic['up_bytes_sum'] / 1024));
@@ -365,7 +365,7 @@ class TrafficCron extends FroxlorCron
 			/**
 			 * WebSpace-Usage
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'calculating webspace usage for ' . $row['loginname']);
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'calculating webspace usage for ' . $row['loginname']);
 			$webspaceusage = 0;
 
 			// Using repquota, it's faster using this tool than using du traversing the complete directory
@@ -383,14 +383,14 @@ class TrafficCron extends FroxlorCron
 					$webspaceusage = floatval($webspaceusage['0']);
 					unset($back);
 				} else {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, 'documentroot ' . $row['documentroot'] . ' does not exist');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, 'documentroot ' . $row['documentroot'] . ' does not exist');
 				}
 			}
 
 			/**
 			 * MailSpace-Usage
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'calculating mailspace usage for ' . $row['loginname']);
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'calculating mailspace usage for ' . $row['loginname']);
 			$emailusage = 0;
 
 			$maildir = FileDir::makeCorrectDir(Settings::Get('system.vmail_homedir') . $row['loginname']);
@@ -403,13 +403,13 @@ class TrafficCron extends FroxlorCron
 				$emailusage = floatval($emailusage['0']);
 				unset($back);
 			} else {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, 'maildir ' . $maildir . ' does not exist');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, 'maildir ' . $maildir . ' does not exist');
 			}
 
 			/**
 			 * MySQLSpace-Usage
 			 */
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'calculating mysqlspace usage for ' . $row['loginname']);
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'calculating mysqlspace usage for ' . $row['loginname']);
 			$mysqlusage = 0;
 
 			if (isset($mysqlusage_all[$row['customerid']])) {
@@ -711,7 +711,7 @@ class TrafficCron extends FroxlorCron
 				$we = '/usr/local/bin/webalizer';
 			}
 
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Running webalizer for domain '" . $caption . "'");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Running webalizer for domain '" . $caption . "'");
 			FileDir::safe_exec($we . ' ' . $verbosity . ' -p -o ' . escapeshellarg($outputdir) . ' -n ' . escapeshellarg($caption) . $domainargs . ' ' . escapeshellarg($logfile));
 
 			/**
@@ -722,7 +722,7 @@ class TrafficCron extends FroxlorCron
 			 */
 			$httptraffic = [];
 			$webalizer_hist = @file_get_contents($outputdir . 'webalizer.hist');
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $webalizer_hist . "'");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $webalizer_hist . "'");
 
 			$webalizer_hist_rows = explode("\n", $webalizer_hist);
 			foreach ($webalizer_hist_rows as $webalizer_hist_row) {
@@ -746,7 +746,7 @@ class TrafficCron extends FroxlorCron
 			reset($httptraffic);
 			$httptrafficlast = [];
 			$webalizer_lasthist = @file_get_contents($outputdir . 'webalizer.hist.1');
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $webalizer_lasthist . "'");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $webalizer_lasthist . "'");
 
 			$webalizer_lasthist_rows = explode("\n", $webalizer_lasthist);
 			foreach ($webalizer_lasthist_rows as $webalizer_lasthist_row) {
@@ -848,11 +848,11 @@ class TrafficCron extends FroxlorCron
 
 			if (!file_exists($awbsp)) {
 				echo "WANRING: Necessary awstats_buildstaticpages.pl script could not be found, no traffic is being calculated and no stats are generated. Please check your AWStats-Path setting";
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Necessary awstats_buildstaticpages.pl script could not be found, no traffic is being calculated and no stats are generated. Please check your AWStats-Path setting");
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Necessary awstats_buildstaticpages.pl script could not be found, no traffic is being calculated and no stats are generated. Please check your AWStats-Path setting");
 				exit();
 			}
 
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Running awstats_buildstaticpages.pl for domain '" . $domain . "' (Output: '" . $staticOutputdir . "')");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Running awstats_buildstaticpages.pl for domain '" . $domain . "' (Output: '" . $staticOutputdir . "')");
 			FileDir::safe_exec($awbsp . ' -awstatsprog=' . escapeshellarg($awprog) . ' -update -month=' . date('m', $current_stamp) . ' -year=' . date('Y', $current_stamp) . ' -config=' . $domain . ' -dir=' . escapeshellarg($staticOutputdir));
 
 			// update our awstats index files
@@ -865,7 +865,7 @@ class TrafficCron extends FroxlorCron
 
 			// statistics file looks like: 'awstats[month][year].[domain].txt'
 			$file = FileDir::makeCorrectFile($outputdir . '/awstats' . date('mY', time()) . '.' . $domain . '.txt');
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $file . "'");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Gathering traffic information from '" . $file . "'");
 
 			if (file_exists($file)) {
 				$content = @file_get_contents($file);
@@ -903,7 +903,7 @@ class TrafficCron extends FroxlorCron
 	private static function awstatsGenerateIndex($domain, $outputdir)
 	{
 		// Generation header
-		$header = "<!-- GENERATED BY FROXLOR -->\n";
+		$header = "<!-- GENERATED BY LIBREPANEL -->\n";
 
 		// Looking for {year}-{month} directories
 		$entries = [];
@@ -925,9 +925,9 @@ class TrafficCron extends FroxlorCron
 		];
 
 		// File names
-		$index_file = Froxlor::getInstallDir() . '/templates/misc/awstats/index.html';
+		$index_file = LibrePanel::getInstallDir() . '/templates/misc/awstats/index.html';
 		$index_file = FileDir::makeCorrectFile($index_file);
-		$nav_file = Froxlor::getInstallDir() . '/templates/misc/awstats/nav.html';
+		$nav_file = LibrePanel::getInstallDir() . '/templates/misc/awstats/nav.html';
 		$nav_file = FileDir::makeCorrectFile($nav_file);
 
 		// Write the index file

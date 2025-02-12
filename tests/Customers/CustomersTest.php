@@ -1,19 +1,19 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\SubDomains;
-use Froxlor\Api\Commands\Ftps;
+use LibrePanel\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\SubDomains;
+use LibrePanel\Api\Commands\Ftps;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Admins
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Admins
  */
 class CustomersTest extends TestCase
 {
@@ -24,7 +24,7 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'test1',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1337,
@@ -56,7 +56,7 @@ class CustomersTest extends TestCase
 		$json_result = Customers::getLocal($admin_userdata, $data)->add();
 		$result = json_decode($json_result, true)['data'];
 		$this->assertEquals(1, $result['customerid']);
-		$this->assertEquals('team@froxlor.org', $result['email']);
+		$this->assertEquals('team@librepanel.org', $result['email']);
 		$this->assertEquals(1337, $result['customernumber']);
 		$this->assertEquals(15, $result['subdomains']);
 		$this->assertEquals('secret', $result['custom_notes']);
@@ -70,7 +70,7 @@ class CustomersTest extends TestCase
 				'id' => $result['standardsubdomain']
 			))->get();
 			$result = json_decode($json_result, true)['data'];
-			$this->assertEquals('test1.dev.froxlor.org', $result['domain']);
+			$this->assertEquals('test1.dev.librepanel.org', $result['domain']);
 		}
 	}
 
@@ -95,12 +95,12 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'test2',
-			'email' => 'test.froxlor.org',
+			'email' => 'test.librepanel.org',
 			'firstname' => 'Test2',
 			'name' => 'Testman2'
 		];
 
-		$this->expectExceptionMessage("Email-address test.froxlor.org contains invalid characters or is incomplete");
+		$this->expectExceptionMessage("Email-address test.librepanel.org contains invalid characters or is incomplete");
 		Customers::getLocal($admin_userdata, $data)->add();
 	}
 
@@ -192,10 +192,10 @@ class CustomersTest extends TestCase
 		$result = json_decode($json_result, true)['data'];
 
 		$this->assertEquals(1, $result['customerid']);
-		$this->assertEquals('team@froxlor.org', $result['email']);
+		$this->assertEquals('team@librepanel.org', $result['email']);
 		$this->assertEquals(1337, $result['customernumber']);
 		$this->assertEquals(15, $result['subdomains']);
-		$this->assertEquals('Froxlor', $result['theme']);
+		$this->assertEquals('LibrePanel', $result['theme']);
 		$this->assertEquals('', $result['custom_notes']);
 	}
 
@@ -301,7 +301,7 @@ class CustomersTest extends TestCase
 		Customers::getLocal($customer_userdata, array(
 			'id' => $customer_userdata['customerid'],
 			'def_language' => 'English',
-			'theme' => 'Froxlor',
+			'theme' => 'LibrePanel',
 			'new_customer_password' => 'h0lYmo1y2'
 		))->update();
 
@@ -310,7 +310,7 @@ class CustomersTest extends TestCase
 		))->get();
 		$result = json_decode($json_result, true)['data'];
 
-		$this->assertEquals('Froxlor', $result['theme']);
+		$this->assertEquals('LibrePanel', $result['theme']);
 		$this->assertEquals('English', $result['def_language']);
 	}
 
@@ -332,7 +332,7 @@ class CustomersTest extends TestCase
 		// add new customer
 		$data = [
 			'new_loginname' => 'test2',
-			'email' => 'test2@froxlor.org',
+			'email' => 'test2@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1338,
@@ -378,7 +378,7 @@ class CustomersTest extends TestCase
 		// add new customer
 		$data = [
 			'new_loginname' => 'test2',
-			'email' => 'test2@froxlor.org',
+			'email' => 'test2@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1338,
@@ -464,7 +464,7 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'web1',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1338,
@@ -507,7 +507,7 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => '',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test2',
 			'name' => 'Testman2',
 			'customernumber' => 1338,
@@ -533,7 +533,7 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'test1',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test2',
 			'name' => 'Testman2',
 			'customernumber' => 1339
@@ -553,7 +553,7 @@ class CustomersTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'user-',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test2',
 			'name' => 'Testman2',
 			'customernumber' => 1339
@@ -571,16 +571,16 @@ class CustomersTest extends TestCase
 	{
 		global $admin_userdata;
 
-		$loginname = str_repeat("x", \Froxlor\Database\Database::getSqlUsernameLength() + 1);
+		$loginname = str_repeat("x", \LibrePanel\Database\Database::getSqlUsernameLength() + 1);
 		$data = [
 			'new_loginname' => $loginname,
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test2',
 			'name' => 'Testman2',
 			'customernumber' => 1339
 		];
 
-		$this->expectExceptionMessage('Loginname contains too many characters. Only ' . (\Froxlor\Database\Database::getSqlUsernameLength() - strlen(Settings::Get('customer.mysqlprefix'))) . ' characters are allowed.');
+		$this->expectExceptionMessage('Loginname contains too many characters. Only ' . (\LibrePanel\Database\Database::getSqlUsernameLength() - strlen(Settings::Get('customer.mysqlprefix'))) . ' characters are allowed.');
 		Customers::getLocal($admin_userdata, $data)->add();
 	}
 
@@ -606,7 +606,7 @@ class CustomersTest extends TestCase
 		// add new customer
 		$data = [
 			'new_loginname' => 'testftpx',
-			'email' => 'testftp@froxlor.org',
+			'email' => 'testftp@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Ftpman',
 			'customernumber' => 1339,

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
-use Froxlor\Config\ConfigParser;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,7 +37,7 @@ final class ConfigDiff extends CliCommand
 {
 	protected function configure(): void
 	{
-		$this->setName('froxlor:config-diff')
+		$this->setName('librepanel:config-diff')
 			->setDescription('Shows differences in config templates between OS versions')
 			->addArgument('from', InputArgument::OPTIONAL, 'OS version to compare against')
 			->addArgument('to', InputArgument::OPTIONAL, 'OS version to compare from')
@@ -50,10 +50,10 @@ final class ConfigDiff extends CliCommand
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		require Froxlor::getInstallDir() . '/lib/functions.php';
+		require LibrePanel::getInstallDir() . '/lib/functions.php';
 
 		$parsers = $versions = [];
-		foreach (glob(Froxlor::getInstallDir() . '/lib/configfiles/*.xml') as $config) {
+		foreach (glob(LibrePanel::getInstallDir() . '/lib/configfiles/*.xml') as $config) {
 			$name = str_replace(".xml", "", strtolower(basename($config)));
 			$parser = new ConfigParser($config);
 			$versions[$name] = $parser->getCompleteDistroName();
@@ -90,8 +90,8 @@ final class ConfigDiff extends CliCommand
 
 		$parser_from = $parsers[$input->getArgument('from')];
 		$parser_to = $parsers[$input->getArgument('to')];
-		$tmp_from = tempnam(sys_get_temp_dir(), 'froxlor_config_diff_from');
-		$tmp_to = tempnam(sys_get_temp_dir(), 'froxlor_config_diff_to');
+		$tmp_from = tempnam(sys_get_temp_dir(), 'librepanel_config_diff_from');
+		$tmp_to = tempnam(sys_get_temp_dir(), 'librepanel_config_diff_to');
 		$files = [];
 		$titles_by_key = [];
 

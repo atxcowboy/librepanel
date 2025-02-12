@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\UI\Callbacks\Customer;
-use Froxlor\UI\Callbacks\Impersonate;
-use Froxlor\UI\Callbacks\ProgressBar;
-use Froxlor\UI\Callbacks\Style;
-use Froxlor\UI\Callbacks\Text;
-use Froxlor\UI\Listing;
+use LibrePanel\UI\Callbacks\Customer;
+use LibrePanel\UI\Callbacks\Impersonate;
+use LibrePanel\UI\Callbacks\ProgressBar;
+use LibrePanel\UI\Callbacks\Style;
+use LibrePanel\UI\Callbacks\Text;
+use LibrePanel\UI\Listing;
 
 return [
 	'customer_list' => [

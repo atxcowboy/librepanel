@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Dns;
+namespace LibrePanel\Cron\Dns;
 
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
 use PDO;
 
 /**
@@ -67,7 +67,7 @@ abstract class DnsBase
 				}
 				// ignore invalid responses
 				if (!is_array($nameserver_ips)) {
-					// act like \Froxlor\PhpHelper::gethostbynamel6() and return unmodified hostname on error
+					// act like \LibrePanel\PhpHelper::gethostbynamel6() and return unmodified hostname on error
 					$nameserver_ips = [
 						$nameserver
 					];
@@ -111,9 +111,9 @@ abstract class DnsBase
 		$cmdStatus = 1;
 		FileDir::safe_exec(escapeshellcmd($cmd), $cmdStatus);
 		if ($cmdStatus === 0) {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, Settings::Get('system.dns_server') . ' daemon reloaded');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, Settings::Get('system.dns_server') . ' daemon reloaded');
 		} else {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'Error while running `' . $cmd . '`: exit code (' . $cmdStatus . ') - please check your system logs');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'Error while running `' . $cmd . '`: exit code (' . $cmdStatus . ') - please check your system logs');
 		}
 	}
 
@@ -158,12 +158,12 @@ abstract class DnsBase
 				'isbinddomain' => '1',
 				'isemaildomain' => Settings::Get('system.dns_createmailentry'),
 				'customerid' => 'none',
-				'loginname' => 'froxlor.panel',
+				'loginname' => 'librepanel.panel',
 				'bindserial' => date('Ymd') . '00',
 				'dkim' => '0',
 				'iswildcarddomain' => '1',
 				'zonefile' => '',
-				'froxlorhost' => '1'
+				'librepanelhost' => '1'
 			];
 			$domains[0] = $hostname_arr;
 		}
@@ -191,10 +191,10 @@ abstract class DnsBase
 			}
 		}
 
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, str_pad('domId', 9, ' ') . str_pad('domain', 40, ' ') . "list of child domain ids");
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, str_pad('domId', 9, ' ') . str_pad('domain', 40, ' ') . "list of child domain ids");
 		foreach ($domains as $domain) {
 			$logLine = str_pad($domain['id'], 9, ' ') . str_pad($domain['domain'], 40, ' ') . join(', ', $domain['children']);
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, $logLine);
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, $logLine);
 		}
 
 		return $domains;

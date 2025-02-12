@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\System;
+namespace LibrePanel\System;
 
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
-use Froxlor\Validate\Validate;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Validate;
 
 class Crypt
 {
@@ -200,7 +200,7 @@ class Crypt
 
 		if ($pwd_hash === $pwd_check || password_verify($password, $pwd_hash)) {
 			// check for update of hash (only if our database is ready to handle the bigger string)
-			$is_ready = Froxlor::versionCompare2("0.9.33", Froxlor::getVersion()) <= 0;
+			$is_ready = LibrePanel::versionCompare2("0.9.33", LibrePanel::getVersion()) <= 0;
 			if ((password_needs_rehash($pwd_hash, $algo) || $update_hash) && $is_ready) {
 				$upd_stmt = Database::prepare("
 					UPDATE " . $table . " SET `password` = :newpasswd WHERE `" . $uid . "` = :uid
@@ -241,7 +241,7 @@ class Crypt
 	}
 
 	/**
-	 * creates a self-signed ECC-certificate for the froxlor-vhost
+	 * creates a self-signed ECC-certificate for the librepanel-vhost
 	 * and sets the content to the corresponding files set in the
 	 * settings for ssl-certificate-file and ssl-certificate-key
 	 *
@@ -253,11 +253,11 @@ class Crypt
 		$certFile = Settings::Get('system.ssl_cert_file');
 		$keyFile = Settings::Get('system.ssl_key_file');
 		if (empty($certFile)) {
-			$certFile = '/etc/ssl/froxlor_selfsigned.pem';
+			$certFile = '/etc/ssl/librepanel_selfsigned.pem';
 			Settings::Set('system.ssl_cert_file', $certFile);
 		}
 		if (empty($keyFile)) {
-			$keyFile = '/etc/ssl/froxlor_selfsigned.key';
+			$keyFile = '/etc/ssl/librepanel_selfsigned.key';
 			Settings::Set('system.ssl_key_file', $keyFile);
 		}
 
@@ -266,8 +266,8 @@ class Crypt
 			"countryName" => "DE",
 			"stateOrProvinceName" => "Hessen",
 			"localityName" => "Frankfurt am Main",
-			"organizationName" => "froxlor",
-			"organizationalUnitName" => "froxlor Server Management Panel",
+			"organizationName" => "librepanel",
+			"organizationalUnitName" => "librepanel Server Management Panel",
 			"commonName" => Settings::Get('system.hostname'),
 			"emailAddress" => Settings::Get('panel.adminmail')
 		];

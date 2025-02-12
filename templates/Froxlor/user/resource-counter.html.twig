@@ -1,4 +1,4 @@
-{% extends "Froxlor/userarea.html.twig" %}
+{% extends "LibrePanel/userarea.html.twig" %}
 
 {% block heading %}
 	<h5 class="mb-1">
@@ -22,7 +22,7 @@
 						<tr>
 							{% if usersection == 'customers' %}
 								<th class="px-3 w-50" scope="row">
-									{{ call_static('\\Froxlor\\User', 'getCorrectUserSalutation', [user]) }}
+									{{ call_static('\\LibrePanel\\User', 'getCorrectUserSalutation', [user]) }}
 									(<a href="{{ linker({'section': 'customers', 'page':'customers','action': 'su','id':user.customerid}) }}">{{ user.loginname }}</a>)
 								</th>
 								<td class="px-3 w-25">
@@ -76,7 +76,7 @@
 							{% else %}
 								<th class="px-3 w-50" scope="row">
 									{{ user.name }}
-									{% if user.adminid != call_static('\\Froxlor\\CurrentUser', 'getField', ['adminid']) %}
+									{% if user.adminid != call_static('\\LibrePanel\\CurrentUser', 'getField', ['adminid']) %}
 										(<a href="{{ linker({'section': 'admins', 'page':'admins','action': 'su','id':user.adminid}) }}">{{ user.loginname }}</a>)
 									{% endif %}
 								</th>

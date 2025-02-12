@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Config\ConfigParser;
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\Install\Install;
-use Froxlor\Install\Install\Core;
-use Froxlor\Settings;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\Install\Install;
+use LibrePanel\Install\Install\Core;
+use LibrePanel\Settings;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,12 +49,12 @@ final class InstallCommand extends Command
 
 	protected function configure()
 	{
-		$this->setName('froxlor:install');
+		$this->setName('librepanel:install');
 		$this->setDescription('Installation process to use instead of web-ui');
 		$this->addArgument('input-file', InputArgument::OPTIONAL, 'Optional JSON array file to use for unattended installations');
 		$this->addOption('print-example-file', 'p', InputOption::VALUE_NONE, 'Outputs an example JSON content to be used with the input file parameter')
 			->addOption('create-userdata-from-str', 'c', InputOption::VALUE_REQUIRED, 'Creates lib/userdata.inc.php file from string created by web-install process')
-			->addOption('show-sysinfo', 's', InputOption::VALUE_NONE, 'Outputs system information about your froxlor installation');
+			->addOption('show-sysinfo', 's', InputOption::VALUE_NONE, 'Outputs system information about your librepanel installation');
 	}
 
 	/**
@@ -77,8 +77,8 @@ final class InstallCommand extends Command
 		}
 
 		if ($input->getOption('show-sysinfo') !== false) {
-			if (!file_exists(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
-				$output->writeln("<error>Could not find froxlor's userdata.inc.php file. You can use this parameter only with an installed froxlor system.</>");
+			if (!file_exists(LibrePanel::getInstallDir() . '/lib/userdata.inc.php')) {
+				$output->writeln("<error>Could not find librepanel's userdata.inc.php file. You can use this parameter only with an installed librepanel system.</>");
 				return self::INVALID;
 			}
 			$this->printSysInfo($output);
@@ -109,19 +109,19 @@ final class InstallCommand extends Command
 			return self::SUCCESS;
 		}
 
-		if (file_exists(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
-			$output->writeln("<error>froxlor seems to be installed already.</>");
+		if (file_exists(LibrePanel::getInstallDir() . '/lib/userdata.inc.php')) {
+			$output->writeln("<error>librepanel seems to be installed already.</>");
 			return self::INVALID;
 		}
 
 		$this->io = new SymfonyStyle($input, $output);
-		$this->io->title('Froxlor installation');
+		$this->io->title('LibrePanel installation');
 
 		if ($input->getArgument('input-file')) {
 			$inputFile = $input->getArgument('input-file');
 			if (strtoupper(substr($inputFile, 0, 4)) == 'HTTP') {
 				$output->writeln("Input file seems to be an URL, trying to download");
-				$target = "/tmp/froxlor-install-" . time() . ".json";
+				$target = "/tmp/librepanel-install-" . time() . ".json";
 				if (@file_exists($target)) {
 					@unlink($target);
 				}
@@ -370,12 +370,12 @@ final class InstallCommand extends Command
 		if (Settings::Get('system.mod_fcgid') == '1') {
 			$php_sapi = 'FCGID';
 			if (Settings::Get('system.mod_fcgid_ownvhost') == '1') {
-				$php_sapi .= ' (+ froxlor)';
+				$php_sapi .= ' (+ librepanel)';
 			}
 		} elseif (Settings::Get('phpfpm.enabled') == '1') {
 			$php_sapi = 'PHP-FPM';
 			if (Settings::Get('phpfpm.enabled_ownvhost') == '1') {
-				$php_sapi .= ' (+ froxlor)';
+				$php_sapi .= ' (+ librepanel)';
 			}
 		}
 
@@ -397,10 +397,10 @@ final class InstallCommand extends Command
 				'Key', 'Value'
 			])
 			->setRows([
-				['Froxlor', Froxlor::getVersionString()],
+				['LibrePanel', LibrePanel::getVersionString()],
 				['Update-channel', Settings::Get('system.update_channel')],
 				['Hostname', Settings::Get('system.hostname')],
-				['Install-dir', Froxlor::getInstallDir()],
+				['Install-dir', LibrePanel::getInstallDir()],
 				['PHP CLI', $php_version],
 				['PHP SAPI', $php_sapi],
 				['Webserver', Settings::Get('system.webserver')],

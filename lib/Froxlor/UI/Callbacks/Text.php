@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\UI\Callbacks;
+namespace LibrePanel\UI\Callbacks;
 
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\System\Markdown;
-use Froxlor\UI\Panel\UI;
-use Froxlor\User;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\System\Markdown;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\User;
 use PDO;
 
 class Text
@@ -111,7 +111,7 @@ class Text
 	{
 		$linker = UI::getLinker();
 		$result = $attributes['fields'];
-		$apikey_data = include Froxlor::getInstallDir() . '/lib/formfields/formfield.api_key.php';
+		$apikey_data = include LibrePanel::getInstallDir() . '/lib/formfields/formfield.api_key.php';
 
 		$body = UI::twig()->render(UI::validateThemeTemplate('/user/inline-form.html.twig'), [
 			'formaction' => $linker->getLink(['section' => 'index', 'page' => 'apikeys']),
@@ -150,7 +150,7 @@ class Text
 			$customers[$row_customer['customerid']] = User::getCorrectFullUserDetails($row_customer) . ' (' . $row_customer['loginname'] . ')';
 		}
 
-		$domdup_data = include Froxlor::getInstallDir() . '/lib/formfields/admin/domains/formfield.domains_duplicate.php';
+		$domdup_data = include LibrePanel::getInstallDir() . '/lib/formfields/admin/domains/formfield.domains_duplicate.php';
 
 		$body = UI::twig()->render(UI::validateThemeTemplate('/user/inline-form.html.twig'), [
 			'formaction' => $linker->getLink(['section' => 'domains', 'page' => 'domains', 'action' => 'duplicate']),

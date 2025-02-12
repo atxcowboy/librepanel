@@ -1,16 +1,16 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Certificates;
-use Froxlor\Api\Commands\SubDomains;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Certificates;
+use LibrePanel\Api\Commands\SubDomains;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Certificates
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Certificates
  */
 class CertificatesTest extends TestCase
 {
@@ -189,10 +189,10 @@ class CertificatesTest extends TestCase
 			"countryName" => "DE",
 			"stateOrProvinceName" => "Hessen",
 			"localityName" => "Frankfurt",
-			"organizationName" => "Froxlor",
+			"organizationName" => "LibrePanel",
 			"organizationalUnitName" => "Testing",
 			"commonName" => "test2.local",
-			"emailAddress" => "team@froxlor.org"
+			"emailAddress" => "team@librepanel.org"
 		);
 
 		// generate key pair

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Settings;
+use LibrePanel\Settings;
 
 return [
 	'groups' => [
-		'froxlorvhost' => [
-			'title' => lng('admin.froxlorvhost') . (call_user_func([
-				'\Froxlor\Settings\FroxlorVhostSettings',
+		'librepanelvhost' => [
+			'title' => lng('admin.librepanelvhost') . (call_user_func([
+				'\LibrePanel\Settings\LibrePanelVhostSettings',
 				'hasVhostContainerEnabled'
 			]) == false ? lng('admin.novhostcontainer') : ''),
 			'icon' => 'fa-solid fa-wrench',
@@ -37,18 +37,18 @@ return [
 				/**
 				 * Webserver-Vhost
 				 */
-				'system_froxlordirectlyviahostname' => [
-					'label' => lng('serversettings.froxlordirectlyviahostname'),
+				'system_librepaneldirectlyviahostname' => [
+					'label' => lng('serversettings.librepaneldirectlyviahostname'),
 					'settinggroup' => 'system',
-					'varname' => 'froxlordirectlyviahostname',
+					'varname' => 'librepaneldirectlyviahostname',
 					'type' => 'checkbox',
 					'default' => true,
 					'save_method' => 'storeSettingField'
 				],
-				'system_froxloraliases' => [
-					'label' => lng('serversettings.froxloraliases'),
+				'system_librepanelaliases' => [
+					'label' => lng('serversettings.librepanelaliases'),
 					'settinggroup' => 'system',
-					'varname' => 'froxloraliases',
+					'varname' => 'librepanelaliases',
 					'type' => 'text',
 					'string_regexp' => '/^(([a-z0-9\-\._]+, ?)*[a-z0-9\-\._]+)?$/i',
 					'string_emptyallowed' => true,
@@ -59,28 +59,28 @@ return [
 				/**
 				 * SSL / Let's Encrypt
 				 */
-				'system_le_froxlor_enabled' => [
-					'label' => lng('serversettings.le_froxlor_enabled'),
+				'system_le_librepanel_enabled' => [
+					'label' => lng('serversettings.le_librepanel_enabled'),
 					'settinggroup' => 'system',
-					'varname' => 'le_froxlor_enabled',
+					'varname' => 'le_librepanel_enabled',
 					'type' => 'checkbox',
 					'default' => false,
 					'save_method' => 'storeSettingClearCertificates',
 					'visible' => Settings::Get('system.leenabled') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'requires_reconf' => ['http']
 				],
-				'system_le_froxlor_redirect' => [
-					'label' => lng('serversettings.le_froxlor_redirect'),
+				'system_le_librepanel_redirect' => [
+					'label' => lng('serversettings.le_librepanel_redirect'),
 					'settinggroup' => 'system',
-					'varname' => 'le_froxlor_redirect',
+					'varname' => 'le_librepanel_redirect',
 					'type' => 'checkbox',
 					'default' => false,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true)
 				],
@@ -94,7 +94,7 @@ return [
 					'default' => 10368000,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'advanced_mode' => true
@@ -107,7 +107,7 @@ return [
 					'default' => false,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'advanced_mode' => true
@@ -120,7 +120,7 @@ return [
 					'default' => false,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'advanced_mode' => true
@@ -133,7 +133,7 @@ return [
 					'default' => false,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'advanced_mode' => true
@@ -146,7 +146,7 @@ return [
 					'default' => true,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('system.use_ssl') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					], true),
 					'advanced_mode' => true
@@ -165,7 +165,7 @@ return [
 						'apache2'
 					],
 					'visible' => Settings::Get('system.mod_fcgid') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:fcgid']
@@ -175,14 +175,14 @@ return [
 					'settinggroup' => 'system',
 					'varname' => 'mod_fcgid_httpuser',
 					'type' => 'text',
-					'default' => 'froxlorlocal',
+					'default' => 'librepanellocal',
 					'string_emptyallowed' => false,
 					'save_method' => 'storeSettingWebserverFcgidFpmUser',
 					'websrv_avail' => [
 						'apache2'
 					],
 					'visible' => Settings::Get('system.mod_fcgid') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:fcgid']
@@ -192,14 +192,14 @@ return [
 					'settinggroup' => 'system',
 					'varname' => 'mod_fcgid_httpgroup',
 					'type' => 'text',
-					'default' => 'froxlorlocal',
+					'default' => 'librepanellocal',
 					'save_method' => 'storeSettingField',
 					'string_emptyallowed' => false,
 					'websrv_avail' => [
 						'apache2'
 					],
 					'visible' => Settings::Get('system.mod_fcgid') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:fcgid']
@@ -211,7 +211,7 @@ return [
 					'type' => 'select',
 					'default' => '2',
 					'option_options_method' => [
-						'\\Froxlor\\Http\\PhpConfig',
+						'\\LibrePanel\\Http\\PhpConfig',
 						'getPhpConfigs'
 					],
 					'save_method' => 'storeSettingField',
@@ -219,7 +219,7 @@ return [
 						'apache2'
 					],
 					'visible' => Settings::Get('system.mod_fcgid') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					])
 				],
@@ -234,7 +234,7 @@ return [
 					'default' => true,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('phpfpm.enabled') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:php-fpm']
@@ -244,11 +244,11 @@ return [
 					'settinggroup' => 'phpfpm',
 					'varname' => 'vhost_httpuser',
 					'type' => 'text',
-					'default' => 'froxlorlocal',
+					'default' => 'librepanellocal',
 					'string_emptyallowed' => false,
 					'save_method' => 'storeSettingWebserverFcgidFpmUser',
 					'visible' => Settings::Get('phpfpm.enabled') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:php-fpm']
@@ -258,11 +258,11 @@ return [
 					'settinggroup' => 'phpfpm',
 					'varname' => 'vhost_httpgroup',
 					'type' => 'text',
-					'default' => 'froxlorlocal',
+					'default' => 'librepanellocal',
 					'string_emptyallowed' => false,
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('phpfpm.enabled') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					]),
 					'requires_reconf' => ['system:php-fpm']
@@ -274,12 +274,12 @@ return [
 					'type' => 'select',
 					'default' => '2',
 					'option_options_method' => [
-						'\\Froxlor\\Http\\PhpConfig',
+						'\\LibrePanel\\Http\\PhpConfig',
 						'getPhpConfigs'
 					],
 					'save_method' => 'storeSettingField',
 					'visible' => Settings::Get('phpfpm.enabled') && call_user_func([
-						'\Froxlor\Settings\FroxlorVhostSettings',
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
 						'hasVhostContainerEnabled'
 					])
 				],

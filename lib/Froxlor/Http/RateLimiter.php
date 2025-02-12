@@ -1,10 +1,10 @@
 <?php
 
-namespace Froxlor\Http;
+namespace LibrePanel\Http;
 
-use Froxlor\Froxlor;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
 
 class RateLimiter
 {
@@ -36,9 +36,9 @@ class RateLimiter
 			header('HTTP/1.1 429 Too Many Requests');
 			header("Retry-After: $reset");
 			UI::twig()->addGlobal('install_mode', '1');
-			echo UI::twig()->render('Froxlor/misc/ratelimithint.html.twig', [
+			echo UI::twig()->render('LibrePanel/misc/ratelimithint.html.twig', [
 				'retry' => $reset,
-				'installdir' => Froxlor::getInstallDir()
+				'installdir' => LibrePanel::getInstallDir()
 			]);
 			die();
 		}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -72,7 +72,7 @@ class Customers extends ApiCommand implements ResourceEntity
 	{
 		if ($this->isAdmin()) {
 			$show_usages = $this->getBoolParam('show_usages', true, false);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] list customers");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] list customers");
 			$query_fields = [];
 			$result_stmt = Database::prepare("
 				SELECT `c`.*, `a`.`loginname` AS `adminname`
@@ -255,7 +255,7 @@ class Customers extends ApiCommand implements ResourceEntity
 	 * @param bool $mysqls_ul
 	 *                             optional, whether customer should have unlimited mysql-databases, default 0 (false)
 	 * @param bool $createstdsubdomain
-	 *                             optional, whether to create a standard-subdomain ([loginname].froxlor-hostname.tld),
+	 *                             optional, whether to create a standard-subdomain ([loginname].librepanel-hostname.tld),
 	 *                             default [system.createstdsubdom_default]
 	 * @param bool $phpenabled
 	 *                             optional, whether to allow usage of PHP, default 0 (false)
@@ -471,7 +471,7 @@ class Customers extends ApiCommand implements ResourceEntity
 							'root',
 							'admin',
 							'froxroot',
-							'froxlor',
+							'librepanel',
 							$sqldata['user'],
 							$sqldata['db'],
 							$sqlrdata['user'],
@@ -673,7 +673,7 @@ class Customers extends ApiCommand implements ResourceEntity
 						Settings::Set('system.lastaccountnumber', $accountnumber, true);
 					}
 
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] added customer '" . $loginname . "'");
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] added customer '" . $loginname . "'");
 					unset($ins_data);
 
 					// insert task to create homedir etc.
@@ -700,13 +700,13 @@ class Customers extends ApiCommand implements ResourceEntity
 
 					$stats_folder = Settings::Get('system.traffictool');
 					$ins_data['path'] = FileDir::makeCorrectDir($documentroot . '/' . $stats_folder . '/');
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added " . $stats_folder . " htpasswd for user '" . $loginname . "'");
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added " . $stats_folder . " htpasswd for user '" . $loginname . "'");
 					Database::pexecute($ins_stmt, $ins_data, true, true);
 
 					Cronjob::inserttask(TaskId::REBUILD_VHOST);
 
 					// add default FTP-User
-					// also, add froxlor-local user to ftp-group (if exists!) to
+					// also, add librepanel-local user to ftp-group (if exists!) to
 					// allow access to customer-directories from within the panel, which
 					// is necessary when pathedit = Dropdown
 					$local_users = [
@@ -718,7 +718,7 @@ class Customers extends ApiCommand implements ResourceEntity
 						} else {
 							$local_user = Settings::Get('phpfpm.vhost_httpuser');
 						}
-						// check froxlor-local user membership in ftp-group
+						// check librepanel-local user membership in ftp-group
 						// without this check addition may duplicate user in list if httpuser == local_user
 						if (in_array($local_user, $local_users) == false) {
 							$local_users[] = $local_user;
@@ -757,7 +757,7 @@ class Customers extends ApiCommand implements ResourceEntity
 							$std_domain = $this->apiCall('Domains.add', $ins_data, true);
 							$domainid = $std_domain['id'];
 						} catch (Exception $e) {
-							$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "[API] Unable to add standard-subdomain: " . $e->getMessage());
+							$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "[API] Unable to add standard-subdomain: " . $e->getMessage());
 						}
 
 						if ($domainid > 0) {
@@ -768,7 +768,7 @@ class Customers extends ApiCommand implements ResourceEntity
 								'domainid' => $domainid,
 								'customerid' => $customerid
 							], true, true);
-							$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added standardsubdomain for user '" . $loginname . "'");
+							$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added standardsubdomain for user '" . $loginname . "'");
 							Cronjob::inserttask(TaskId::REBUILD_VHOST);
 						}
 					}
@@ -791,8 +791,8 @@ class Customers extends ApiCommand implements ResourceEntity
 
 					if ($sendpassword == '1') {
 						$srv_hostname = Settings::Get('system.hostname');
-						if (Settings::Get('system.froxlordirectlyviahostname') == '0') {
-							$srv_hostname .= '/' . basename(\Froxlor\Froxlor::getInstallDir());
+						if (Settings::Get('system.librepaneldirectlyviahostname') == '0') {
+							$srv_hostname .= '/' . basename(\LibrePanel\LibrePanel::getInstallDir());
 						}
 
 						$srv_ip_stmt = Database::prepare("
@@ -855,15 +855,15 @@ class Customers extends ApiCommand implements ResourceEntity
 						}
 
 						if ($_mailerror) {
-							$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
+							$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
 							Response::standardError('errorsendingmail', $email, true);
 						}
 
 						$this->mailer()->clearAddresses();
-						$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically sent password to user '" . $loginname . "'");
+						$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically sent password to user '" . $loginname . "'");
 					}
 				}
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] added customer '" . $loginname . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] added customer '" . $loginname . "'");
 
 				$result = $this->apiCall('Customers.get', [
 					'loginname' => $loginname
@@ -958,7 +958,7 @@ class Customers extends ApiCommand implements ResourceEntity
 					$result['dbspace_used'] = 0;
 				}
 			}
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get customer '" . $result['loginname'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get customer '" . $result['loginname'] . "'");
 			return $this->response($result);
 		}
 		$key = ($id > 0 ? "id #" . $id : "loginname '" . $loginname . "'");
@@ -1073,7 +1073,7 @@ class Customers extends ApiCommand implements ResourceEntity
 	 * @param bool $mysqls_ul
 	 *                             optional, whether customer should have unlimited mysql-databases, default 0 (false)
 	 * @param bool $createstdsubdomain
-	 *                             optional, whether to create a standard-subdomain ([loginname].froxlor-hostname.tld),
+	 *                             optional, whether to create a standard-subdomain ([loginname].librepanel-hostname.tld),
 	 *                             default 1 (if customer has std-subdomain) else 0 (false)
 	 * @param bool $phpenabled
 	 *                             optional, whether to allow usage of PHP, default 0 (false)
@@ -1301,7 +1301,7 @@ class Customers extends ApiCommand implements ResourceEntity
 					$std_domain = $this->apiCall('Domains.add', $ins_data);
 					$domainid = $std_domain['id'];
 				} catch (Exception $e) {
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "[API] Unable to add standard-subdomain: " . $e->getMessage());
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "[API] Unable to add standard-subdomain: " . $e->getMessage());
 				}
 
 				if ($domainid > 0) {
@@ -1312,7 +1312,7 @@ class Customers extends ApiCommand implements ResourceEntity
 						'domainid' => $domainid,
 						'customerid' => $result['customerid']
 					], true, true);
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added standardsubdomain for user '" . $result['loginname'] . "'");
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically added standardsubdomain for user '" . $result['loginname'] . "'");
 					Cronjob::inserttask(TaskId::REBUILD_VHOST);
 				}
 			}
@@ -1324,9 +1324,9 @@ class Customers extends ApiCommand implements ResourceEntity
 						'is_stdsubdomain' => 1
 					]);
 				} catch (Exception $e) {
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "[API] Unable to delete standard-subdomain: " . $e->getMessage());
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "[API] Unable to delete standard-subdomain: " . $e->getMessage());
 				}
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically deleted standardsubdomain for user '" . $result['loginname'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] automatically deleted standardsubdomain for user '" . $result['loginname'] . "'");
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			}
 
@@ -1434,7 +1434,7 @@ class Customers extends ApiCommand implements ResourceEntity
 					'vu' => $valid_until
 				], true, true);
 
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] " . ($deactivated ? 'deactivated' : 'reactivated') . " user '" . $result['loginname'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] " . ($deactivated ? 'deactivated' : 'reactivated') . " user '" . $result['loginname'] . "'");
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			}
 
@@ -1647,7 +1647,7 @@ class Customers extends ApiCommand implements ResourceEntity
 			Database::query($admin_update_query);
 		}
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] edited user '" . $result['loginname'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] edited user '" . $result['loginname'] . "'");
 
 		/*
 		 * move customer to another admin/reseller; #1166
@@ -1912,7 +1912,7 @@ class Customers extends ApiCommand implements ResourceEntity
 			// Using filesystem - quota, insert a task which cleans the filesystem - quota
 			Cronjob::inserttask(TaskId::CREATE_QUOTA);
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] deleted customer '" . $result['loginname'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] deleted customer '" . $result['loginname'] . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);
@@ -1969,7 +1969,7 @@ class Customers extends ApiCommand implements ResourceEntity
 			// set the new value for result-array
 			$result['loginfail_count'] = 0;
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] unlocked customer '" . $result['loginname'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] unlocked customer '" . $result['loginname'] . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);
@@ -2035,7 +2035,7 @@ class Customers extends ApiCommand implements ResourceEntity
 			// now, recalculate the resource-usage for the old and the new admin
 			User::updateCounters(false);
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] moved user '" . $c_result['loginname'] . "' from admin/reseller '" . $c_result['adminname'] . " to admin/reseller '" . $a_result['loginname'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] moved user '" . $c_result['loginname'] . "' from admin/reseller '" . $c_result['adminname'] . " to admin/reseller '" . $a_result['loginname'] . "'");
 
 			$result = $this->apiCall('Customers.get', [
 				'id' => $c_result['customerid']

@@ -1,11 +1,11 @@
 <?php
 
-define('DEV_FROXLOR', 1);
+define('DEV_LIBREPANEL', 1);
 
-if (file_exists('/etc/froxlor-test.pwd') && file_exists('/etc/froxlor-test.rpwd')) {
-	// froxlor jenkins test-system
-	$pwd = trim(file_get_contents('/etc/froxlor-test.pwd'));
-	$rpwd = trim(file_get_contents('/etc/froxlor-test.rpwd'));
+if (file_exists('/etc/librepanel-test.pwd') && file_exists('/etc/librepanel-test.rpwd')) {
+	// librepanel jenkins test-system
+	$pwd = trim(file_get_contents('/etc/librepanel-test.pwd'));
+	$rpwd = trim(file_get_contents('/etc/librepanel-test.rpwd'));
 	define('TRAVIS_CI', 0);
 } else {
 	// travis-ci.org
@@ -20,10 +20,10 @@ if (@php_sapi_name() !== 'cli') {
 }
 
 $userdata_content = "<?php
-\$sql['user'] = 'froxlor010';
+\$sql['user'] = 'librepanel010';
 \$sql['password'] = '$pwd';
 \$sql['host'] = '127.0.0.1';
-\$sql['db'] = 'froxlor010';
+\$sql['db'] = 'librepanel010';
 \$sql_root[0]['user'] = 'root';
 \$sql_root[0]['password'] = '$rpwd';
 \$sql_root[0]['host'] = '127.0.0.1';
@@ -44,16 +44,16 @@ require dirname(__DIR__) . '/lib/functions.php';
 // include table definitions
 require dirname(__DIR__) . '/lib/tables.inc.php';
 
-use Froxlor\Database\Database;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Settings;
 
 if (TRAVIS_CI == 0) {
 	Database::needRoot(true);
-	Database::query("DROP DATABASE IF EXISTS `froxlor010`;");
-	Database::query("CREATE DATABASE `froxlor010`;");
-	$sql = include(dirname(__DIR__) . "/install/froxlor.sql.php");
-	file_put_contents("/tmp/froxlor.sql", $sql);
-	exec("mysql -u root -p" . $rpwd . " froxlor010 < /tmp/froxlor.sql");
+	Database::query("DROP DATABASE IF EXISTS `librepanel010`;");
+	Database::query("CREATE DATABASE `librepanel010`;");
+	$sql = include(dirname(__DIR__) . "/install/librepanel.sql.php");
+	file_put_contents("/tmp/librepanel.sql", $sql);
+	exec("mysql -u root -p" . $rpwd . " librepanel010 < /tmp/librepanel.sql");
 	Database::query("DROP USER IF EXISTS 'test1sql1'@'localhost';");
 	Database::query("DROP USER IF EXISTS 'test1sql1'@'127.0.0.1';");
 	Database::query("DROP USER IF EXISTS 'test1sql1'@'172.17.0.1';");
@@ -97,9 +97,9 @@ Database::query("ALTER TABLE `" . TABLE_PANEL_FPMDAEMONS . "` AUTO_INCREMENT=2;"
 // add superadmin
 Database::query("INSERT INTO `" . TABLE_PANEL_ADMINS . "` SET
 	`loginname` = 'admin',
-	`password` = '" . \Froxlor\System\Crypt::makeCryptPassword('admin') . "',
-	`name` = 'Froxlor-Administrator',
-	`email` = 'admin@dev.froxlor.org',
+	`password` = '" . \LibrePanel\System\Crypt::makeCryptPassword('admin') . "',
+	`name` = 'LibrePanel-Administrator',
+	`email` = 'admin@dev.librepanel.org',
 	`def_language` = 'English',
 	`customers` = -1,
 	`customers_see_all` = 1,
@@ -162,20 +162,20 @@ $sel_stmt = Database::prepare("SELECT * FROM `" . TABLE_PANEL_ADMINS . "` WHERE 
 $admin_userdata = Database::pexecute_first($sel_stmt);
 $admin_userdata['adminsession'] = 1;
 
-$log = \Froxlor\FroxlorLogger::getInstanceOf($admin_userdata);
+$log = \LibrePanel\LibrePanelLogger::getInstanceOf($admin_userdata);
 
 Settings::Set('panel.standardlanguage', 'English', true);
-Settings::Set('panel.adminmail', 'admin@dev.froxlor.org', true);
+Settings::Set('panel.adminmail', 'admin@dev.librepanel.org', true);
 Settings::Set('panel.allow_domain_change_admin', '1', true);
 Settings::Set('panel.allow_domain_change_customer', '1', true);
 Settings::Set('system.lastguid', '10000', true);
 Settings::Set('system.ipaddress', '82.149.225.46', true);
 Settings::Set('system.documentroot_use_default_value', '1', true);
-Settings::Set('system.hostname', 'dev.froxlor.org', true);
-Settings::Set('system.nameservers', 'dev.froxlor.org', true);
+Settings::Set('system.hostname', 'dev.librepanel.org', true);
+Settings::Set('system.nameservers', 'dev.librepanel.org', true);
 Settings::Set('system.mysql_access_host', 'localhost,127.0.0.1,172.17.0.1,2a01:440:1:12:82:149:225:46,82.149.225.46', true);
 Settings::Set('system.use_ssl', '1', true);
-Settings::Set('system.froxlordirectlyviahostname', '1', true);
+Settings::Set('system.librepaneldirectlyviahostname', '1', true);
 Settings::Set('system.dns_createhostnameentry', '1', true);
 Settings::Set('system.bind_enable', '1', true);
 Settings::Set('system.dnsenabled', '1', true);

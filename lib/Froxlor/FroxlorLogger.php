@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +16,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor;
+namespace LibrePanel;
 
-use Froxlor\System\MysqlHandler;
+use LibrePanel\System\MysqlHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 
 /**
- * Class FroxlorLogger
+ * Class LibrePanelLogger
  */
-class FroxlorLogger
+class LibrePanelLogger
 {
 
 	const USR_ACTION = '10';
@@ -101,14 +101,14 @@ class FroxlorLogger
 			foreach (self::$logtypes as $logger) {
 				switch ($logger) {
 					case 'syslog':
-						self::$ml->pushHandler(new SyslogHandler('froxlor', LOG_USER, Logger::DEBUG));
+						self::$ml->pushHandler(new SyslogHandler('librepanel', LOG_USER, Logger::DEBUG));
 						break;
 					case 'file':
 						$setings_logfile = Settings::Get('logger.logfile');
 						if (empty($setings_logfile)) {
-							Settings::Set('logger.logfile', 'froxlor.log');
+							Settings::Set('logger.logfile', 'librepanel.log');
 						}
-						$logger_logfile = FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/logs/' . Settings::Get('logger.logfile'));
+						$logger_logfile = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/logs/' . Settings::Get('logger.logfile'));
 						// is_writable needs an existing file to check if it's actually writable
 						if (!@touch($logger_logfile) || !is_writable($logger_logfile)) {
 							// not writable in our own directory? Skip
@@ -134,17 +134,17 @@ class FroxlorLogger
 	{
 		if (empty(self::$ml)) {
 			// get Theme object
-			self::$ml = new Logger('froxlor');
+			self::$ml = new Logger('librepanel');
 		}
 		return self::$ml;
 	}
 
 	/**
-	 * return FroxlorLogger instance
+	 * return LibrePanelLogger instance
 	 *
 	 * @param array $userinfo
 	 *
-	 * @return FroxlorLogger
+	 * @return LibrePanelLogger
 	 * @throws \Exception
 	 */
 	public static function getInstanceOf(array $userinfo = [])
@@ -154,7 +154,7 @@ class FroxlorLogger
 				'loginname' => 'system'
 			];
 		}
-		return new FroxlorLogger($userinfo);
+		return new LibrePanelLogger($userinfo);
 	}
 
 	/**
@@ -164,7 +164,7 @@ class FroxlorLogger
 	 * @param int $type
 	 * @param ?string $text
 	 */
-	public function logAction($action = FroxlorLogger::USR_ACTION, int $type = LOG_NOTICE, string $text = null)
+	public function logAction($action = LibrePanelLogger::USR_ACTION, int $type = LOG_NOTICE, string $text = null)
 	{
 		// not logging normal stuff if not set to "paranoid" logging
 		if (!self::$crondebug_flag && Settings::Get('logger.severity') == '1' && $type > LOG_NOTICE) {
@@ -178,12 +178,12 @@ class FroxlorLogger
 		// clean log-text
 		$text = preg_replace("/[^\w @#\"':.,()\[\]+\-_\/\\\!]/i", "_", $text);
 
-		if (self::$crondebug_flag || ($action == FroxlorLogger::CRON_ACTION && $type <= LOG_WARNING)) {
+		if (self::$crondebug_flag || ($action == LibrePanelLogger::CRON_ACTION && $type <= LOG_WARNING)) {
 			echo "[" . $this->getLogLevelDesc($type) . "] " . $text . PHP_EOL;
 		}
 
 		// warnings, errors and critical messages WILL be logged
-		if (Settings::Get('logger.log_cron') == '0' && $action == FroxlorLogger::CRON_ACTION && $type > LOG_WARNING) {
+		if (Settings::Get('logger.log_cron') == '0' && $action == LibrePanelLogger::CRON_ACTION && $type > LOG_WARNING) {
 			return;
 		}
 
@@ -253,19 +253,19 @@ class FroxlorLogger
 	private function getActionTypeDesc($action): string
 	{
 		switch ($action) {
-			case FroxlorLogger::USR_ACTION:
+			case LibrePanelLogger::USR_ACTION:
 				$_action = 'user';
 				break;
-			case FroxlorLogger::ADM_ACTION:
+			case LibrePanelLogger::ADM_ACTION:
 				$_action = 'admin';
 				break;
-			case FroxlorLogger::RES_ACTION:
+			case LibrePanelLogger::RES_ACTION:
 				$_action = 'reseller';
 				break;
-			case FroxlorLogger::CRON_ACTION:
+			case LibrePanelLogger::CRON_ACTION:
 				$_action = 'cron';
 				break;
-			case FroxlorLogger::LOGIN_ACTION:
+			case LibrePanelLogger::LOGIN_ACTION:
 				$_action = 'login';
 				break;
 			default:

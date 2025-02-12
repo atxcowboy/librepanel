@@ -1,19 +1,19 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\DomainZones;
-use Froxlor\Api\Commands\Domains;
-use Froxlor\Api\Commands\SubDomains;
+use LibrePanel\Settings;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\DomainZones;
+use LibrePanel\Api\Commands\Domains;
+use LibrePanel\Api\Commands\SubDomains;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\SubDomains
- * @covers \Froxlor\Api\Commands\DomainZones
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\SubDomains
+ * @covers \LibrePanel\Api\Commands\DomainZones
  */
 class DomainZonesTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Validate;
+namespace LibrePanel\Validate;
 
 class Form
 {
@@ -61,9 +61,9 @@ class Form
 	public static function validateFormField($fieldname, array $fielddata, $newfieldvalue)
 	{
 		$returnvalue = '';
-		if (isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\Froxlor\\Validate\\Form\\Data', 'validateFormField' . ucfirst($fielddata['type']))) {
+		if (isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\LibrePanel\\Validate\\Form\\Data', 'validateFormField' . ucfirst($fielddata['type']))) {
 			$returnvalue = call_user_func([
-				'\\Froxlor\\Validate\\Form\\Data',
+				'\\LibrePanel\\Validate\\Form\\Data',
 				'validateFormField' . ucfirst($fielddata['type'])
 			], $fieldname, $fielddata, $newfieldvalue);
 		} else {

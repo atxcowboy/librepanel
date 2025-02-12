@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
 use PDO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,8 +43,8 @@ final class ValidateAcmeWebroot extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:validate-acme-webroot');
-		$this->setDescription('Validates the Le_Webroot value is correct for froxlor managed domains with Let\'s Encrypt certificate.');
+		$this->setName('librepanel:validate-acme-webroot');
+		$this->setDescription('Validates the Le_Webroot value is correct for librepanel managed domains with Let\'s Encrypt certificate.');
 		$this->addOption('yes-to-all', 'A', InputOption::VALUE_NONE, 'Do not ask for confirmation, update files if necessary');
 	}
 
@@ -58,7 +58,7 @@ final class ValidateAcmeWebroot extends CliCommand
 		$io = new SymfonyStyle($input, $output);
 
 		if ((int)Settings::Get('system.leenabled') == 0) {
-			$io->info("Let's Encrypt not activated in froxlor settings.");
+			$io->info("Let's Encrypt not activated in librepanel settings.");
 			$result = self::INVALID;
 		}
 
@@ -70,8 +70,8 @@ final class ValidateAcmeWebroot extends CliCommand
 			$sel_stmt = Database::prepare("SELECT id, domain FROM panel_domains WHERE `letsencrypt` = '1' AND aliasdomain IS NULL ORDER BY id ASC");
 			Database::pexecute($sel_stmt);
 			$domains = $sel_stmt->fetchAll(PDO::FETCH_ASSOC);
-			// check for froxlor-vhost
-			if (Settings::Get('system.le_froxlor_enabled') == '1') {
+			// check for librepanel-vhost
+			if (Settings::Get('system.le_librepanel_enabled') == '1') {
 				$domains[] = [
 					'id' => 0,
 					'domain' => Settings::Get('system.hostname')
@@ -80,7 +80,7 @@ final class ValidateAcmeWebroot extends CliCommand
 			$upd_stmt = Database::prepare("UPDATE domain_ssl_settings SET `validtodate`=NULL WHERE `domainid` = :did");
 			$acmesh_dir = dirname(Settings::Get('system.acmeshpath'));
 			$acmesh_challenge_dir = rtrim(FileDir::makeCorrectDir(Settings::Get('system.letsencryptchallengepath')), "/");
-			$recommended = rtrim(FileDir::makeCorrectDir(Froxlor::getInstallDir()), "/");
+			$recommended = rtrim(FileDir::makeCorrectDir(LibrePanel::getInstallDir()), "/");
 
 			if ($acmesh_challenge_dir != $recommended) {
 				$io->warning([
@@ -144,13 +144,13 @@ final class ValidateAcmeWebroot extends CliCommand
 				}
 			}
 			if ($count_changes > 0) {
-				if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
-					$io->info("Changes detected but froxlor has been updated. Inserting task to rebuild vhosts after update.");
+				if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
+					$io->info("Changes detected but librepanel has been updated. Inserting task to rebuild vhosts after update.");
 					Cronjob::inserttask(TaskId::REBUILD_VHOST);
 				} else {
 					$question = new ConfirmationQuestion('Changes detected. Force cronjob to refresh certificates? [yes] ', true, '/^(y|j)/i');
 					if ($yestoall || $helper->ask($input, $output, $question)) {
-						passthru(FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/bin/froxlor-cli') . ' froxlor:cron -f -d');
+						passthru(FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/bin/librepanel-cli') . ' librepanel:cron -f -d');
 					}
 				}
 			} else {

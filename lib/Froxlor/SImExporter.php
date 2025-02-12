@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor;
+namespace LibrePanel;
 
 use Exception;
-use Froxlor\Database\Database;
-use Froxlor\UI\Form;
-use Froxlor\Validate\Validate;
+use LibrePanel\Database\Database;
+use LibrePanel\UI\Form;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -65,7 +65,7 @@ class SImExporter
 	public static function export()
 	{
 		$settings_definitions = [];
-		foreach (PhpHelper::loadConfigArrayDir(Froxlor::getInstallDir() . '/actions/admin/settings/')['groups'] as $group) {
+		foreach (PhpHelper::loadConfigArrayDir(LibrePanel::getInstallDir() . '/actions/admin/settings/')['groups'] as $group) {
 			foreach ($group['fields'] as $field) {
 				$settings_definitions[$field['settinggroup']][$field['varname']] = $field;
 			}
@@ -116,7 +116,7 @@ class SImExporter
 			$_dbversion = isset($_data['panel.db_version']) ? $_data['panel.db_version'] : false;
 			// check if we have everything we need
 			if (!$_sha || !$_version || !$_dbversion) {
-				throw new Exception("Invalid froxlor settings data. Unable to import.");
+				throw new Exception("Invalid librepanel settings data. Unable to import.");
 			}
 			// validate import file
 			unset($_data['_sha']);
@@ -140,8 +140,8 @@ class SImExporter
 					$_data['system.use_ssl'] = 0;
 					// deactivate other ssl-related settings
 					$_data['system.leenabled'] = 0;
-					$_data['system.le_froxlor_enabled'] = 0;
-					$_data['system.le_froxlor_redirect'] = 0;
+					$_data['system.le_librepanel_enabled'] = 0;
+					$_data['system.le_librepanel_redirect'] = 0;
 				}
 			}
 
@@ -171,7 +171,7 @@ class SImExporter
 			}
 
 			// store new data
-			$settings_data = PhpHelper::loadConfigArrayDir(Froxlor::getInstallDir() . '/actions/admin/settings/');
+			$settings_data = PhpHelper::loadConfigArrayDir(LibrePanel::getInstallDir() . '/actions/admin/settings/');
 			Settings::loadSettingsInto($settings_data);
 
 			if (Form::processForm($settings_data, $form_data, [], null, true)) {
@@ -182,7 +182,7 @@ class SImExporter
 				if (count($image_data) > 0) {
 					foreach ($image_data as $index => $value) {
 						$index_split = explode('.', $index, 3);
-						$path = Froxlor::getInstallDir() . '/img/';
+						$path = LibrePanel::getInstallDir() . '/img/';
 						if (!is_dir($path) && !mkdir($path, 0775)) {
 							throw new Exception("img directory does not exist and cannot be created");
 						}
@@ -211,7 +211,7 @@ class SImExporter
 								throw new Exception("Invalid file-extension, use one of: jpeg, jpg, png, gif");
 							}
 							$img_filename = 'img/' . bin2hex(random_bytes(16)) . '.' . $file_extension;
-							file_put_contents(Froxlor::getInstallDir() . '/' . $img_filename, $img_data);
+							file_put_contents(LibrePanel::getInstallDir() . '/' . $img_filename, $img_data);
 							$img_index = $index_split[0].'.'.$index_split[1];
 							Settings::Set($img_index, $img_filename . '?v=' . time());
 						}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -67,7 +67,7 @@ class PhpSettings extends ApiCommand implements ResourceEntity
 	public function listing()
 	{
 		if ($this->isAdmin()) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] list php-configs");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] list php-configs");
 
 			$with_subdomains = $this->getBoolParam('with_subdomains', true, false);
 			$query_fields = [];
@@ -391,7 +391,7 @@ class PhpSettings extends ApiCommand implements ResourceEntity
 			$ins_data['id'] = Database::lastInsertId();
 
 			Cronjob::inserttask(TaskId::REBUILD_VHOST);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] php setting with description '" . $description . "' has been created by '" . $this->getUserDetail('loginname') . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] php setting with description '" . $description . "' has been created by '" . $this->getUserDetail('loginname') . "'");
 
 			$result = $this->apiCall('PhpSettings.get', [
 				'id' => $ins_data['id']
@@ -627,7 +627,7 @@ class PhpSettings extends ApiCommand implements ResourceEntity
 			Database::pexecute($upd_stmt, $upd_data, true, true);
 
 			Cronjob::inserttask(TaskId::REBUILD_VHOST);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] php setting with description '" . $description . "' has been updated by '" . $this->getUserDetail('loginname') . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] php setting with description '" . $description . "' has been updated by '" . $this->getUserDetail('loginname') . "'");
 
 			$result = $this->apiCall('PhpSettings.get', [
 				'id' => $id
@@ -684,7 +684,7 @@ class PhpSettings extends ApiCommand implements ResourceEntity
 			], true, true);
 
 			Cronjob::inserttask(TaskId::REBUILD_VHOST);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] php setting '" . $result['description'] . "' has been deleted by '" . $this->getUserDetail('loginname') . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] php setting '" . $result['description'] . "' has been deleted by '" . $this->getUserDetail('loginname') . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);

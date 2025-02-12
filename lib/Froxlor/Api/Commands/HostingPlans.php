@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -61,7 +61,7 @@ class HostingPlans extends ApiCommand implements ResourceEntity
 	public function listing()
 	{
 		if ($this->isAdmin()) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] list hosting-plans");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] list hosting-plans");
 			$query_fields = [];
 			$result_stmt = Database::prepare("
 				SELECT p.*, a.loginname as adminname
@@ -227,7 +227,7 @@ class HostingPlans extends ApiCommand implements ResourceEntity
 				'valuearr' => json_encode($value_arr)
 			];
 			Database::pexecute($ins_stmt, $ins_data, true, true);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] added hosting-plan '" . $name . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] added hosting-plan '" . $name . "'");
 			$result = $this->apiCall('HostingPlans.get', [
 				'planname' => $name
 			]);
@@ -264,7 +264,7 @@ class HostingPlans extends ApiCommand implements ResourceEntity
 			}
 			$result = Database::pexecute_first($result_stmt, $params, true, true);
 			if ($result) {
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] get hosting-plan '" . $result['name'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] get hosting-plan '" . $result['name'] . "'");
 				return $this->response($result);
 			}
 			$key = ($id > 0 ? "id #" . $id : "planname '" . $planname . "'");
@@ -414,7 +414,7 @@ class HostingPlans extends ApiCommand implements ResourceEntity
 				'id' => $id
 			];
 			Database::pexecute($upd_stmt, $update_data, true, true);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] updated hosting-plan '" . $result['name'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] updated hosting-plan '" . $result['name'] . "'");
 			return $this->response($update_data);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);
@@ -452,7 +452,7 @@ class HostingPlans extends ApiCommand implements ResourceEntity
 			Database::pexecute($del_stmt, [
 				'id' => $id
 			], true, true);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] deleted hosting-plan '" . $result['name'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] deleted hosting-plan '" . $result['name'] . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);

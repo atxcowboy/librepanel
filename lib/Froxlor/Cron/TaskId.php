@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron;
+namespace LibrePanel\Cron;
 
 use ReflectionClass;
 
@@ -41,7 +41,7 @@ final class TaskId
 
 	/**
 	 * TYPE=4 MEANS THAT SOMETHING IN THE DNS CONFIG HAS CHANGED.
-	 * REBUILD froxlor_bind.conf IF BIND IS ENABLED, UPDATE DKIM KEYS
+	 * REBUILD librepanel_bind.conf IF BIND IS ENABLED, UPDATE DKIM KEYS
 	 */
 	const REBUILD_DNS = 4;
 
@@ -68,7 +68,7 @@ final class TaskId
 
 	/**
 	 * TYPE=9 MEANS THAT SOMETHING ANTISPAM RELATED HAS CHANGED.
-	 * REBUILD froxlor_settings.conf IF ANTISPAM IS ENABLED
+	 * REBUILD librepanel_settings.conf IF ANTISPAM IS ENABLED
 	 */
 	const REBUILD_RSPAMD = 9;
 

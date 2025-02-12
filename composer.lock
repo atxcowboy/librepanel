@@ -144,16 +144,16 @@
             "time": "2024-07-08T12:26:09+00:00"
         },
         {
-            "name": "froxlor/idna-convert-legacy",
+            "name": "librepanel/idna-convert-legacy",
             "version": "v2.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Froxlor/idna-convert-legacy.git",
+                "url": "https://github.com/LibrePanel/idna-convert-legacy.git",
                 "reference": "09c1db623ba19e1ed8f2f9dabc15eeda9dc713b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Froxlor/idna-convert-legacy/zipball/09c1db623ba19e1ed8f2f9dabc15eeda9dc713b7",
+                "url": "https://api.github.com/repos/LibrePanel/idna-convert-legacy/zipball/09c1db623ba19e1ed8f2f9dabc15eeda9dc713b7",
                 "reference": "09c1db623ba19e1ed8f2f9dabc15eeda9dc713b7",
                 "shasum": ""
             },
@@ -183,7 +183,7 @@
                 },
                 {
                     "name": "Michael Kaufmann (d00p)",
-                    "email": "d00p@froxlor.org",
+                    "email": "d00p@librepanel.org",
                     "role": "Developer"
                 }
             ],
@@ -195,7 +195,7 @@
                 "php"
             ],
             "support": {
-                "source": "https://github.com/Froxlor/idna-convert-legacy/tree/v2.1.2"
+                "source": "https://github.com/LibrePanel/idna-convert-legacy/tree/v2.1.2"
             },
             "time": "2019-12-31T12:16:30+00:00"
         },

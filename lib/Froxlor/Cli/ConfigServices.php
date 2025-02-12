@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +16,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Config\ConfigParser;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\SImExporter;
-use Froxlor\System\Crypt;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\SImExporter;
+use LibrePanel\System\Crypt;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,13 +51,13 @@ final class ConfigServices extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:config-services');
+		$this->setName('librepanel:config-services');
 		$this->setDescription('Configure system services');
 		$this->addOption('create', 'c', InputOption::VALUE_NONE, 'Create a services list configuration for the --apply option.')
 			->addOption('apply', 'a', InputOption::VALUE_REQUIRED, 'Configure your services by given configuration file/string. To create one run the command with the --create option.')
 			->addOption('list', 'l', InputOption::VALUE_NONE, 'Output the services that are going to be configured using a given config file (--apply option). No services will be configured.')
 			->addOption('daemon', 'd', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'When used with --apply you can specify one or multiple daemons. These will be the only services that get configured.')
-			->addOption('import-settings', 'i', InputOption::VALUE_REQUIRED, 'Import settings from another froxlor installation. This can be done standalone or in addition to --apply.')
+			->addOption('import-settings', 'i', InputOption::VALUE_REQUIRED, 'Import settings from another librepanel installation. This can be done standalone or in addition to --apply.')
 			->addOption('yes-to-all', 'A', InputOption::VALUE_NONE, 'Install packages without asking questions (Debian/Ubuntu only currently)');
 	}
 
@@ -65,7 +65,7 @@ final class ConfigServices extends CliCommand
 	{
 		$result = $this->validateRequirements($output);
 
-		require Froxlor::getInstallDir() . '/lib/functions.php';
+		require LibrePanel::getInstallDir() . '/lib/functions.php';
 
 		if ($result == self::SUCCESS && $input->getOption('import-settings') == false && $input->getOption('create') == false && $input->getOption('apply') == false) {
 			$output->writeln('<error>No option given to do something, exiting.</>');
@@ -114,7 +114,7 @@ final class ConfigServices extends CliCommand
 
 		if (strtoupper(substr($importFile, 0, 4)) == 'HTTP') {
 			$output->writeln("Settings file seems to be an URL, trying to download");
-			$target = "/tmp/froxlor-import-settings-" . time() . ".json";
+			$target = "/tmp/librepanel-import-settings-" . time() . ".json";
 			if (@file_exists($target)) {
 				@unlink($target);
 			}
@@ -164,7 +164,7 @@ final class ConfigServices extends CliCommand
 			'distro' => ""
 		];
 
-		$config_dir = Froxlor::getInstallDir() . '/lib/configfiles/';
+		$config_dir = LibrePanel::getInstallDir() . '/lib/configfiles/';
 		// show list of available distro's
 		$distros = glob($config_dir . '*.xml');
 		// tmp array
@@ -273,18 +273,18 @@ final class ConfigServices extends CliCommand
 		}
 
 		$daemons_config = json_encode($_daemons_config);
-		$output_file = $io->ask("Choose output-filename", "/tmp/froxlor-config-" . date('Ymd') . ".json");
+		$output_file = $io->ask("Choose output-filename", "/tmp/librepanel-config-" . date('Ymd') . ".json");
 		file_put_contents($output_file, $daemons_config);
 		$output->writeln("<info>Successfully generated service-configfile '" . $output_file . "'</>");
 		$output->writeln([
 			"",
 			"<info>You can now apply this config running:</>",
-			"php " . Froxlor::getInstallDir() . "bin/froxlor-cli froxlor:config-services --apply=" . $output_file,
+			"php " . LibrePanel::getInstallDir() . "bin/librepanel-cli librepanel:config-services --apply=" . $output_file,
 			""
 		]);
 		$proceed = $io->confirm("Do you want to apply the config now?", false);
 		if ($proceed) {
-			passthru("php " . Froxlor::getInstallDir() . "bin/froxlor-cli froxlor:config-services --apply=" . $output_file);
+			passthru("php " . LibrePanel::getInstallDir() . "bin/librepanel-cli librepanel:config-services --apply=" . $output_file);
 		}
 		return self::SUCCESS;
 	}
@@ -306,7 +306,7 @@ final class ConfigServices extends CliCommand
 		if (!$skipFileCheck) {
 			if (strtoupper(substr($applyFile, 0, 4)) == 'HTTP') {
 				$output->writeln("Config file seems to be an URL, trying to download");
-				$target = "/tmp/froxlor-config-" . time() . ".json";
+				$target = "/tmp/librepanel-config-" . time() . ".json";
 				if (@file_exists($target)) {
 					@unlink($target);
 				}
@@ -357,7 +357,7 @@ final class ConfigServices extends CliCommand
 
 		if (!empty($decoded_config)) {
 
-			$config_dir = Froxlor::getInstallDir() . 'lib/configfiles/';
+			$config_dir = LibrePanel::getInstallDir() . 'lib/configfiles/';
 			if (empty($decoded_config['distro']) || !file_exists($config_dir . '/' . $decoded_config['distro']. ".xml")) {
 				$output->writeln('<error>Empty or non-existing distribution given. Please login with an admin, go to "System -> Configuration" and select your correct distribution in the top-right corner or specify valid distribution name for "distro" parameter.</>');
 				return self::INVALID;
@@ -431,7 +431,7 @@ final class ConfigServices extends CliCommand
 			// set is_configured flag
 			Settings::Set('panel.is_configured', '1', true);
 			// run cronjob at the end to ensure configs are all up to date
-			exec('php ' . Froxlor::getInstallDir() . 'bin/froxlor-cli froxlor:cron --force');
+			exec('php ' . LibrePanel::getInstallDir() . 'bin/librepanel-cli librepanel:cron --force');
 			// and done
 			$output->writeln('<info>All services have been configured</>');
 			return self::SUCCESS;
@@ -514,7 +514,7 @@ final class ConfigServices extends CliCommand
 			'<VIRTUAL_GID_MAPS>' => Settings::Get('system.vmail_gid'),
 			'<SSLPROTOCOLS>' => (Settings::Get('system.use_ssl') == '1') ? 'imaps pop3s' : '',
 			'<CUSTOMER_TMP>' => FileDir::makeCorrectDir($customer_tmpdir),
-			'<BASE_PATH>' => Froxlor::getInstallDir(),
+			'<BASE_PATH>' => LibrePanel::getInstallDir(),
 			'<BIND_CONFIG_PATH>' => FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory')),
 			'<WEBSERVER_RELOAD_CMD>' => Settings::Get('system.apachereload_command'),
 			'<CUSTOMER_LOGS>' => FileDir::makeCorrectDir(Settings::Get('system.logfiles_directory')),

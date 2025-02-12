@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,27 +16,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Http\RateLimiter;
-use Froxlor\UI\Panel\UI;
-use Froxlor\Install\Install;
+use LibrePanel\Http\RateLimiter;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\Install\Install;
 
 require dirname(__DIR__) . '/lib/functions.php';
 
 // define default theme for configurehint, etc.
-$_deftheme = 'Froxlor';
+$_deftheme = 'LibrePanel';
 
 // validate correct php version
 if (version_compare("7.4.0", PHP_VERSION, ">=")) {
 	die(view($_deftheme . '/misc/phprequirementfailed.html.twig', [
 		'{{ basehref }}' => '../',
-		'{{ froxlor_min_version }}' => '7.4.0',
+		'{{ librepanel_min_version }}' => '7.4.0',
 		'{{ current_version }}' => PHP_VERSION,
 		'{{ current_year }}' => date('Y', time()),
 	]));
@@ -46,7 +46,7 @@ if (version_compare("7.4.0", PHP_VERSION, ">=")) {
 if (!file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
 	die(view($_deftheme . '/misc/vendormissinghint.html.twig', [
 		'{{ basehref }}' => '../',
-		'{{ froxlor_install_dir }}' => dirname(__DIR__),
+		'{{ librepanel_install_dir }}' => dirname(__DIR__),
 		'{{ current_year }}' => date('Y', time()),
 	]));
 }

@@ -1,18 +1,18 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Domains;
-use Froxlor\Database\Database;
+use LibrePanel\Settings;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Domains;
+use LibrePanel\Database\Database;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Domains
- * @covers \Froxlor\Api\Commands\SubDomains
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Domains
+ * @covers \LibrePanel\Api\Commands\SubDomains
  */
 class DomainsTest extends TestCase
 {
@@ -207,7 +207,7 @@ class DomainsTest extends TestCase
 	{
 		global $admin_userdata;
 		$data = [
-			'domain' => 'dev.froxlor.org',
+			'domain' => 'dev.librepanel.org',
 			'customerid' => 1
 		];
 		$this->expectExceptionMessage('The server-hostname cannot be used as customer-domain.');
@@ -362,7 +362,7 @@ class DomainsTest extends TestCase
 		// add new customer
 		$data = [
 			'new_loginname' => 'test3',
-			'email' => 'test3@froxlor.org',
+			'email' => 'test3@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1339,
@@ -465,7 +465,7 @@ class DomainsTest extends TestCase
 
 	/**
 	 *
-	 * @refs https://github.com/Froxlor/Froxlor/issues/899
+	 * @refs https://github.com/LibrePanel/LibrePanel/issues/899
 	 */
 	public function testAdminIdn2DomainsAdd()
 	{

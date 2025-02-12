@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -38,7 +38,7 @@ return [
 					'default' => '/var/customers/webs/',
 					'save_method' => 'storeSettingField',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkPathConflicts'
 					],
 					'requires_reconf' => ['http']
@@ -57,7 +57,7 @@ return [
 					'varname' => 'ipaddress',
 					'type' => 'select',
 					'option_options_method' => [
-						'\\Froxlor\\Domain\\IpAddr',
+						'\\LibrePanel\\Domain\\IpAddr',
 						'getIpAddresses'
 					],
 					'default' => '',
@@ -70,7 +70,7 @@ return [
 					'type' => 'select',
 					'select_mode' => 'multiple',
 					'option_options_method' => [
-						'\\Froxlor\\Domain\\IpAddr',
+						'\\LibrePanel\\Domain\\IpAddr',
 						'getIpPortCombinations'
 					],
 					'default' => '',
@@ -83,7 +83,7 @@ return [
 					'type' => 'select',
 					'select_mode' => 'multiple',
 					'option_options_method' => [
-						'\\Froxlor\\Domain\\IpAddr',
+						'\\LibrePanel\\Domain\\IpAddr',
 						'getSslIpPortCombinations'
 					],
 					'default' => '',
@@ -97,7 +97,7 @@ return [
 					'default' => '',
 					'save_method' => 'storeSettingHostname',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkHostname'
 					]
 				],
@@ -159,7 +159,7 @@ return [
 					'type' => 'text',
 					'default' => '127.0.0.1,localhost',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkMysqlAccessHost'
 					],
 					'save_method' => 'storeSettingMysqlAccessHost'
@@ -186,7 +186,7 @@ return [
 					'varname' => 'report_enable',
 					'type' => 'checkbox',
 					'default' => true,
-					'cronmodule' => 'froxlor/reports',
+					'cronmodule' => 'librepanel/reports',
 					'save_method' => 'storeSettingField'
 				],
 				'system_report_webmax' => [

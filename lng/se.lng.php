@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,12 +16,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
+ * @author     LibrePanel team <team@librepanel.org>
  * @author     Staffan Starberg <staff@starberg.com>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -29,12 +29,12 @@ return [
 		'overview' => 'Översikt',
 		'ressourcedetails' => 'Använda resurser',
 		'systemdetails' => 'System Detaljer',
-		'froxlordetails' => 'Froxlor Detaljer',
-		'installedversion' => 'Installerad version av Froxlor',
-		'latestversion' => 'Senaste version av Froxlor',
+		'librepaneldetails' => 'LibrePanel Detaljer',
+		'installedversion' => 'Installerad version av LibrePanel',
+		'latestversion' => 'Senaste version av LibrePanel',
 		'lookfornewversion' => [
-			'clickhere' => '[Sök senaste verison av Froxlor via Internet]',
-			'error' => 'Fel vid läsning, kontrollera uppkopplingen mot Froxlor',
+			'clickhere' => '[Sök senaste verison av LibrePanel via Internet]',
+			'error' => 'Fel vid läsning, kontrollera uppkopplingen mot LibrePanel',
 		],
 		'resources' => 'Resurser',
 		'customer' => 'Kunder',
@@ -266,7 +266,7 @@ return [
 		'youcantdeleteyourself' => 'Av säkerhetsskäl går inte att redera ditt eget konto.',
 		'youcanteditallfieldsofyourself' => 'Notera: Av säkerhetsskäl går det inte att ändra ditt eget konto.',
 		'documentrootexists' => 'Katalogen &quot;%s&quot; finns redan hos den här kunden. Radera detta först innan kunden skapas igen.',
-		'formtokencompromised' => 'Den säkra anslutningen till Froxlor har avslutats och du har av säkerhetsskäl automatiskt loggats ur.',
+		'formtokencompromised' => 'Den säkra anslutningen till LibrePanel har avslutats och du har av säkerhetsskäl automatiskt loggats ur.',
 	],
 	'extras' => [
 		'description' => 'Här kan du ändra övriga saker såsom katalogskydd mm.<br />Systemet behöver dock lite tid på sig att genomföra ändringarna.',
@@ -302,7 +302,7 @@ return [
 			'subject' => 'Kontoinformation',
 		],
 		'pop_success_alternative' => [
-			'mailbody' => 'Hej,\\n\\nditt E-postkonto {EMAIL}\\nhar ny skapats.\\nDitt lösenord är {PASSWORD}.\\n\\nDetta är ett automatgenererat E-postmeddelande som det INTE går att svara på!\\n\\nLycka till önskar, Froxlor',
+			'mailbody' => 'Hej,\\n\\nditt E-postkonto {EMAIL}\\nhar ny skapats.\\nDitt lösenord är {PASSWORD}.\\n\\nDetta är ett automatgenererat E-postmeddelande som det INTE går att svara på!\\n\\nLycka till önskar, LibrePanel',
 			'subject' => 'E-postkontot är nu skapat',
 		],
 	],

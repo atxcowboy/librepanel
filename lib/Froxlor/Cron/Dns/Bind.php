@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Dns;
+namespace LibrePanel\Cron\Dns;
 
-use Froxlor\Dns\Dns;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\Validate\Validate;
+use LibrePanel\Dns\Dns;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Validate;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -41,24 +41,24 @@ class Bind extends DnsBase
 	public function writeConfigs()
 	{
 		// tell the world what we are doing
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Task4 started - Rebuilding froxlor_bind.conf');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Task4 started - Rebuilding librepanel_bind.conf');
 
 		// clean up
 		$this->cleanZonefiles();
 
 		// check for subfolder in bind-config-directory
 		if (!file_exists(FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory') . '/domains/'))) {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory') . '/domains/')));
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory') . '/domains/')));
 			FileDir::safe_exec('mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory') . '/domains/')));
 		}
 
 		$domains = $this->getDomainList();
 
 		if (empty($domains)) {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'No domains found for nameserver-config, not creating any zones...');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'No domains found for nameserver-config, not creating any zones...');
 			$this->bindconf_file = '';
 		} else {
-			$this->bindconf_file = '# ' . Settings::Get('system.bindconf_directory') . 'froxlor_bind.conf' . "\n" . '# Created ' . date('d.m.Y H:i') . "\n" . '# Do NOT manually edit this file, all changes will be deleted after the next domain change at the panel.' . "\n\n";
+			$this->bindconf_file = '# ' . Settings::Get('system.bindconf_directory') . 'librepanel_bind.conf' . "\n" . '# Created ' . date('d.m.Y H:i') . "\n" . '# Do NOT manually edit this file, all changes will be deleted after the next domain change at the panel.' . "\n\n";
 			foreach ($domains as $domain) {
 				if ($domain['is_child']) {
 					// domains that are subdomains to other main domains are handled by recursion within walkDomainList()
@@ -68,19 +68,19 @@ class Bind extends DnsBase
 			}
 		}
 
-		$bindconf_file_handler = fopen(FileDir::makeCorrectFile(Settings::Get('system.bindconf_directory') . '/froxlor_bind.conf'), 'w');
+		$bindconf_file_handler = fopen(FileDir::makeCorrectFile(Settings::Get('system.bindconf_directory') . '/librepanel_bind.conf'), 'w');
 		fwrite($bindconf_file_handler, $this->bindconf_file);
 		fclose($bindconf_file_handler);
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'froxlor_bind.conf written');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'librepanel_bind.conf written');
 		$this->reloadDaemon();
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Task4 finished');
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Task4 finished');
 	}
 
 	private function cleanZonefiles()
 	{
 		$config_dir = FileDir::makeCorrectFile(Settings::Get('system.bindconf_directory') . '/domains/');
 
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Cleaning dns zone files from ' . $config_dir);
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Cleaning dns zone files from ' . $config_dir);
 
 		// check directory
 		if (@is_dir($config_dir)) {
@@ -108,32 +108,32 @@ class Bind extends DnsBase
 
 		if ($domain['zonefile'] == '') {
 			// check for system-hostname
-			$isFroxlorHostname = false;
-			if (isset($domain['froxlorhost']) && $domain['froxlorhost'] == 1) {
-				$isFroxlorHostname = true;
+			$isLibrePanelHostname = false;
+			if (isset($domain['librepanelhost']) && $domain['librepanelhost'] == 1) {
+				$isLibrePanelHostname = true;
 			}
 
 			if (!$domain['is_child']) {
-				$zoneContent = (string)Dns::createDomainZone(($domain['id'] == 'none') ? $domain : $domain['id'], $isFroxlorHostname);
+				$zoneContent = (string)Dns::createDomainZone(($domain['id'] == 'none') ? $domain : $domain['id'], $isLibrePanelHostname);
 				$domain['zonefile'] = 'domains/' . $domain['domain'] . '.zone';
 				$zonefile_name = FileDir::makeCorrectFile(Settings::Get('system.bindconf_directory') . '/' . $domain['zonefile']);
 				$zonefile_handler = fopen($zonefile_name, 'w');
 				fwrite($zonefile_handler, $zoneContent . $subzones);
 				fclose($zonefile_handler);
-				$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, '`' . $zonefile_name . '` written');
+				$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, '`' . $zonefile_name . '` written');
 				$this->bindconf_file .= $this->generateDomainConfig($domain);
 			} else {
-				return (string)Dns::createDomainZone(($domain['id'] == 'none') ? $domain : $domain['id'], $isFroxlorHostname, true);
+				return (string)Dns::createDomainZone(($domain['id'] == 'none') ? $domain : $domain['id'], $isLibrePanelHostname, true);
 			}
 		} else {
-			$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Added zonefile ' . $domain['zonefile'] . ' for domain ' . $domain['domain'] . ' - Note that you will also have to handle ALL records for ALL subdomains.');
+			$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Added zonefile ' . $domain['zonefile'] . ' for domain ' . $domain['domain'] . ' - Note that you will also have to handle ALL records for ALL subdomains.');
 			$this->bindconf_file .= $this->generateDomainConfig($domain);
 		}
 	}
 
 	private function generateDomainConfig($domain = [])
 	{
-		$this->logger->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Generating dns config for ' . $domain['domain']);
+		$this->logger->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Generating dns config for ' . $domain['domain']);
 
 		$bindconf_file = '# Domain ID: ' . $domain['id'] . ' - CustomerID: ' . $domain['customerid'] . ' - CustomerLogin: ' . $domain['loginname'] . "\n";
 		$bindconf_file .= 'zone "' . $domain['domain'] . '" in {' . "\n";

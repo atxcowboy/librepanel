@@ -1,22 +1,22 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Emails;
-use Froxlor\Api\Commands\EmailForwarders;
-use Froxlor\Api\Commands\EmailAccounts;
+use LibrePanel\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Emails;
+use LibrePanel\Api\Commands\EmailForwarders;
+use LibrePanel\Api\Commands\EmailAccounts;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Emails
- * @covers \Froxlor\Api\Commands\EmailForwarders
- * @covers \Froxlor\Api\Commands\EmailAccounts
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Admins
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Emails
+ * @covers \LibrePanel\Api\Commands\EmailForwarders
+ * @covers \LibrePanel\Api\Commands\EmailAccounts
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Admins
  */
 class MailsTest extends TestCase
 {
@@ -416,7 +416,7 @@ class MailsTest extends TestCase
 
 		$data = [
 			'emailaddr' => 'info@test2.local',
-			'email_password' => \Froxlor\System\Crypt::generatePassword(),
+			'email_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'alternative_email' => 'noone@example.com',
 			'email_quota' => 1337,
 			'sendinfomail' => TRAVIS_CI == 1 ? 0 : 1
@@ -454,7 +454,7 @@ class MailsTest extends TestCase
 
 		$data = [
 			'emailaddr' => 'info@test2.local',
-			'email_password' => \Froxlor\System\Crypt::generatePassword(),
+			'email_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'alternative_email' => 'noone@example.com',
 			'email_quota' => 1338
 		];
@@ -544,7 +544,7 @@ class MailsTest extends TestCase
 		// add account
 		$data = [
 			'emailaddr' => 'info@test2.local',
-			'email_password' => \Froxlor\System\Crypt::generatePassword(),
+			'email_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'alternative_email' => 'noone@example.com',
 			'sendinfomail' => TRAVIS_CI == 1 ? 0 : 1
 		];

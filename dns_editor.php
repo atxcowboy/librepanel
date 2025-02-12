@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 if (!defined('AREA')) {
@@ -28,15 +28,15 @@ if (!defined('AREA')) {
 	exit();
 }
 
-use Froxlor\Api\Commands\DomainZones;
-use Froxlor\Dns\Dns;
-use Froxlor\Settings;
-use Froxlor\UI\Collection;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Listing;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
+use LibrePanel\Api\Commands\DomainZones;
+use LibrePanel\Dns\Dns;
+use LibrePanel\Settings;
+use LibrePanel\UI\Collection;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Listing;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
 
 // This file is being included in admin_domains and customer_domains
 // and therefore does not need to require lib/init.php

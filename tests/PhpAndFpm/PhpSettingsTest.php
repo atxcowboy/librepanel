@@ -1,15 +1,15 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\PhpSettings;
+use LibrePanel\Settings;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\PhpSettings;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\PhpSettings
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\PhpSettings
  */
 class PhpSettingsText extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Database;
+namespace LibrePanel\Database;
 
 use Exception;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -141,7 +141,7 @@ class Database
 		$sql_root = [];
 
 		// include userdata.inc.php
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		// le format
 		if (isset($sql['root_user']) && isset($sql['root_password']) && empty($sql_root)) {
@@ -159,7 +159,7 @@ class Database
 			// write new layout so this won't happen again
 			self::generateNewUserData($sql, $sql_root);
 			// re-read file
-			require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+			require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 		}
 
 		$substitutions = [
@@ -186,11 +186,11 @@ class Database
 		 * log to a file, so we can actually ask people for the error
 		 * (no one seems to find the stuff in the syslog)
 		 */
-		$sl_dir = FileDir::makeCorrectDir(Froxlor::getInstallDir() . "/logs/");
+		$sl_dir = FileDir::makeCorrectDir(LibrePanel::getInstallDir() . "/logs/");
 		if (!file_exists($sl_dir)) {
 			@mkdir($sl_dir, 0755);
 		}
-		openlog("froxlor", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+		openlog("librepanel", LOG_PID | LOG_PERROR, LOG_LOCAL0);
 		syslog(LOG_WARNING, str_replace("\n", " ", $error_message));
 		syslog(LOG_WARNING, str_replace("\n", " ", "--- DEBUG: " . $error_trace));
 		closelog();
@@ -418,7 +418,7 @@ class Database
 		}
 
 		// include userdata.inc.php
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		// le format
 		if (isset($sql['root_user']) && isset($sql['root_password']) && (!isset($sql_root) || !is_array($sql_root))) {
@@ -436,7 +436,7 @@ class Database
 			// write new layout so this won't happen again
 			self::generateNewUserData($sql, $sql_root);
 			// re-read file
-			require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+			require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 		}
 
 		// either root or unprivileged user
@@ -608,14 +608,14 @@ class Database
 	{
 		$content = PhpHelper::parseArrayToPhpFile(
 			['sql' => $sql, 'sql_root' => $sql_root],
-			'automatically generated userdata.inc.php for froxlor'
+			'automatically generated userdata.inc.php for librepanel'
 		);
-		chmod(Froxlor::getInstallDir() . "/lib/userdata.inc.php", 0700);
-		file_put_contents(Froxlor::getInstallDir() . "/lib/userdata.inc.php", $content);
-		chmod(Froxlor::getInstallDir() . "/lib/userdata.inc.php", 0400);
+		chmod(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", 0700);
+		file_put_contents(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", $content);
+		chmod(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", 0400);
 		clearstatcache();
 		if (function_exists('opcache_invalidate')) {
-			@opcache_invalidate(Froxlor::getInstallDir() . "/lib/userdata.inc.php", true);
+			@opcache_invalidate(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", true);
 		}
 	}
 }

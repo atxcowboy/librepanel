@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +16,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Database;
+namespace LibrePanel\Database;
 
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 use PDO;
 
 class IntegrityCheck
@@ -50,7 +50,7 @@ class IntegrityCheck
 				'loginname' => 'integrity-check'
 			];
 		}
-		$this->log = FroxlorLogger::getInstanceOf($userinfo);
+		$this->log = LibrePanelLogger::getInstanceOf($userinfo);
 		$this->available = get_class_methods($this);
 		unset($this->available[array_search('__construct', $this->available)]);
 		unset($this->available[array_search('checkAll', $this->available)]);
@@ -83,7 +83,7 @@ class IntegrityCheck
 	}
 
 	/**
-	 * check whether the froxlor database and its tables are in utf-8 character-set
+	 * check whether the librepanel database and its tables are in utf-8 character-set
 	 *
 	 * @param bool $fix fix db charset/collation if not utf8
 	 *
@@ -99,7 +99,7 @@ class IntegrityCheck
 		]);
 		$charset = $resp['default_character_set_name'] ?? null;
 		if (!empty($charset) && substr(strtolower($charset), 0, 4) != 'utf8') {
-			$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+			$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 				"database charset seems to be different from UTF-8, integrity-check can fix that");
 			if ($fix) {
 				// fix database
@@ -110,7 +110,7 @@ class IntegrityCheck
 					$table = $row[0];
 					Database::query('ALTER TABLE `' . $table . '` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;');
 				}
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 					"database charset was different from UTF-8, integrity-check fixed that");
 			} else {
 				return false;
@@ -188,10 +188,10 @@ class IntegrityCheck
 						'domainid' => $row['id_domain'],
 						'ipandportid' => $row['id_ipandports']
 					]);
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 						"found an ip/port-id in domain <> ip table which does not exist, integrity check fixed this");
 				} else {
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 						"found an ip/port-id in domain <> ip table which does not exist, integrity check can fix this");
 					return false;
 				}
@@ -202,10 +202,10 @@ class IntegrityCheck
 						'domainid' => $row['id_domain'],
 						'ipandportid' => $row['id_ipandports']
 					]);
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 						"found a domain-id in domain <> ip table which does not exist, integrity check fixed this");
 				} else {
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 						"found a domain-id in domain <> ip table which does not exist, integrity check can fix this");
 					return false;
 				}
@@ -224,10 +224,10 @@ class IntegrityCheck
 							'ipandportid' => $defaultip
 						]);
 					}
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 						"found a domain-id with no entry in domain <> ip table, integrity check fixed this");
 				} else {
-					$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+					$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 						"found a domain-id with no entry in domain <> ip table, integrity check can fix this");
 					return false;
 				}
@@ -311,11 +311,11 @@ class IntegrityCheck
 				Database::pexecute($upd_stmt, [
 					'domainid' => $id
 				]);
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 					"found a subdomain with ssl_redirect=1 but parent-domain has ssl=0, integrity check fixed this");
 			} else {
 				// It's just the check, let the function fail
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 					"found a subdomain with ssl_redirect=1 but parent-domain has ssl=0, integrity check can fix this");
 				return false;
 			}
@@ -398,11 +398,11 @@ class IntegrityCheck
 				Database::pexecute($upd_stmt, [
 					'domainid' => $id
 				]);
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING,
 					"found a subdomain with letsencrypt=1 but parent-domain has ssl=0, integrity check fixed this");
 			} else {
 				// It's just the check, let the function fail
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 					"found a subdomain with letsencrypt=1 but parent-domain has ssl=0, integrity check can fix this");
 				return false;
 			}
@@ -438,7 +438,7 @@ class IntegrityCheck
 		]);
 
 		if ($cwg_stmt->rowCount() > 0) {
-			$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+			$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 				"Customers are missing the webserver-user as group-member, integrity-check can fix that");
 			if ($fix) {
 				// prepare update statement
@@ -454,7 +454,7 @@ class IntegrityCheck
 					$upd_data['id'] = $cwg_row['id'];
 					Database::pexecute($upd_stmt, $upd_data);
 				}
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
 					"Customers were missing the webserver-user as group-member, integrity-check fixed that");
 			} else {
 				return false;
@@ -468,16 +468,16 @@ class IntegrityCheck
 	}
 
 	/**
-	 * check whether the local froxlor user is in
+	 * check whether the local librepanel user is in
 	 * the customers groups when fcgid / php-fpm and
-	 * fcgid/fpm in froxlor vhost is used
+	 * fcgid/fpm in librepanel vhost is used
 	 *
 	 * @param bool $fix fix member/groups
 	 *
 	 * @return bool
 	 * @throws \Exception
 	 */
-	public function froxlorLocalGroupMemberForFcgidPhpFpm(bool $fix = false): bool
+	public function librepanelLocalGroupMemberForFcgidPhpFpm(bool $fix = false): bool
 	{
 		if (Settings::Get('system.mod_fcgid') == 0 && Settings::Get('phpfpm.enabled') == 0) {
 			return true;
@@ -508,8 +508,8 @@ class IntegrityCheck
 		]);
 
 		if ($cwg_stmt->rowCount() > 0) {
-			$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
-				"Customers are missing the local froxlor-user as group-member, integrity-check can fix that");
+			$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
+				"Customers are missing the local librepanel-user as group-member, integrity-check can fix that");
 			if ($fix) {
 				// prepare update statement
 				$upd_stmt = Database::prepare("
@@ -524,15 +524,15 @@ class IntegrityCheck
 					$upd_data['id'] = $cwg_row['id'];
 					Database::pexecute($upd_stmt, $upd_data);
 				}
-				$this->log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE,
-					"Customers were missing the local froxlor-user as group-member, integrity-check fixed that");
+				$this->log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE,
+					"Customers were missing the local librepanel-user as group-member, integrity-check fixed that");
 			} else {
 				return false;
 			}
 		}
 
 		if ($fix) {
-			return $this->froxlorLocalGroupMemberForFcgidPhpFpm();
+			return $this->librepanelLocalGroupMemberForFcgidPhpFpm();
 		}
 		return true;
 	}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,25 +16,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\LetsEncrypt\AcmeSh;
-use Froxlor\Cron\Http\Php\Fpm;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
+use LibrePanel\Cron\Http\LetsEncrypt\AcmeSh;
+use LibrePanel\Cron\Http\Php\Fpm;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
 use PDO;
 
 /**
@@ -47,7 +47,7 @@ class HttpConfigBase
 
 	/**
 	 * Pre-defined DHE groups to use as fallback if dhparams_file
-	 * is given, but non-existent, see also https://github.com/froxlor/Froxlor/issues/1270
+	 * is given, but non-existent, see also https://github.com/librepanel/LibrePanel/issues/1270
 	 */
 	const FFDHE4096 = <<<EOC
 -----BEGIN DH PARAMETERS-----
@@ -69,7 +69,7 @@ EOC;
 	{
 		// if Let's Encrypt is activated, run it before regeneration of webserver configfiles
 		if (Settings::Get('system.leenabled') == 1) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Running Let\'s Encrypt cronjob prior to regenerating webserver config files');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Running Let\'s Encrypt cronjob prior to regenerating webserver config files');
 			AcmeSh::$no_inserttask = true;
 			AcmeSh::run(true);
 			// set last run timestamp of cronjob
@@ -91,21 +91,21 @@ EOC;
 				// so we need to create a dummy
 				$_conffiles = glob(FileDir::makeCorrectFile($restart_cmd['config_dir'] . "/*.conf"));
 				if ($_conffiles === false || empty($_conffiles)) {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: fpm config directory "' . $restart_cmd['config_dir'] . '" is empty. Creating dummy.');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: fpm config directory "' . $restart_cmd['config_dir'] . '" is empty. Creating dummy.');
 					Fpm::createDummyPool($restart_cmd['config_dir']);
 				}
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: running ' . $restart_cmd['reload_cmd']);
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: running ' . $restart_cmd['reload_cmd']);
 				FileDir::safe_exec(escapeshellcmd($restart_cmd['reload_cmd']));
 			}
 		}
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: reloading ' . $called_class);
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: reloading ' . $called_class);
 		FileDir::safe_exec(escapeshellcmd(Settings::Get('system.apachereload_command')));
 
 		/**
 		 * nginx does not auto-spawn fcgi-processes
 		 */
 		if (Settings::Get('system.webserver') == "nginx" && Settings::Get('system.phpreload_command') != '' && (int)Settings::Get('phpfpm.enabled') == 0) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: restarting php processes');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, $called_class . '::reload: restarting php processes');
 			FileDir::safe_exec(Settings::Get('system.phpreload_command'));
 		}
 	}
@@ -147,10 +147,10 @@ EOC;
 	protected function getMyPath($ip_port = null)
 	{
 		if (!empty($ip_port) && $ip_port['docroot'] == '') {
-			if (Settings::Get('system.froxlordirectlyviahostname')) {
-				$mypath = FileDir::makeCorrectDir(Froxlor::getInstallDir());
+			if (Settings::Get('system.librepaneldirectlyviahostname')) {
+				$mypath = FileDir::makeCorrectDir(LibrePanel::getInstallDir());
 			} else {
-				$mypath = FileDir::makeCorrectDir(dirname(Froxlor::getInstallDir()));
+				$mypath = FileDir::makeCorrectDir(dirname(LibrePanel::getInstallDir()));
 			}
 		} else {
 			// user-defined docroot, #417
@@ -181,29 +181,29 @@ EOC;
 		return $_sslport;
 	}
 
-	protected function froxlorVhostHasLetsEncryptCert()
+	protected function librepanelVhostHasLetsEncryptCert()
 	{
 		// check whether we have an entry with valid certificates which just does not need
 		// updating yet, so we need to skip this here
-		$froxlor_ssl_settings_stmt = Database::prepare("
+		$librepanel_ssl_settings_stmt = Database::prepare("
 			SELECT * FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` WHERE `domainid` = '0'
 		");
-		$froxlor_ssl = Database::pexecute_first($froxlor_ssl_settings_stmt);
-		if ($froxlor_ssl && !empty($froxlor_ssl['ssl_cert_file'])) {
+		$librepanel_ssl = Database::pexecute_first($librepanel_ssl_settings_stmt);
+		if ($librepanel_ssl && !empty($librepanel_ssl['ssl_cert_file'])) {
 			return true;
 		}
 		return false;
 	}
 
-	protected function froxlorVhostLetsEncryptNeedsRenew()
+	protected function librepanelVhostLetsEncryptNeedsRenew()
 	{
-		$froxlor_ssl_settings_stmt = Database::prepare("
+		$librepanel_ssl_settings_stmt = Database::prepare("
 			SELECT * FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "`
 			WHERE `domainid` = '0' AND
 			(`validtodate` < DATE_ADD(NOW(), INTERVAL 30 DAY) OR `validtodate` IS NULL)
 		");
-		$froxlor_ssl = Database::pexecute_first($froxlor_ssl_settings_stmt);
-		if ($froxlor_ssl && !empty($froxlor_ssl['ssl_cert_file'])) {
+		$librepanel_ssl = Database::pexecute_first($librepanel_ssl_settings_stmt);
+		if ($librepanel_ssl && !empty($librepanel_ssl['ssl_cert_file'])) {
 			return true;
 		}
 		return false;
@@ -216,7 +216,7 @@ EOC;
 	{
 		// number of dots in a domain specifies its position (and depth of subdomain) starting at 35 going downwards on higher depth
 		$vhost_no = (string)(35 - substr_count($domain['domain'], ".") + 1);
-		$filename = $vhost_no . '_froxlor_' . ($ssl_vhost ? 'ssl' : 'normal') . '_vhost_' . $domain['domain'] . '.conf';
+		$filename = $vhost_no . '_librepanel_' . ($ssl_vhost ? 'ssl' : 'normal') . '_vhost_' . $domain['domain'] . '.conf';
 		if ($filename_only) {
 			return $filename;
 		}

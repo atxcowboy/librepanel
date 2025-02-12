@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
+ * @author     LibrePanel team <team@librepanel.org>
  * @author     Tim Zielosko <tim.zielosko@syscp.de>
  * @author     Aldo Reset <aldo.reset@placenet.org>
  * @author     Romain MARIADASSOU <roms2000@free.fr>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -31,7 +31,7 @@ return [
 		'overview' => 'Sommaire',
 		'ressourcedetails' => 'Ressources utilisées',
 		'systemdetails' => 'Informations du système',
-		'froxlordetails' => 'Informations de Froxlor',
+		'librepaneldetails' => 'Informations de LibrePanel',
 		'installedversion' => 'Version installée',
 		'latestversion' => 'Dernière version en date',
 		'lookfornewversion' => [
@@ -259,7 +259,7 @@ return [
 		'hasaliasdomains' => 'Le domaine possède un ou des alias.',
 		'statstics' => 'Fréquentation',
 		'isassigneddomain' => 'Le domaine est attribué',
-		'add_date' => 'Ajouter à Froxlor',
+		'add_date' => 'Ajouter à LibrePanel',
 		'registration_date' => 'Ajouter à l\'enregistrement',
 	],
 	'emails' => [
@@ -406,20 +406,20 @@ return [
 	],
 	'mails' => [
 		'pop_success' => [
-			'mailbody' => 'Bonjour,\\n\\nvotre accès POP3 / IMAP {EMAIL}\\na été créé avec succès.\\n\\nCeci est un e-mail généré automatiquement, veuillez ne pas répondre à ce message.\\n\\nCordialement,\\nL\'équipe Froxlor\\nhttp://www.froxlor.org',
+			'mailbody' => 'Bonjour,\\n\\nvotre accès POP3 / IMAP {EMAIL}\\na été créé avec succès.\\n\\nCeci est un e-mail généré automatiquement, veuillez ne pas répondre à ce message.\\n\\nCordialement,\\nL\'équipe LibrePanel\\nhttp://www.librepanel.org',
 			'subject' => 'Accès POP3 / IMAP créé',
 		],
 		'createcustomer' => [
-			'mailbody' => 'Bonjour {FIRSTNAME} {NAME},\\n\\nVous trouverez ci-dessous vos informations d\'accès au panel d\'administration :\\n\\nAdresse d\'administration : http://demo.froxlor.org\\n\\nIdentifiant : {USERNAME}\\nMot de passe : {PASSWORD}\\n\\nCordialement,\\nL\'équipe Froxlor\\nhttp://www.froxlor.org\\n',
-			'subject' => 'Froxlor : Informations pour votre accès au panel d\'administration',
+			'mailbody' => 'Bonjour {FIRSTNAME} {NAME},\\n\\nVous trouverez ci-dessous vos informations d\'accès au panel d\'administration :\\n\\nAdresse d\'administration : http://demo.librepanel.org\\n\\nIdentifiant : {USERNAME}\\nMot de passe : {PASSWORD}\\n\\nCordialement,\\nL\'équipe LibrePanel\\nhttp://www.librepanel.org\\n',
+			'subject' => 'LibrePanel : Informations pour votre accès au panel d\'administration',
 		],
 		'pop_success_alternative' => [
-			'mailbody' => 'Bonjour,\\n\\nVotre compte e-mail {EMAIL} a été correctement créé.\\n\\nVotre mot de passe est : {PASSWORD}.\\n\\nCeci est un message généré automatiquemenent, veuillez ne pas répondre à cet e-mail car il ne serait être consulter.\\n\\nCordialement,\\nL\'équipe Froxlor.',
+			'mailbody' => 'Bonjour,\\n\\nVotre compte e-mail {EMAIL} a été correctement créé.\\n\\nVotre mot de passe est : {PASSWORD}.\\n\\nCeci est un message généré automatiquemenent, veuillez ne pas répondre à cet e-mail car il ne serait être consulter.\\n\\nCordialement,\\nL\'équipe LibrePanel.',
 			'subject' => 'Compte e-mail correctement créé',
 		],
 		'password_reset' => [
 			'subject' => 'réinitialisation du mot de passe',
-			'mailbody' => 'Bonjour {USERNAME},\\n\\nVotre mot de passe pour Froxlor a été réinitialiser !\\nLe nouveau mot de passe est : {LINK}\\n\\nCordialement,\\nL\'équipe Froxlor.',
+			'mailbody' => 'Bonjour {USERNAME},\\n\\nVotre mot de passe pour LibrePanel a été réinitialiser !\\nLe nouveau mot de passe est : {LINK}\\n\\nCordialement,\\nL\'équipe LibrePanel.',
 		],
 	],
 	'menu' => [
@@ -597,7 +597,7 @@ return [
 		],
 		'adminmail' => [
 			'title' => 'Adresse e-mail de l\'administrateur',
-			'description' => 'Quelle est l\'adresse e-mail par défaut des e-mails envoyés par Froxlor ?',
+			'description' => 'Quelle est l\'adresse e-mail par défaut des e-mails envoyés par LibrePanel ?',
 		],
 		'phpmyadmin_url' => [
 			'title' => 'Adresse URL de phpMyAdmin',

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\UI;
+namespace LibrePanel\UI;
 
-use Froxlor\CurrentUser;
-use Froxlor\FroxlorTwoFactorAuth;
-use Froxlor\Settings;
-use Froxlor\Validate\Check;
+use LibrePanel\CurrentUser;
+use LibrePanel\LibrePanelTwoFactorAuth;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Check;
 
 class Form
 {
@@ -36,7 +36,7 @@ class Form
 	{
 		$fields = [];
 
-		if (\Froxlor\Validate\Form::validateFormDefinition($form)) {
+		if (\LibrePanel\Validate\Form::validateFormDefinition($form)) {
 			foreach ($form['groups'] as $groupname => $groupdetails) {
 				// check for advanced mode sections
 				if (isset($groupdetails['advanced_mode']) && $groupdetails['advanced_mode'] && (int)Settings::Get('panel.settings_mode') == 0) {
@@ -75,7 +75,7 @@ class Form
 						'do_show' => $do_show
 					];
 
-					if (\Froxlor\Validate\Form::validateFieldDefinition($groupdetails)) {
+					if (\LibrePanel\Validate\Form::validateFieldDefinition($groupdetails)) {
 						// Collect form field output
 						foreach ($groupdetails['fields'] as $fieldname => $fielddetails) {
 							// check for advanced mode sections
@@ -227,14 +227,14 @@ class Form
 
 	public static function processForm(&$form, &$input, $url_params = [], $part = null, bool $settings_all = false, $settings_part = null, bool $only_enabledisable = false)
 	{
-		if (\Froxlor\Validate\Form::validateFormDefinition($form)) {
+		if (\LibrePanel\Validate\Form::validateFormDefinition($form)) {
 			$submitted_fields = [];
 			$changed_fields = [];
 			$saved_fields = [];
 
 			foreach ($form['groups'] as $groupname => $groupdetails) {
 				if (($settings_part && $part == $groupname) || $settings_all || $only_enabledisable) {
-					if (\Froxlor\Validate\Form::validateFieldDefinition($groupdetails)) {
+					if (\LibrePanel\Validate\Form::validateFieldDefinition($groupdetails)) {
 						// Prefetch form fields
 						foreach ($groupdetails['fields'] as $fieldname => $fielddetails) {
 							if (!$only_enabledisable || isset($fielddetails['overview_option'])) {
@@ -248,13 +248,13 @@ class Form
 
 			foreach ($form['groups'] as $groupname => $groupdetails) {
 				if (($settings_part && $part == $groupname) || $settings_all || $only_enabledisable) {
-					if (\Froxlor\Validate\Form::validateFieldDefinition($groupdetails)) {
+					if (\LibrePanel\Validate\Form::validateFieldDefinition($groupdetails)) {
 						// Validate fields
 						foreach ($groupdetails['fields'] as $fieldname => $fielddetails) {
 							if (((isset($fielddetails['visible']) && $fielddetails['visible']) || !isset($fielddetails['visible'])) && (!$only_enabledisable || ($only_enabledisable && isset($fielddetails['overview_option'])))) {
 								$newfieldvalue = self::getFormFieldData($fieldname, $fielddetails, $input);
 								if ($newfieldvalue != $fielddetails['value']) {
-									if (($error = \Froxlor\Validate\Form::validateFormField($fieldname, $fielddetails, $newfieldvalue)) !== true) {
+									if (($error = \LibrePanel\Validate\Form::validateFormField($fieldname, $fielddetails, $newfieldvalue)) !== true) {
 										Response::standardError($error, $fieldname);
 									} else {
 										$changed_fields[$fieldname] = $newfieldvalue;
@@ -270,7 +270,7 @@ class Form
 
 			foreach ($form['groups'] as $groupname => $groupdetails) {
 				if (($settings_part && $part == $groupname) || $settings_all || $only_enabledisable) {
-					if (\Froxlor\Validate\Form::validateFieldDefinition($groupdetails)) {
+					if (\LibrePanel\Validate\Form::validateFieldDefinition($groupdetails)) {
 						// Check fields for plausibility
 						foreach ($groupdetails['fields'] as $fieldname => $fielddetails) {
 							if (!isset($submitted_fields[$fieldname])) {
@@ -329,7 +329,7 @@ class Form
 										} else {
 											// validate given OTP code
 											$code = trim($input['otp_verification']);
-											$tfa = new FroxlorTwoFactorAuth('Froxlor ' . Settings::Get('system.hostname'));
+											$tfa = new LibrePanelTwoFactorAuth('LibrePanel ' . Settings::Get('system.hostname'));
 											$result = $tfa->verifyCode(CurrentUser::getField('data_2fa'), $code, 3);
 											if (!$result) {
 												Response::standardError('otpnotvalidated');
@@ -349,7 +349,7 @@ class Form
 
 			foreach ($form['groups'] as $groupname => $groupdetails) {
 				if (($settings_part && $part == $groupname) || $settings_all || $only_enabledisable) {
-					if (\Froxlor\Validate\Form::validateFieldDefinition($groupdetails)) {
+					if (\LibrePanel\Validate\Form::validateFieldDefinition($groupdetails)) {
 						// Save fields
 						foreach ($groupdetails['fields'] as $fieldname => $fielddetails) {
 							if (!$only_enabledisable || (isset($fielddetails['overview_option']))) {
@@ -374,9 +374,9 @@ class Form
 
 	public static function getFormFieldData($fieldname, $fielddata, &$input)
 	{
-		if (is_array($fielddata) && isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\Froxlor\\UI\\Data', 'getFormFieldData' . ucfirst($fielddata['type']))) {
+		if (is_array($fielddata) && isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\LibrePanel\\UI\\Data', 'getFormFieldData' . ucfirst($fielddata['type']))) {
 			$newfieldvalue = call_user_func([
-				'\\Froxlor\\UI\\Data',
+				'\\LibrePanel\\UI\\Data',
 				'getFormFieldData' . ucfirst($fielddata['type'])
 			], $fieldname, $fielddata, $input);
 		} else {
@@ -408,7 +408,7 @@ class Form
 		$returnvalue = '';
 		if (is_array($fielddata) && isset($fielddata['save_method']) && $fielddata['save_method'] != '') {
 			$returnvalue = call_user_func([
-				'\\Froxlor\\Settings\\Store',
+				'\\LibrePanel\\Settings\\Store',
 				$fielddata['save_method']
 			], $fieldname, $fielddata, $newfieldvalue);
 		} elseif (is_array($fielddata) && !isset($fielddata['save_method'])) {
@@ -421,9 +421,9 @@ class Form
 
 	public static function manipulateFormFieldData($fieldname, $fielddata, $newfieldvalue)
 	{
-		if (is_array($fielddata) && isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\Froxlor\\UI\\Data', 'manipulateFormFieldData' . ucfirst($fielddata['type']))) {
+		if (is_array($fielddata) && isset($fielddata['type']) && $fielddata['type'] != '' && method_exists('\\LibrePanel\\UI\\Data', 'manipulateFormFieldData' . ucfirst($fielddata['type']))) {
 			$newfieldvalue = call_user_func([
-				'\\Froxlor\\UI\\Data',
+				'\\LibrePanel\\UI\\Data',
 				'manipulateFormFieldData' . ucfirst($fielddata['type'])
 			], $fieldname, $fielddata, $newfieldvalue);
 		}
@@ -436,7 +436,7 @@ class Form
 		$returnvalue = '';
 		if (is_array($fielddata) && isset($fielddata['save_method']) && $fielddata['save_method'] != '') {
 			$returnvalue = call_user_func([
-				'\\Froxlor\\Settings\\Store',
+				'\\LibrePanel\\Settings\\Store',
 				$fielddata['save_method']
 			], $fielddata, $newfieldvalue);
 		} elseif (is_array($fielddata) && !isset($fielddata['save_method'])) {

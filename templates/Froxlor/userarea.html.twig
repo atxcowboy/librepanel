@@ -1,4 +1,4 @@
-{% extends "Froxlor/base.html.twig" %}
+{% extends "LibrePanel/base.html.twig" %}
 
 {% set body_class = "min-vh-100 d-flex flex-column" %}
 
@@ -32,12 +32,12 @@
 					<a class="nav-link d-md-none" data-bs-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseSearch">
 						<i class="fa-solid fa-search text-body-secondary"></i>
 					</a>
-					{% if call_static('\\Froxlor\\CurrentUser', 'getField', ['switched_user']) is not empty and call_static('\\Froxlor\\CurrentUser', 'getField', ['switched_user']) is iterable %}
+					{% if call_static('\\LibrePanel\\CurrentUser', 'getField', ['switched_user']) is not empty and call_static('\\LibrePanel\\CurrentUser', 'getField', ['switched_user']) is iterable %}
 						<a class="nav-link text-success" href="{{ linker({'section': 'index', 'action': 'suback'}) }}">
 							<i class="fa-solid fa-reply me-1"></i><span class="d-none d-xl-inline">{{ userinfo.switched_user.loginname }}</span>
 						</a>
 					{% endif %}
-					{% if userinfo.adminsession == 1 and call_static('\\Froxlor\\CurrentUser', 'getField', ['change_serversettings']) is not empty and call_static('\\Froxlor\\CurrentUser', 'getField', ['change_serversettings']) == 1 %}
+					{% if userinfo.adminsession == 1 and call_static('\\LibrePanel\\CurrentUser', 'getField', ['change_serversettings']) is not empty and call_static('\\LibrePanel\\CurrentUser', 'getField', ['change_serversettings']) == 1 %}
 						<li class="nav-item" id="updatecheck"></li>
 					{% endif %}
 					<li class="nav-item">
@@ -72,7 +72,7 @@
 									</a>
 								</li>
 								<li>
-									<a class="dropdown-item" href="https://docs.froxlor.org/latest/api-guide/" rel="external" target="_blank">
+									<a class="dropdown-item" href="https://docs.librepanel.org/latest/api-guide/" rel="external" target="_blank">
 										<i class="fa-solid fa-circle-info"></i> {{ lng('menue.main.apihelp') }}
 									</a>
 								</li>
@@ -103,7 +103,7 @@
 
 {% block body %}
 	<div class="d-flex flex-grow-1">
-		{{ include('Froxlor/sidebar.html.twig') }}
+		{{ include('LibrePanel/sidebar.html.twig') }}
 
 		<div class="d-flex flex-grow-1 overflow-hidden">
 
@@ -116,8 +116,8 @@
 				{% endif %}
 
 				{% block errors %}
-					{% if call_static('\\Froxlor\\ErrorBag', 'hasErrors') %}
-						{% for error in call_static('\\Froxlor\\ErrorBag', 'getErrors') %}
+					{% if call_static('\\LibrePanel\\ErrorBag', 'hasErrors') %}
+						{% for error in call_static('\\LibrePanel\\ErrorBag', 'getErrors') %}
 							{{ error|raw }}
 						{% endfor %}
 					{% endif %}
@@ -127,7 +127,7 @@
 					{% block content %}{% endblock %}
 				</section>
 
-				{{ include('Froxlor/footer.html.twig') }}
+				{{ include('LibrePanel/footer.html.twig') }}
 			</main>
 
 			{% block subsidebar %}{% endblock %}

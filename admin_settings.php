@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,28 +16,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Api\Commands\Froxlor;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Database\IntegrityCheck;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Form;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Listing;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\User;
+use LibrePanel\Api\Commands\LibrePanel;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\IntegrityCheck;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Form;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Listing;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
 use PHPMailer\PHPMailer\PHPMailer;
 
 const AREA = 'admin';
@@ -80,7 +80,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 				'page' => $page,
 				'part' => $_part,
 			], $_part, $settings_all, $settings_part, $only_enabledisable)) {
-				$log->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "rebuild configfiles due to changed setting");
+				$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "rebuild configfiles due to changed setting");
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 				// Using nameserver, insert a task which rebuilds the server config
 				Cronjob::inserttask(TaskId::REBUILD_DNS);
@@ -141,7 +141,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 	]);
 } elseif ($page == 'rebuildconfigs' && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "rebuild configfiles");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "rebuild configfiles");
 		Cronjob::inserttask(TaskId::REBUILD_VHOST);
 		Cronjob::inserttask(TaskId::CREATE_QUOTA);
 		// Using nameserver, insert a task which rebuilds the server config
@@ -159,7 +159,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 	}
 } elseif ($page == 'updatecounters' && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "updated resource-counters");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "updated resource-counters");
 		$updatecounters = User::updateCounters(true);
 		UI::view('user/resource-counter.html.twig', [
 			'counters' => $updatecounters
@@ -171,7 +171,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 	}
 } elseif ($page == 'wipecleartextmailpws' && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "wiped all cleartext mail passwords");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "wiped all cleartext mail passwords");
 		Database::query("UPDATE `" . TABLE_MAIL_USERS . "` SET `password` = '';");
 		Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `value` = '0' WHERE `settinggroup` = 'system' AND `varname` = 'mailpwcleartext'");
 		Response::redirectTo($filename);
@@ -182,7 +182,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 	}
 } elseif ($page == 'wipequotas' && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "wiped all mailquotas");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "wiped all mailquotas");
 
 		// Set the quota to 0 which means unlimited
 		Database::query("UPDATE `" . TABLE_MAIL_USERS . "` SET `quota` = '0';");
@@ -224,7 +224,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 
 		// Update the Customer, if the used quota is bigger than the allowed quota
 		Database::query("UPDATE `" . TABLE_PANEL_CUSTOMERS . "` SET `email_quota` = `email_quota_used` WHERE `email_quota` < `email_quota_used`");
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, 'enforcing mailquota to all customers: ' . Settings::Get('system.mail_quota') . ' MB');
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, 'enforcing mailquota to all customers: ' . Settings::Get('system.mail_quota') . ' MB');
 		Response::redirectTo($filename);
 	} else {
 		HTML::askYesNo('admin_quotas_reallyenforce', $filename, [
@@ -276,12 +276,12 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 	if (Request::get('action') == "export") {
 		// export
 		try {
-			$json_result = Froxlor::getLocal($userinfo)->exportSettings();
+			$json_result = LibrePanel::getLocal($userinfo)->exportSettings();
 			$json_export = json_decode($json_result, true)['data'];
 		} catch (Exception $e) {
 			Response::dynamicError($e->getMessage());
 		}
-		header('Content-disposition: attachment; filename=Froxlor_settings-' . \Froxlor\Froxlor::VERSION . '-' . \Froxlor\Froxlor::DBVERSION . '_' . date('d.m.Y') . '.json');
+		header('Content-disposition: attachment; filename=LibrePanel_settings-' . \LibrePanel\LibrePanel::VERSION . '-' . \LibrePanel\LibrePanel::DBVERSION . '_' . date('d.m.Y') . '.json');
 		header('Content-type: application/json');
 		echo $json_export;
 		exit();
@@ -292,7 +292,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 			if (isset($_FILES["import_file"]["tmp_name"])) {
 				$imp_content = file_get_contents($_FILES["import_file"]["tmp_name"]);
 				try {
-					Froxlor::getLocal($userinfo, [
+					LibrePanel::getLocal($userinfo, [
 						'json_str' => $imp_content
 					])->importSettings();
 				} catch (Exception $e) {
@@ -360,7 +360,7 @@ if ($page == 'overview' && $userinfo['change_serversettings'] == '1') {
 			}
 
 			try {
-				$testmail->Subject = "Froxlor Test-Mail";
+				$testmail->Subject = "LibrePanel Test-Mail";
 				$mail_body = "Yay, this worked :)";
 				$testmail->AltBody = $mail_body;
 				$testmail->MsgHTML(str_replace("\n", "<br />", $mail_body));

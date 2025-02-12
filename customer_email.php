@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,33 +16,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'customer';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Api\Commands\EmailAccounts;
-use Froxlor\Api\Commands\EmailDomains;
-use Froxlor\Api\Commands\EmailForwarders;
-use Froxlor\Api\Commands\Emails;
-use Froxlor\Cron\Mail\Rspamd;
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\UI\Collection;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Listing;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Check;
+use LibrePanel\Api\Commands\EmailAccounts;
+use LibrePanel\Api\Commands\EmailDomains;
+use LibrePanel\Api\Commands\EmailForwarders;
+use LibrePanel\Api\Commands\Emails;
+use LibrePanel\Cron\Mail\Rspamd;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Collection;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Listing;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Check;
 
 // redirect if this customer page is hidden via settings
 if (Settings::IsInList('panel.customer_hide_options', 'email') || $userinfo['emails'] == 0) {
@@ -77,7 +77,7 @@ if ($page == 'overview' || $page == 'emails') {
 		}
 
 		$actions_links[] = [
-			'href' => \Froxlor\Froxlor::getDocsUrl() . 'user-guide/emails/',
+			'href' => \LibrePanel\LibrePanel::getDocsUrl() . 'user-guide/emails/',
 			'target' => '_blank',
 			'icon' => 'fa-solid fa-circle-info',
 			'class' => 'btn-outline-secondary'
@@ -95,7 +95,7 @@ if ($page == 'overview' || $page == 'emails') {
 if ($page == 'email_domain') {
 	$email_domainid = Request::any('domainid', 0);
 	if ($action == '') {
-		$log->logAction(FroxlorLogger::USR_ACTION, LOG_INFO, "viewed customer_email::emails");
+		$log->logAction(LibrePanelLogger::USR_ACTION, LOG_INFO, "viewed customer_email::emails");
 
 		$sql_search = [];
 		if ($email_domainid > 0) {
@@ -139,7 +139,7 @@ if ($page == 'email_domain') {
 			];
 		}
 		$actions_links[] = [
-			'href' => \Froxlor\Froxlor::getDocsUrl() . 'user-guide/emails/',
+			'href' => \LibrePanel\LibrePanel::getDocsUrl() . 'user-guide/emails/',
 			'target' => '_blank',
 			'icon' => 'fa-solid fa-circle-info',
 			'class' => 'btn-outline-secondary'

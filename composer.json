@@ -1,27 +1,27 @@
 {
-	"name": "froxlor/froxlor",
+	"name": "librepanel/librepanel",
 	"description": "The server administration software for your needs. Developed by experienced server administrators, this panel simplifies the effort of managing your hosting platform.",
 	"keywords": [
 		"server",
 		"administration",
 		"php"
 	],
-	"homepage": "https://www.froxlor.org",
+	"homepage": "https://www.librepanel.org",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
 			"name": "Michael Kaufmann",
-			"email": "team@froxlor.org",
+			"email": "team@librepanel.org",
 			"role": "Lead Developer"
 		}
 	],
 	"support": {
-		"email": "team@froxlor.org",
-		"issues": "https://github.com/Froxlor/Froxlor/issues",
-		"forum": "https://forum.froxlor.org/",
-		"source": "https://github.com/Froxlor/Froxlor",
-		"docs": "https://docs.froxlor.org/",
-		"chat": "https://discord.froxlor.org/"
+		"email": "team@librepanel.org",
+		"issues": "https://github.com/LibrePanel/LibrePanel/issues",
+		"forum": "https://forum.librepanel.org/",
+		"source": "https://github.com/LibrePanel/LibrePanel",
+		"docs": "https://docs.librepanel.org/",
+		"chat": "https://discord.librepanel.org/"
 	},
 	"funding": [
 		{
@@ -50,7 +50,7 @@
 		"phpmailer/phpmailer": "~6.0",
 		"monolog/monolog": "^1.24",
 		"robthree/twofactorauth": "^1.6",
-		"froxlor/idna-convert-legacy": "^2.1",
+		"librepanel/idna-convert-legacy": "^2.1",
 		"voku/anti-xss": "^4.1",
 		"twig/twig": "^3.3",
 		"symfony/console": "^5.4",
@@ -83,8 +83,8 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Froxlor\\": [
-				"lib/Froxlor"
+			"LibrePanel\\": [
+				"lib/LibrePanel"
 			]
 		}
 	},

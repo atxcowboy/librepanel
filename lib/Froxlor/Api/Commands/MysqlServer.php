@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,23 +16,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Validate\Validate;
 use PDO;
 use PDOException;
 
@@ -129,7 +129,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 		$sql_root = [];
 
 		// get all data from lib/userdata
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		// le format
 		if (isset($sql['root_user']) && isset($sql['root_password']) && !is_array($sql_root)) {
@@ -168,7 +168,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 			$this->addDatabaseFromCustomerAllowedList($newdbserver);
 		}
 
-		$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] added new database server '" . $description . "' (" . $mysql_host . ")");
+		$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] added new database server '" . $description . "' (" . $mysql_host . ")");
 
 		return $this->response(['dbserver' => $newdbserver]);
 	}
@@ -200,7 +200,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 
 		$sql_root = [];
 		// get all data from lib/userdata
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		if (!isset($sql_root[$dbserver])) {
 			throw new Exception('Mysql server not found', 404);
@@ -219,7 +219,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 		$mysql_host = $sql_root[$dbserver]['host'] ?? "unknown";
 		unset($sql_root[$dbserver]);
 
-		$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] removed database server '" . $description . "' (" . $mysql_host . ")");
+		$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] removed database server '" . $description . "' (" . $mysql_host . ")");
 
 		$this->generateNewUserData($sql, $sql_root);
 		return $this->response(['true']);
@@ -236,7 +236,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 		$sql = [];
 		$sql_root = [];
 		// get all data from lib/userdata
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		// limit customer to its allowed servers
 		$allowed_mysqls = [];
@@ -281,7 +281,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 		}
 		$sql_root = [];
 		// get all data from lib/userdata
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 		return $this->response(count($sql_root));
 	}
 
@@ -306,7 +306,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 
 		$sql_root = [];
 		// get all data from lib/userdata
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		if (!isset($sql_root[$dbserver])) {
 			throw new Exception('Mysql server not found', 404);
@@ -324,7 +324,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 
 		unset($sql_root[$dbserver]['password']);
 		$sql_root[$dbserver]['id'] = $dbserver;
-		$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] get database-server '" . $sql_root[$dbserver]['caption'] . "'");
+		$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] get database-server '" . $sql_root[$dbserver]['caption'] . "'");
 		return $this->response($sql_root[$dbserver]);
 	}
 
@@ -368,7 +368,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 		$dbserver = $id >= 0 ? $id : $dbserver;
 
 		$sql_root = [];
-		require Froxlor::getInstallDir() . "/lib/userdata.inc.php";
+		require LibrePanel::getInstallDir() . "/lib/userdata.inc.php";
 
 		if (!isset($sql_root[$dbserver])) {
 			throw new Exception('Mysql server not found', 404);
@@ -456,7 +456,7 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 			$this->addDatabaseFromCustomerAllowedList($dbserver);
 		}
 
-		$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] edited database server '" . $description . "' (" . $mysql_host . ")");
+		$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] edited database server '" . $description . "' (" . $mysql_host . ")");
 
 		return $this->response(['true']);
 	}
@@ -542,14 +542,14 @@ class MysqlServer extends ApiCommand implements ResourceEntity
 	{
 		$content = PhpHelper::parseArrayToPhpFile(
 			['sql' => $sql, 'sql_root' => $sql_root],
-			'automatically generated userdata.inc.php for froxlor'
+			'automatically generated userdata.inc.php for librepanel'
 		);
-		chmod(Froxlor::getInstallDir() . "/lib/userdata.inc.php", 0700);
-		file_put_contents(Froxlor::getInstallDir() . "/lib/userdata.inc.php", $content);
-		chmod(Froxlor::getInstallDir() . "/lib/userdata.inc.php", 0400);
+		chmod(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", 0700);
+		file_put_contents(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", $content);
+		chmod(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", 0400);
 		clearstatcache();
 		if (function_exists('opcache_invalidate')) {
-			@opcache_invalidate(Froxlor::getInstallDir() . "/lib/userdata.inc.php", true);
+			@opcache_invalidate(LibrePanel::getInstallDir() . "/lib/userdata.inc.php", true);
 		}
 	}
 }

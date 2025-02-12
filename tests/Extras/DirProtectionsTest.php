@@ -1,15 +1,15 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\DirProtections;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\DirProtections;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\DirProtections
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\DirProtections
  */
 class DirProtectionsTest extends TestCase
 {
@@ -27,7 +27,7 @@ class DirProtectionsTest extends TestCase
 		$data = [
 			'path' => '/test',
 			'username' => 'testing',
-			'directory_password' => \Froxlor\System\Crypt::generatePassword(),
+			'directory_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'directory_authname' => 'test1'
 		];
 		$json_result = DirProtections::getLocal($customer_userdata, $data)->add();
@@ -49,7 +49,7 @@ class DirProtectionsTest extends TestCase
 		$data = [
 			'path' => '/test',
 			'username' => 'testing',
-			'directory_password' => \Froxlor\System\Crypt::generatePassword(),
+			'directory_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'directory_authname' => 'test2'
 		];
 		$this->expectExceptionMessage("Combination of username and path already exists");
@@ -65,7 +65,7 @@ class DirProtectionsTest extends TestCase
 			'loginname' => 'test1'
 		))->get();
 		$customer_userdata = json_decode($json_result, true)['data'];
-		$up = \Froxlor\System\Crypt::generatePassword();
+		$up = \LibrePanel\System\Crypt::generatePassword();
 		$data = [
 			'path' => '/test',
 			'username' => $up,
@@ -146,7 +146,7 @@ class DirProtectionsTest extends TestCase
 
 		$data = [
 			'id' => 1,
-			'directory_password' => \Froxlor\System\Crypt::generatePassword(),
+			'directory_password' => \LibrePanel\System\Crypt::generatePassword(),
 			'directory_authname' => 'test1337'
 		];
 		$json_result = DirProtections::getLocal($customer_userdata, $data)->update();

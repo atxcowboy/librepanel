@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -65,7 +65,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 	public function listing()
 	{
 		if ($this->isAdmin() && ($this->getUserDetail('change_serversettings') || !empty($this->getUserDetail('ip')))) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] list ips and ports");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] list ips and ports");
 			$ip_where = "";
 			$append_where = false;
 			if (!empty($this->getUserDetail('ip')) && $this->getUserDetail('ip') != -1) {
@@ -132,7 +132,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 	 * @param string $default_vhostconf_domain
 	 *            optional, defatul empty
 	 * @param string $docroot
-	 *            optional, default empty (point to froxlor)
+	 *            optional, default empty (point to librepanel)
 	 * @param bool $ssl
 	 *            optional, default 0 (false)
 	 * @param string $ssl_cert_file
@@ -299,7 +299,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 				$ip = '[' . $ip . ']';
 			}
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] added IP/port '" . $ip . ":" . $port . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] added IP/port '" . $ip . ":" . $port . "'");
 			// get ip for return-array
 			$result = $this->apiCall('IpsAndPorts.get', [
 				'id' => $ins_data['id']
@@ -336,7 +336,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 				'id' => $id
 			], true, true);
 			if ($result) {
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] get ip " . $result['ip'] . " " . $result['port']);
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] get ip " . $result['ip'] . " " . $result['port']);
 				return $this->response($result);
 			}
 			throw new Exception("IP/port with id #" . $id . " could not be found", 404);
@@ -365,7 +365,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 	 * @param string $default_vhostconf_domain
 	 *            optional, defatul empty
 	 * @param string $docroot
-	 *            optional, default empty (point to froxlor)
+	 *            optional, default empty (point to librepanel)
 	 * @param bool $ssl
 	 *            optional, default 0 (false)
 	 * @param string $ssl_cert_file
@@ -548,7 +548,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 				// Using nameserver, insert a task which rebuilds the server config
 				Cronjob::inserttask(TaskId::REBUILD_DNS);
 
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] changed IP/port from '" . $result['ip'] . ":" . $result['port'] . "' to '" . $ip . ":" . $port . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] changed IP/port from '" . $result['ip'] . ":" . $result['port'] . "' to '" . $ip . ":" . $port . "'");
 
 				$result = $this->apiCall('IpsAndPorts.get', [
 					'id' => $result['id']
@@ -619,7 +619,7 @@ class IpsAndPorts extends ApiCommand implements ResourceEntity
 						// Using nameserver, insert a task which rebuilds the server config
 						Cronjob::inserttask(TaskId::REBUILD_DNS);
 
-						$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] deleted IP/port '" . $result['ip'] . ":" . $result['port'] . "'");
+						$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] deleted IP/port '" . $result['ip'] . ":" . $result['port'] . "'");
 						return $this->response($result);
 					} else {
 						Response::standardError('cantdeletesystemip', '', true);

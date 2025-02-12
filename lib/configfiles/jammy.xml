@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<froxlor>
+<librepanel>
 	<distribution name="Ubuntu" codename="Jammy"
 		version="22.04" defaulteditor="/bin/nano">
 		<!-- OS defaults to be loaded on installation -->
 		<defaults>
 			<default settinggroup="system" varname="nssextrausers" value="1"></default>
 			<default for="lighttpd" settinggroup="system" varname="apacheconf_vhost" value="/etc/lighttpd/conf-enabled/"></default>
-			<default for="lighttpd" settinggroup="system" varname="apacheconf_diroptions" value="/etc/lighttpd/froxlor-diroptions/"></default>
-			<default for="lighttpd" settinggroup="system" varname="apacheconf_htpasswddir" value="/etc/lighttpd/froxlor-htpasswd/"></default>
+			<default for="lighttpd" settinggroup="system" varname="apacheconf_diroptions" value="/etc/lighttpd/librepanel-diroptions/"></default>
+			<default for="lighttpd" settinggroup="system" varname="apacheconf_htpasswddir" value="/etc/lighttpd/librepanel-htpasswd/"></default>
 			<default for="lighttpd" settinggroup="system" varname="apachereload_command" value="service lighttpd reload"></default>
 			<default for="lighttpd" settinggroup="system" varname="letsencryptacmeconf" value="/etc/lighttpd/acme.conf"></default>
 			<default for="lighttpd" settinggroup="phpfpm" varname="fastcgi_ipcdir" value="/var/run/lighttpd/"></default>
 			<default for="nginx" settinggroup="system" varname="apacheconf_vhost" value="/etc/nginx/sites-enabled/"></default>
 			<default for="nginx" settinggroup="system" varname="apacheconf_diroptions" value="/etc/nginx/sites-enabled/"></default>
-			<default for="nginx" settinggroup="system" varname="apacheconf_htpasswddir" value="/etc/nginx/froxlor-htpasswd/"></default>
+			<default for="nginx" settinggroup="system" varname="apacheconf_htpasswddir" value="/etc/nginx/librepanel-htpasswd/"></default>
 			<default for="nginx" settinggroup="system" varname="apachereload_command" value="service nginx reload"></default>
 			<default for="nginx" settinggroup="system" varname="letsencryptacmeconf" value="/etc/nginx/acme.conf"></default>
 			<default for="nginx" settinggroup="phpfpm" varname="fastcgi_ipcdir" value="/var/run/php/"></default>
@@ -377,10 +377,10 @@ exit "$RETVAL"
 				<!--Bind9 -->
 				<daemon name="bind" title="Bind9 nameserver" default="true">
 					<install><![CDATA[apt-get install bind9]]></install>
-					<command><![CDATA[echo "include \"{{settings.system.bindconf_directory}}froxlor_bind.conf\";" >> /etc/bind/named.conf.local]]></command>
-					<command><![CDATA[touch {{settings.system.bindconf_directory}}froxlor_bind.conf]]></command>
-					<command><![CDATA[chown bind:0 {{settings.system.bindconf_directory}}froxlor_bind.conf]]></command>
-					<command><![CDATA[chmod 0644 {{settings.system.bindconf_directory}}froxlor_bind.conf]]></command>
+					<command><![CDATA[echo "include \"{{settings.system.bindconf_directory}}librepanel_bind.conf\";" >> /etc/bind/named.conf.local]]></command>
+					<command><![CDATA[touch {{settings.system.bindconf_directory}}librepanel_bind.conf]]></command>
+					<command><![CDATA[chown bind:0 {{settings.system.bindconf_directory}}librepanel_bind.conf]]></command>
+					<command><![CDATA[chmod 0644 {{settings.system.bindconf_directory}}librepanel_bind.conf]]></command>
 					<command><![CDATA[service bind9 restart]]></command>
 				</daemon>
 				<daemon name="powerdns" title="PowerDNS (standalone)">
@@ -902,13 +902,13 @@ version-string=powerdns
 #
 # webserver-print-arguments=no
 
-# include froxlor-bind-specific config
-include-dir=/etc/powerdns/froxlor/
+# include librepanel-bind-specific config
+include-dir=/etc/powerdns/librepanel/
 ]]>
 						</content>
 					</file>
-					<command><![CDATA[mkdir -p /etc/powerdns/froxlor/]]></command>
-					<file name="/etc/powerdns/froxlor/pdns_froxlor.conf"
+					<command><![CDATA[mkdir -p /etc/powerdns/librepanel/]]></command>
+					<file name="/etc/powerdns/librepanel/pdns_librepanel.conf"
 						chown="root:pdns" chmod="640">
 						<content><![CDATA[
 # mysql-settings / you need to create the power-dns database for yourself!
@@ -1447,13 +1447,13 @@ version-string=powerdns
 #
 # webserver-print-arguments=no
 
-# include froxlor-bind-specific config
-include-dir=/etc/powerdns/froxlor/
+# include librepanel-bind-specific config
+include-dir=/etc/powerdns/librepanel/
 ]]>
 						</content>
 					</file>
-					<command><![CDATA[mkdir -p /etc/powerdns/froxlor/]]></command>
-					<file name="/etc/powerdns/froxlor/pdns_froxlor.conf"
+					<command><![CDATA[mkdir -p /etc/powerdns/librepanel/]]></command>
+					<file name="/etc/powerdns/librepanel/pdns_librepanel.conf"
 						chown="root:pdns" chmod="640">
 						<content><![CDATA[
 # Bind backend configuration
@@ -1638,7 +1638,7 @@ compatibility_level = 2
 # from gethostname(). $myhostname is used as a default value for many
 # other configuration parameters.
 #
-# Froxlor Note: $myhostname can and should be the same as $mydomain as long as
+# LibrePanel Note: $myhostname can and should be the same as $mydomain as long as
 # you don't intend to send mail to it (it will be considered local, not virtual)
 # for the case of a subdomain, $mydomain *must* be equal to $myhostname,
 # otherwise you cannot use the main domain for virtual transport.
@@ -1651,10 +1651,10 @@ myhostname = $mydomain
 # $mydomain is used as a default value for many other configuration
 # parameters.
 #
-# Froxlor Note: We are using a default here but that may or may not make sense,
+# LibrePanel Note: We are using a default here but that may or may not make sense,
 # depending on your dns configuration, please check yourself.
 
-# FQDN from Froxlor
+# FQDN from LibrePanel
 mydomain = <SERVERNAME>
 
 mydestination = $myhostname, localhost.$mydomain, localhost
@@ -3413,7 +3413,7 @@ action = "no action";
 #  want_spam = yes;
 #}
 
-## Include froxlor generated settings
+## Include librepanel generated settings
 .include(try=true,priority=1,duplicate=merge) "{{settings.antispam.config_file}}"
 ]]>
 							</content>
@@ -3854,7 +3854,7 @@ TLSRequired                             on
 ]]>
 						</content>
 					</file>
-					<file name="/etc/proftpd/conf.d/99-froxlor-ratelimit.conf" chown="root:0"
+					<file name="/etc/proftpd/conf.d/99-librepanel-ratelimit.conf" chown="root:0"
 						  chmod="0644">
 						<content><![CDATA[
 <Class whitelist>
@@ -4203,11 +4203,11 @@ aliases:     files
 				<!-- Logrotate -->
 				<daemon name="logrotate" title="Logrotate">
 					<install><![CDATA[apt-get install logrotate]]></install>
-					<file name="/etc/logrotate.d/froxlor" chown="root:root"
+					<file name="/etc/logrotate.d/librepanel" chown="root:root"
 						chmod="0644">
 						<content><![CDATA[
 #
-# Froxlor logrotate snippet
+# LibrePanel logrotate snippet
 #
 <CUSTOMER_LOGS>*.log {
   missingok
@@ -4242,7 +4242,7 @@ aliases:     files
 					</commands>
 					<!-- instead of just restarting apache, we let the cronjob do all the
 						dirty work -->
-					<command><![CDATA[php {{const.install_dir}}bin/froxlor-cli froxlor:cron --force]]></command>
+					<command><![CDATA[php {{const.install_dir}}bin/librepanel-cli librepanel:cron --force]]></command>
 				</daemon>
 				<!-- PHP-FPM -->
 				<daemon name="php-fpm"
@@ -4280,17 +4280,17 @@ aliases:     files
 					</commands>
 					<!-- instead of just restarting apache, we let the cronjob do all the
 						dirty work -->
-					<command><![CDATA[php {{const.install_dir}}bin/froxlor-cli froxlor:cron --force]]></command>
+					<command><![CDATA[php {{const.install_dir}}bin/librepanel-cli librepanel:cron --force]]></command>
 				</daemon>
 				<!-- Cronjob -->
-				<daemon name="cron" title="Cronjob for froxlor"
+				<daemon name="cron" title="Cronjob for librepanel"
 					mandatory="true">
 					<install><![CDATA[apt-get install cron gnupg]]></install>
-					<command><![CDATA[[ ! -e /usr/local/bin/froxlor-cli ] && ln -s <BASE_PATH>bin/froxlor-cli /usr/local/bin/froxlor-cli]]></command>
-					<command><![CDATA[/usr/bin/php <BASE_PATH>bin/froxlor-cli froxlor:cron --run-task 99]]></command>
+					<command><![CDATA[[ ! -e /usr/local/bin/librepanel-cli ] && ln -s <BASE_PATH>bin/librepanel-cli /usr/local/bin/librepanel-cli]]></command>
+					<command><![CDATA[/usr/bin/php <BASE_PATH>bin/librepanel-cli librepanel:cron --run-task 99]]></command>
 					<command><![CDATA[{{settings.system.crondreload}}]]></command>
 				</daemon>
 			</service>
 		</services>
 	</distribution>
-</froxlor>
+</librepanel>

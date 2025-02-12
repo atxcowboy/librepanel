@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,25 +16,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 declare(strict_types=1);
 
-namespace Froxlor\UI\Panel;
+namespace LibrePanel\UI\Panel;
 
 use DirectoryIterator;
 use Exception;
-use Froxlor\CurrentUser;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\UI\Linker;
+use LibrePanel\CurrentUser;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Linker;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -73,7 +73,7 @@ class UI
 	 *
 	 * @var string
 	 */
-	private static $default_theme = 'Froxlor';
+	private static $default_theme = 'LibrePanel';
 
 	private static $install_mode = false;
 
@@ -127,7 +127,7 @@ class UI
 
 		header("Content-Type: text/html; charset=UTF-8");
 
-		// prevent Froxlor pages from being cached
+		// prevent LibrePanel pages from being cached
 		header("Cache-Control: no-store, no-cache, must-revalidate");
 		header("Pragma: no-cache");
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
@@ -142,7 +142,7 @@ class UI
 		header("X-Content-Security-Policy: " . $csp_content);
 		header("X-WebKit-CSP: " . $csp_content);
 
-		// Don't allow to load Froxlor in an iframe to prevent i.e. clickjacking
+		// Don't allow to load LibrePanel in an iframe to prevent i.e. clickjacking
 		header("X-Frame-Options: DENY");
 
 		// Internet Explorer shall not guess the Content-Type, see:
@@ -158,7 +158,7 @@ class UI
 	public static function sendSslHeaders()
 	{
 		/**
-		 * If Froxlor was called via HTTPS -> enforce it for the next time by settings HSTS header according to settings
+		 * If LibrePanel was called via HTTPS -> enforce it for the next time by settings HSTS header according to settings
 		 */
 		if (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) != 'off')) {
 			$maxage = Settings::Get('system.hsts_maxage');
@@ -183,18 +183,18 @@ class UI
 	{
 		self::$install_mode = $install_mode;
 		// init twig template engine
-		$loader = new FilesystemLoader(Froxlor::getInstallDir() . '/templates/');
+		$loader = new FilesystemLoader(LibrePanel::getInstallDir() . '/templates/');
 		$twig_params = [
 			'auto_reload' => true,
 			'debug' => false,
 		];
-		if (is_writable(Froxlor::getInstallDir() . '/cache')) {
-			$twig_params['cache'] = Froxlor::getInstallDir() . '/cache';
+		if (is_writable(LibrePanel::getInstallDir() . '/cache')) {
+			$twig_params['cache'] = LibrePanel::getInstallDir() . '/cache';
 		}
 		self::$twig = new Environment($loader, $twig_params);
 		self::$twig->addExtension(new DebugExtension());
 		self::$twig->addExtension(new CustomReflection());
-		self::$twig->addExtension(new FroxlorTwig());
+		self::$twig->addExtension(new LibrePanelTwig());
 		// empty buffer
 		self::$twigbuf = [];
 	}
@@ -237,7 +237,7 @@ class UI
 	 */
 	public static function getThemes(): array
 	{
-		$themespath = FileDir::makeCorrectDir(Froxlor::getInstallDir() . '/templates/');
+		$themespath = FileDir::makeCorrectDir(LibrePanel::getInstallDir() . '/templates/');
 		$themes_available = [];
 
 		if (is_dir($themespath)) {
@@ -294,10 +294,10 @@ class UI
 			$theme = self::getTheme();
 		}
 		$template_file = $theme . '/' . $name;
-		if (!file_exists(Froxlor::getInstallDir() . '/templates/' . $template_file)) {
+		if (!file_exists(LibrePanel::getInstallDir() . '/templates/' . $template_file)) {
 			PhpHelper::phpErrHandler(E_USER_WARNING, "Template '" . $template_file . "' could not be found, trying fallback theme", __FILE__, __LINE__);
 			$template_file = self::$default_theme . '/'. $name;
-			if (!file_exists(Froxlor::getInstallDir() . '/templates/' . $template_file)) {
+			if (!file_exists(LibrePanel::getInstallDir() . '/templates/' . $template_file)) {
 				PhpHelper::phpErrHandler(E_USER_ERROR, "Unknown template '" . $template_file . "'", __FILE__, __LINE__);
 			}
 		}
@@ -310,9 +310,9 @@ class UI
 		$theme = self::$default_theme;
 		if (!self::$install_mode) {
 			// system default
-			if (Froxlor::versionCompare2(Settings::Get('panel.version'), '2.0.0-beta1') == -1) {
+			if (LibrePanel::versionCompare2(Settings::Get('panel.version'), '2.0.0-beta1') == -1) {
 				// pre 2.0
-				Settings::Set('panel.default_theme', 'Froxlor');
+				Settings::Set('panel.default_theme', 'LibrePanel');
 			} else {
 				$theme = (Settings::Get('panel.default_theme') !== null) ? Settings::Get('panel.default_theme') : $theme;
 				// customer theme
@@ -325,7 +325,7 @@ class UI
 		if (preg_match("/([a-z0-9.\-]+)_([a-z0-9.\-]+)/i", $theme, $matches)) {
 			$theme = $matches[1];
 		}
-		if (!file_exists(Froxlor::getInstallDir() . '/templates/' . $theme)) {
+		if (!file_exists(LibrePanel::getInstallDir() . '/templates/' . $theme)) {
 			PhpHelper::phpErrHandler(E_USER_WARNING, "Theme '" . $theme . "' could not be found.", __FILE__, __LINE__);
 			$theme = self::$default_theme;
 		}

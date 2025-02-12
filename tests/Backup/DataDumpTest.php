@@ -1,16 +1,16 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\DataDump;
+use LibrePanel\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\DataDump;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\DataDump
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\DataDump
  */
 class DataDumpTest extends TestCase
 {

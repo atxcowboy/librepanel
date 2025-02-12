@@ -6,16 +6,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="robots" content="noindex, nofollow, noarchive"/>
 	<meta name="googlebot" content="nosnippet"/>
-	<link rel="icon" type="image/x-icon" href="{{ basehref|default('') }}templates/Froxlor/assets/img/icon.png">
+	<link rel="icon" type="image/x-icon" href="{{ basehref|default('') }}templates/LibrePanel/assets/img/icon.png">
 	{% if csrf_token %}<meta name="csrf-token" content="{{ csrf_token }}" />{% endif %}
 
 	<!-- Assets  -->
 	{{ vite(basehref, theme_assets, [
-		'templates/Froxlor/assets/scss/app.scss',
-		'templates/Froxlor/assets/js/app.js',
+		'templates/LibrePanel/assets/scss/app.scss',
+		'templates/LibrePanel/assets/js/app.js',
 	])|raw }}
 
-	<title>Froxlor{% if page_title %} | {{ page_title }}{% endif %}</title>
+	<title>LibrePanel{% if page_title %} | {{ page_title }}{% endif %}</title>
 </head>
 <body id="app" class="min-vh-100 d-flex flex-column">
 	{% block navigation %}{% endblock %}
@@ -23,7 +23,7 @@
 	{% block body %}
 		<div class="container-fluid">
 			{% block content %}{% endblock %}
-			{{ include('Froxlor/footer.html.twig') }}
+			{{ include('LibrePanel/footer.html.twig') }}
 		</div>
 	{% endblock %}
 </body>

@@ -1,25 +1,25 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Mysqls;
-use Froxlor\Api\Commands\MysqlServer;
-use Froxlor\Database\Database;
-use Froxlor\Settings\Store;
+use LibrePanel\Settings;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Mysqls;
+use LibrePanel\Api\Commands\MysqlServer;
+use LibrePanel\Database\Database;
+use LibrePanel\Settings\Store;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Mysqls
- * @covers \Froxlor\Api\Commands\MysqlServer
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Admins
- * @covers \Froxlor\Database\DbManager
- * @covers \Froxlor\Database\Manager\DbManagerMySQL
- * @covers \Froxlor\Settings\Store
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Mysqls
+ * @covers \LibrePanel\Api\Commands\MysqlServer
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Admins
+ * @covers \LibrePanel\Database\DbManager
+ * @covers \LibrePanel\Database\Manager\DbManagerMySQL
+ * @covers \LibrePanel\Settings\Store
  */
 class MysqlsTest extends TestCase
 {
@@ -34,7 +34,7 @@ class MysqlsTest extends TestCase
 		))->get();
 		$customer_userdata = json_decode($json_result, true)['data'];
 
-		$newPwd = \Froxlor\System\Crypt::generatePassword();
+		$newPwd = \LibrePanel\System\Crypt::generatePassword();
 		$data = [
 			'mysql_password' => $newPwd,
 			'description' => 'testdb',
@@ -66,7 +66,7 @@ class MysqlsTest extends TestCase
 		// Set customer.mysqlprefix to DBNAME
 		Settings::Set('customer.mysqlprefix', 'DBNAME');
 
-		$newPwd = \Froxlor\System\Crypt::generatePassword();
+		$newPwd = \LibrePanel\System\Crypt::generatePassword();
 		$data = [
 			'mysql_password' => $newPwd,
 			'custom_suffix' => 'abc123',
@@ -151,7 +151,7 @@ class MysqlsTest extends TestCase
 	{
 		global $admin_userdata;
 
-		$newPwd = \Froxlor\System\Crypt::generatePassword();
+		$newPwd = \LibrePanel\System\Crypt::generatePassword();
 		$data = [
 			'dbname' => 'test1sql1',
 			'mysql_password' => $newPwd,
@@ -180,7 +180,7 @@ class MysqlsTest extends TestCase
 	{
 		global $admin_userdata;
 
-		$newPwd = \Froxlor\System\Crypt::generatePassword();
+		$newPwd = \LibrePanel\System\Crypt::generatePassword();
 		$data = [
 			'dbname' => 'test1sql1',
 			'mysql_password' => $newPwd,
@@ -314,8 +314,8 @@ class MysqlsTest extends TestCase
 	 */
 	public function testGetAllSqlUsers()
 	{
-		\Froxlor\Database\Database::needRoot(true);
-		$dbm = new \Froxlor\Database\DbManager(\Froxlor\FroxlorLogger::getInstanceOf());
+		\LibrePanel\Database\Database::needRoot(true);
+		$dbm = new \LibrePanel\Database\DbManager(\LibrePanel\LibrePanelLogger::getInstanceOf());
 		$users = $dbm->getManager()->getAllSqlUsers(false);
 		foreach ($users as $user => $data) {
 			if (strtolower($user) == 'mariadb.sys') {
@@ -329,21 +329,21 @@ class MysqlsTest extends TestCase
 		if (TRAVIS_CI == 0) {
 			// just to be sure, not required for travis as the vm is fresh every time
 			Database::needRoot(true);
-			Database::query("DROP USER IF EXISTS froxlor010@10.0.0.10;");
+			Database::query("DROP USER IF EXISTS librepanel010@10.0.0.10;");
 		}
 
 		// grant privileges to another host
-		$testdata = $users['froxlor010'];
+		$testdata = $users['librepanel010'];
 		$password = [
 			'password' => $testdata['password'],
 			'plugin' => $testdata['plugin']
 		];
-		$dbm->getManager()->grantPrivilegesTo('froxlor010', $password, '10.0.0.10', true);
+		$dbm->getManager()->grantPrivilegesTo('librepanel010', $password, '10.0.0.10', true);
 
-		// select all entries from mysql.user for froxlor010 to compare password-hashes
+		// select all entries from mysql.user for librepanel010 to compare password-hashes
 		$sel_stmt = Database::prepare("SELECT * FROM mysql.user WHERE `User` = :usr");
 		Database::pexecute($sel_stmt, [
-			'usr' => 'froxlor010'
+			'usr' => 'librepanel010'
 		]);
 		$results = $sel_stmt->fetchAll(\PDO::FETCH_ASSOC);
 		foreach ($results as $user) {

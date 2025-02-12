@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,15 +16,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 // define default theme for configurehint, etc.
-$_deftheme = 'Froxlor';
+$_deftheme = 'LibrePanel';
 
 require dirname(__DIR__) . '/lib/functions.php';
 
@@ -32,7 +32,7 @@ require dirname(__DIR__) . '/lib/functions.php';
 if (version_compare("7.4.0", PHP_VERSION, ">=")) {
 	die(view($_deftheme . '/misc/phprequirementfailed.html.twig', [
 		'{{ basehref }}' => '',
-		'{{ froxlor_min_version }}' => '7.4.0',
+		'{{ librepanel_min_version }}' => '7.4.0',
 		'{{ current_version }}' => PHP_VERSION,
 		'{{ current_year }}' => date('Y', time()),
 	]));
@@ -42,33 +42,33 @@ if (version_compare("7.4.0", PHP_VERSION, ">=")) {
 if (!file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
 	die(view($_deftheme . '/misc/vendormissinghint.html.twig', [
 		'{{ basehref }}' => '',
-		'{{ froxlor_install_dir }}' => dirname(__DIR__),
+		'{{ librepanel_install_dir }}' => dirname(__DIR__),
 		'{{ current_year }}' => date('Y', time()),
 	]));
 }
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Froxlor\CurrentUser;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Http\RateLimiter;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Install\Update;
-use Froxlor\Language;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Mailer;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Linker;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Install\Requirements;
+use LibrePanel\CurrentUser;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Http\RateLimiter;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Install\Update;
+use LibrePanel\Language;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Mailer;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Linker;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Install\Requirements;
 
 // include MySQL-tabledefinitions
-require Froxlor::getInstallDir() . '/lib/tables.inc.php';
+require LibrePanel::getInstallDir() . '/lib/tables.inc.php';
 
 UI::sendHeaders();
 UI::initTwig();
@@ -84,14 +84,14 @@ unset($key);
 $filename = htmlentities(basename($_SERVER['SCRIPT_NAME']));
 
 // check whether the userdata file exists
-if (!file_exists(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
+if (!file_exists(LibrePanel::getInstallDir() . '/lib/userdata.inc.php')) {
 	UI::twig()->addGlobal('install_mode', '1');
 	echo UI::twig()->render($_deftheme . '/misc/configurehint.html.twig');
 	die();
 }
 
 // check whether we can read the userdata file
-if (!is_readable(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
+if (!is_readable(LibrePanel::getInstallDir() . '/lib/userdata.inc.php')) {
 	// get possible owner
 	$posixusername = posix_getpwuid(posix_getuid());
 	$posixgroup = posix_getgrgid(posix_getgid());
@@ -99,13 +99,13 @@ if (!is_readable(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
 	echo UI::twig()->render($_deftheme . '/misc/ownershiphint.html.twig', [
 		'user' => $posixusername['name'],
 		'group' => $posixgroup['name'],
-		'installdir' => Froxlor::getInstallDir()
+		'installdir' => LibrePanel::getInstallDir()
 	]);
 	die();
 }
 
 // include MySQL-Username/Passwort etc.
-require Froxlor::getInstallDir() . '/lib/userdata.inc.php';
+require LibrePanel::getInstallDir() . '/lib/userdata.inc.php';
 if (!isset($sql) || !is_array($sql)) {
 	UI::twig()->addGlobal('install_mode', '1');
 	echo UI::twig()->render($_deftheme . '/misc/configurehint.html.twig');
@@ -113,16 +113,16 @@ if (!isset($sql) || !is_array($sql)) {
 }
 
 /**
- * Show nice note if requested domain is "unknown" to froxlor and thus is being lead to its vhost
+ * Show nice note if requested domain is "unknown" to librepanel and thus is being lead to its vhost
  */
 $req_host = UI::getCookieHost();
 if ($req_host != Settings::Get('system.hostname') &&
 	    Settings::Get('panel.is_configured') == 1 &&
 		!filter_var($req_host, FILTER_VALIDATE_IP) && (
-		empty(Settings::Get('system.froxloraliases')) ||
-		(!empty(Settings::Get('system.froxloraliases')) && !in_array($req_host, array_map('trim', explode(',', Settings::Get('system.froxloraliases')))))
+		empty(Settings::Get('system.librepanelaliases')) ||
+		(!empty(Settings::Get('system.librepanelaliases')) && !in_array($req_host, array_map('trim', explode(',', Settings::Get('system.librepanelaliases')))))
 )) {
-	// not the froxlor system-hostname, show info page for domains not configured in froxlor
+	// not the librepanel system-hostname, show info page for domains not configured in librepanel
 	$redirect_file = FileDir::getUnknownDomainTemplate($req_host ?? "non-detectable http-host");
 	header('Location: '.$redirect_file);
 	die();
@@ -148,11 +148,11 @@ if (!empty($missingExtensions)) {
 
 // set error-handler
 @set_error_handler([
-	'\\Froxlor\\PhpHelper',
+	'\\LibrePanel\\PhpHelper',
 	'phpErrHandler'
 ]);
 @set_exception_handler([
-	'\\Froxlor\\PhpHelper',
+	'\\LibrePanel\\PhpHelper',
 	'phpExceptionHandler'
 ]);
 
@@ -275,7 +275,7 @@ UI::setCurrentUser($userinfo);
 // Initialize logger
 if (CurrentUser::hasSession()) {
 	// Initialize logging
-	$log = FroxlorLogger::getInstanceOf($userinfo);
+	$log = LibrePanelLogger::getInstanceOf($userinfo);
 	if ((CurrentUser::isAdmin() && AREA != 'admin') || (!CurrentUser::isAdmin() && AREA != 'customer')) {
 		// user tries to access an area not meant for him -> redirect to corresponding index
 		Response::redirectTo((CurrentUser::isAdmin() ? 'admin' : 'customer') . '_index.php');
@@ -288,9 +288,9 @@ if (CurrentUser::hasSession()) {
  */
 $navigation = [];
 if (AREA == 'admin' || AREA == 'customer') {
-	if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
+	if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
 		/*
-		 * if froxlor-files have been updated
+		 * if librepanel-files have been updated
 		 * but not yet configured by the admin
 		 * we only show logout and the update-page
 		 */
@@ -354,7 +354,7 @@ $mail = new Mailer(true);
 if (CurrentUser::hasSession()) {
 	// create new csrf token if not set
 	if (!$csrf_token = CurrentUser::getField('csrf_token')) {
-		$csrf_token = Froxlor::genSessionId(20);
+		$csrf_token = LibrePanel::genSessionId(20);
 		CurrentUser::setField('csrf_token', $csrf_token);
 	}
 	// set csrf token for twig
@@ -378,5 +378,5 @@ if (CurrentUser::hasSession()) {
 	];
 	setcookie(session_name(), $_COOKIE[session_name()], $cookie_params);
 } else {
-	UI::twig()->addGlobal('csrf_token', Froxlor::genSessionId(20));
+	UI::twig()->addGlobal('csrf_token', LibrePanel::genSessionId(20));
 }

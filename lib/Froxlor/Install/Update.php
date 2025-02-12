@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Install;
+namespace LibrePanel\Install;
 
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 
 class Update
 {
@@ -57,7 +57,7 @@ class Update
 			self::$task_counter++;
 		}
 
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::ADM_ACTION, \LOG_WARNING, $task);
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::ADM_ACTION, \LOG_WARNING, $task);
 	}
 
 	/**
@@ -93,19 +93,19 @@ class Update
 		self::$task_counter++;
 
 		if ($status == -1 || $status == 2) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::ADM_ACTION, \LOG_WARNING, 'Attention - last update task failed!!!');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::ADM_ACTION, \LOG_WARNING, 'Attention - last update task failed!!!');
 		} elseif ($status == 0 || $status == 1) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::ADM_ACTION, \LOG_WARNING, 'Success');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::ADM_ACTION, \LOG_WARNING, 'Success');
 		}
 	}
 
 	public static function versionInUpdate($current_version, $version_to_check)
 	{
-		if (!Froxlor::isFroxlor()) {
+		if (!LibrePanel::isLibrePanel()) {
 			return true;
 		}
 
-		return Froxlor::versionCompare2($current_version, $version_to_check) == -1;
+		return LibrePanel::versionCompare2($current_version, $version_to_check) == -1;
 	}
 
 	public static function storeUpdateCheckData(array $response)
@@ -145,7 +145,7 @@ class Update
 		$exec_allowed = !in_array('exec', $disabled);
 		$del_list = "";
 		foreach ($to_clean as $filedir) {
-			$complete_filedir = Froxlor::getInstallDir() . $filedir;
+			$complete_filedir = LibrePanel::getInstallDir() . $filedir;
 			if (file_exists($complete_filedir)) {
 				if ($exec_allowed) {
 					FileDir::safe_exec("rm -rf " . escapeshellarg($complete_filedir));

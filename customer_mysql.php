@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'customer';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Api\Commands\Mysqls;
-use Froxlor\Api\Commands\MysqlServer;
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Collection;
-use Froxlor\UI\HTML;
-use Froxlor\UI\Listing;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
+use LibrePanel\Api\Commands\Mysqls;
+use LibrePanel\Api\Commands\MysqlServer;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Collection;
+use LibrePanel\UI\HTML;
+use LibrePanel\UI\Listing;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
 
 // redirect if this customer page is hidden via settings or no resources given
 if (Settings::IsInList('panel.customer_hide_options', 'mysql') || $userinfo['mysqls'] == 0) {
@@ -56,7 +56,7 @@ $id = (int)Request::any('id');
 
 if ($page == 'overview' || $page == 'mysqls') {
 	if ($action == '') {
-		$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, "viewed customer_mysql::mysqls");
+		$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, "viewed customer_mysql::mysqls");
 
 		$multiple_mysqlservers = count(json_decode($userinfo['allowed_mysqlserver'] ?? '[]', true)) > 1;
 
@@ -89,7 +89,7 @@ if ($page == 'overview' || $page == 'mysqls') {
 		}
 
 		$actions_links[] = [
-			'href' => \Froxlor\Froxlor::getDocsUrl() . 'user-guide/databases/',
+			'href' => \LibrePanel\LibrePanel::getDocsUrl() . 'user-guide/databases/',
 			'target' => '_blank',
 			'icon' => 'fa-solid fa-circle-info',
 			'class' => 'btn-outline-secondary'

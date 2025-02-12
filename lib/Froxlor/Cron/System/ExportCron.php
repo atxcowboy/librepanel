@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\System;
+namespace LibrePanel\Cron\System;
 
 use Exception;
-use Froxlor\Cron\Forkable;
-use Froxlor\Cron\FroxlorCron;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Cron\Forkable;
+use LibrePanel\Cron\LibrePanelCron;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 
-class ExportCron extends FroxlorCron
+class ExportCron extends LibrePanelCron
 {
 	use Forkable;
 
 	public static function run()
 	{
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'ExportCron: started - creating customer data export');
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'ExportCron: started - creating customer data export');
 
 		$result_tasks_stmt = Database::query("
 			SELECT * FROM `" . TABLE_PANEL_TASKS . "` WHERE `type` = '20' ORDER BY `id` ASC
@@ -54,7 +54,7 @@ class ExportCron extends FroxlorCron
 	public static function handle(array $row)
 	{
 		$del_stmt = Database::prepare("DELETE FROM `" . TABLE_PANEL_TASKS . "` WHERE `id` = :id");
-		$cronlog = FroxlorLogger::getInstanceOf();
+		$cronlog = LibrePanelLogger::getInstanceOf();
 
 		if ($row['data'] != '') {
 			$row['data'] = json_decode($row['data'], true);
@@ -67,7 +67,7 @@ class ExportCron extends FroxlorCron
 
 				// create folder if not exists
 				if (!file_exists($row['data']['destdir']) && $row['data']['destdir'] != '/' && $row['data']['destdir'] != Settings::Get('system.documentroot_prefix') && $row['data']['destdir'] != $customerdocroot) {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Creating data export destination path for customer: ' . escapeshellarg($row['data']['destdir']));
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Creating data export destination path for customer: ' . escapeshellarg($row['data']['destdir']));
 					FileDir::safe_exec('mkdir -p ' . escapeshellarg($row['data']['destdir']));
 				}
 
@@ -92,19 +92,19 @@ class ExportCron extends FroxlorCron
 	 */
 	private static function createCustomerExport($data = null, $customerdocroot = null, &$cronlog = null)
 	{
-		$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Creating data export for user "' . $data['loginname'] . '"');
+		$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Creating data export for user "' . $data['loginname'] . '"');
 
 		// create tmp folder
 		$tmpdir = FileDir::makeCorrectDir($data['destdir'] . '/.tmp/');
-		$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Creating tmp-folder "' . $tmpdir . '"');
-		$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> mkdir -p ' . escapeshellarg($tmpdir));
+		$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Creating tmp-folder "' . $tmpdir . '"');
+		$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> mkdir -p ' . escapeshellarg($tmpdir));
 		FileDir::safe_exec('mkdir -p ' . escapeshellarg($tmpdir));
 		$create_export_tar_data = "";
 
 		// MySQL databases
 		if ($data['dump_dbs'] == 1) {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Creating mysql-folder "' . FileDir::makeCorrectDir($tmpdir . '/mysql') . '"');
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir($tmpdir . '/mysql')));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Creating mysql-folder "' . FileDir::makeCorrectDir($tmpdir . '/mysql') . '"');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir($tmpdir . '/mysql')));
 			FileDir::safe_exec('mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir($tmpdir . '/mysql')));
 
 			// get all customer database-names
@@ -127,7 +127,7 @@ class ExportCron extends FroxlorCron
 				$section = 'mariadb-dump';
 			}
 			if (!isset($mysql_dump)) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'mysqldump/mariadb-dump executable could not be found. Please install mysql-client/mariadb-client package.');
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'mysqldump/mariadb-dump executable could not be found. Please install mysql-client/mariadb-client package.');
 			} else {
 
 				while ($row = $sel_stmt->fetch()) {
@@ -147,7 +147,7 @@ class ExportCron extends FroxlorCron
 						}
 						file_put_contents($mysqlcnf_file, $mysqlcnf);
 					}
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> '.basename($mysql_dump) . ' -u ' . escapeshellarg($sql_root['user']) . ' -pXXXXX ' . $row['databasename'] . ' > ' . FileDir::makeCorrectFile($tmpdir . '/mysql/' . $row['databasename'] . '_' . date('YmdHi', time()) . '.sql'));
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> '.basename($mysql_dump) . ' -u ' . escapeshellarg($sql_root['user']) . ' -pXXXXX ' . $row['databasename'] . ' > ' . FileDir::makeCorrectFile($tmpdir . '/mysql/' . $row['databasename'] . '_' . date('YmdHi', time()) . '.sql'));
 					$bool_false = false;
 					FileDir::safe_exec($mysql_dump . ' --defaults-file=' . escapeshellarg($mysqlcnf_file) . ' -u ' . escapeshellarg($sql_root['user']) . ' ' . $row['databasename'] . ' > ' . FileDir::makeCorrectFile($tmpdir . '/mysql/' . $row['databasename'] . '_' . date('YmdHi', time()) . '.sql'), $bool_false, [
 						'>'
@@ -170,7 +170,7 @@ class ExportCron extends FroxlorCron
 
 		// E-mail data
 		if ($data['dump_mail'] == 1) {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Creating mail-folder "' . FileDir::makeCorrectDir($tmpdir . '/mail') . '"');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Creating mail-folder "' . FileDir::makeCorrectDir($tmpdir . '/mail') . '"');
 			FileDir::safe_exec('mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir($tmpdir . '/mail')));
 
 			// get all customer mail-accounts
@@ -187,7 +187,7 @@ class ExportCron extends FroxlorCron
 			}
 
 			if (!empty($tar_file_list)) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfvz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/mail/' . $data['loginname'] . '-mail.tar.gz')) . ' -C ' . escapeshellarg($mail_homedir) . ' ' . trim($tar_file_list));
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfvz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/mail/' . $data['loginname'] . '-mail.tar.gz')) . ' -C ' . escapeshellarg($mail_homedir) . ' ' . trim($tar_file_list));
 				FileDir::safe_exec('tar cfz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/mail/' . $data['loginname'] . '-mail.tar.gz')) . ' -C ' . escapeshellarg($mail_homedir) . ' ' . trim($tar_file_list));
 				$create_export_tar_data .= './mail ';
 			}
@@ -195,40 +195,40 @@ class ExportCron extends FroxlorCron
 
 		// Web data
 		if ($data['dump_web'] == 1) {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'Creating web-folder "' . FileDir::makeCorrectDir($tmpdir . '/web') . '"');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'Creating web-folder "' . FileDir::makeCorrectDir($tmpdir . '/web') . '"');
 			FileDir::safe_exec('mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir($tmpdir . '/web')));
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/web/' . $data['loginname'] . '-web.tar.gz')) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", FileDir::makeCorrectFile($tmpdir . '/*'))) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", substr(FileDir::makeCorrectDir($tmpdir), 0, -1))) . ' -C ' . escapeshellarg($customerdocroot) . ' .');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/web/' . $data['loginname'] . '-web.tar.gz')) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", FileDir::makeCorrectFile($tmpdir . '/*'))) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", substr(FileDir::makeCorrectDir($tmpdir), 0, -1))) . ' -C ' . escapeshellarg($customerdocroot) . ' .');
 			FileDir::safe_exec('tar cfz ' . escapeshellarg(FileDir::makeCorrectFile($tmpdir . '/web/' . $data['loginname'] . '-web.tar.gz')) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", FileDir::makeCorrectFile($tmpdir . '/*'))) . ' --exclude=' . escapeshellarg(str_replace($customerdocroot, "./", substr(FileDir::makeCorrectFile($tmpdir), 0, -1))) . ' -C ' . escapeshellarg($customerdocroot) . ' .');
 			$create_export_tar_data .= './web ';
 		}
 
 		if (!empty($create_export_tar_data)) {
 			// set owner to customer
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($tmpdir));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($tmpdir));
 			FileDir::safe_exec('chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($tmpdir));
 			// create tar-file
 			$export_file = FileDir::makeCorrectFile($tmpdir . '/' . $data['loginname'] . '-export_' . date('YmdHi', time()) . '.tar.gz' . (!empty($data['pgp_public_key']) ? '.gpg' : ''));
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Creating export-file "' . $export_file . '"');
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Creating export-file "' . $export_file . '"');
 			if (!empty($data['pgp_public_key'])) {
 				// pack all archives in tmp-dir to one archive and encrypt it with gpg
 				$recipient_file = FileDir::makeCorrectFile($tmpdir . '/' . $data['loginname'] . '-recipients.gpg');
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Creating recipient-file "' . $recipient_file . '"');
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Creating recipient-file "' . $recipient_file . '"');
 				file_put_contents($recipient_file, $data['pgp_public_key']);
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz - -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data) . ' | gpg --encrypt --recipient-file ' . escapeshellarg($recipient_file) . ' --output ' . escapeshellarg($export_file) . ' --trust-model always --batch --yes');
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz - -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data) . ' | gpg --encrypt --recipient-file ' . escapeshellarg($recipient_file) . ' --output ' . escapeshellarg($export_file) . ' --trust-model always --batch --yes');
 				FileDir::safe_exec('tar cfz - -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data) . ' | gpg --encrypt --recipient-file ' . escapeshellarg($recipient_file) . ' --output ' . escapeshellarg($export_file) . ' --trust-model always --batch --yes', $return_value, ['|']);
 			} else {
 				// pack all archives in tmp-dir to one archive
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz ' . escapeshellarg($export_file) . ' -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data));
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> tar cfz ' . escapeshellarg($export_file) . ' -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data));
 				FileDir::safe_exec('tar cfz ' . escapeshellarg($export_file) . ' -C ' . escapeshellarg($tmpdir) . ' ' . trim($create_export_tar_data));
 			}
 			// move to destination directory
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> mv ' . escapeshellarg($export_file) . ' ' . escapeshellarg($data['destdir']));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> mv ' . escapeshellarg($export_file) . ' ' . escapeshellarg($data['destdir']));
 			FileDir::safe_exec('mv ' . escapeshellarg($export_file) . ' ' . escapeshellarg($data['destdir']));
 			// remove tmp-files
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> rm -rf ' . escapeshellarg($tmpdir));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> rm -rf ' . escapeshellarg($tmpdir));
 			FileDir::safe_exec('rm -rf ' . escapeshellarg($tmpdir));
 			// set owner to customer
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'shell> chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($data['destdir']));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'shell> chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($data['destdir']));
 			FileDir::safe_exec('chown -R ' . (int)$data['uid'] . ':' . (int)$data['gid'] . ' ' . escapeshellarg($data['destdir']));
 		}
 	}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\System;
+namespace LibrePanel\System;
 
 use Exception;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 use PDO;
 
 class Cronjob
@@ -39,27 +39,27 @@ class Cronjob
 	 * Function checkLastGuid
 	 *
 	 * Checks if the system's last guid is not higher than the one saved
-	 * in froxlor's database. If it's higher, froxlor needs to
+	 * in librepanel's database. If it's higher, librepanel needs to
 	 * set its last guid to this one to avoid conflicts with libnss-users
 	 *
 	 * @return null
 	 */
 	public static function checkLastGuid()
 	{
-		$mylog = FroxlorLogger::getInstanceOf();
+		$mylog = LibrePanelLogger::getInstanceOf();
 
 		$group_lines = [];
 		$group_guids = [];
 		$update_to_guid = 0;
 
-		$froxlor_guid = 0;
+		$librepanel_guid = 0;
 		$result_stmt = Database::query("SELECT MAX(`guid`) as `fguid` FROM `" . TABLE_PANEL_CUSTOMERS . "`");
 		$result = $result_stmt->fetch(PDO::FETCH_ASSOC);
-		$froxlor_guid = $result['fguid'];
+		$librepanel_guid = $result['fguid'];
 
 		// possibly no customers yet or f*cked up lastguid settings
-		if ($froxlor_guid < Settings::Get('system.lastguid')) {
-			$froxlor_guid = Settings::Get('system.lastguid');
+		if ($librepanel_guid < Settings::Get('system.lastguid')) {
+			$librepanel_guid = Settings::Get('system.lastguid');
 		}
 
 		$g_file = '/etc/group';
@@ -89,10 +89,10 @@ class Cronjob
 						}
 					}
 
-					// if it's lower, then froxlor's highest guid is the last
-					if ($update_to_guid < $froxlor_guid) {
-						$update_to_guid = $froxlor_guid;
-					} elseif ($update_to_guid == $froxlor_guid) {
+					// if it's lower, then librepanel's highest guid is the last
+					if ($update_to_guid < $librepanel_guid) {
+						$update_to_guid = $librepanel_guid;
+					} elseif ($update_to_guid == $librepanel_guid) {
 						// if it's equal, that means we already have a collision
 						// to ensure it won't happen again, increase the guid by one
 						$update_to_guid = (int)$update_to_guid++;
@@ -100,20 +100,20 @@ class Cronjob
 
 					// now check if it differs from our settings
 					if ($update_to_guid != Settings::Get('system.lastguid')) {
-						$mylog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE,
-							'Updating froxlor last guid to ' . $update_to_guid);
+						$mylog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE,
+							'Updating librepanel last guid to ' . $update_to_guid);
 						Settings::Set('system.lastguid', $update_to_guid);
 					}
 				} else {
-					$mylog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE,
+					$mylog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE,
 						'File /etc/group not readable; cannot check for latest guid');
 				}
 			} else {
-				$mylog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE,
+				$mylog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE,
 					'File /etc/group not readable; cannot check for latest guid');
 			}
 		} else {
-			$mylog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE,
+			$mylog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE,
 				'File /etc/group does not exist; cannot check for latest guid');
 		}
 	}
@@ -125,7 +125,7 @@ class Cronjob
 	 * @param string $params Parameter (possible to pass multiple times)
 	 *
 	 * @throws Exception
-	 * @author Froxlor team <team@froxlor.org> (2010-)
+	 * @author LibrePanel team <team@librepanel.org> (2010-)
 	 */
 	public static function inserttask(int $type, ...$params)
 	{
@@ -148,7 +148,7 @@ class Cronjob
 				return;
 			}
 			// 13 = let's encrypt for services -> if services empty = no task
-			if ($type == TaskId::UPDATE_LE_SERVICES && (Settings::Get('system.le_froxlor_enabled') == '0' || Settings::Get('system.le_renew_services') == '')) {
+			if ($type == TaskId::UPDATE_LE_SERVICES && (Settings::Get('system.le_librepanel_enabled') == '0' || Settings::Get('system.le_renew_services') == '')) {
 				return;
 			}
 
@@ -325,7 +325,7 @@ class Cronjob
 	 *
 	 * @return void
 	 */
-	public static function notifyMailToAdmin(string $message, string $subject = "[froxlor] Important notice")
+	public static function notifyMailToAdmin(string $message, string $subject = "[librepanel] Important notice")
 	{
 		$mail = new Mailer(true);
 		$mailerror = false;

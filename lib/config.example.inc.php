@@ -5,9 +5,9 @@
  */
 return [
 	/**
-	 * enable/disable the possibility to update froxlor from within the web-interface,
+	 * enable/disable the possibility to update librepanel from within the web-interface,
 	 * recommended value for debian/ubuntu package users is false to rely on apt and not have version mixup.
-	 * This is also useful for providers that manage the servers but give admin access to froxlor to handle
+	 * This is also useful for providers that manage the servers but give admin access to librepanel to handle
 	 * updates the way the providers does it (e.g. automation, etc.)
 	 *
 	 * Default: false
@@ -26,7 +26,7 @@ return [
 
 	/**
 	 * For debugging/development purposes only.
-	 * Enable to display all php related issue (notices, warnings, etc.; depending on php.ini) for froxlor itself
+	 * Enable to display all php related issue (notices, warnings, etc.; depending on php.ini) for librepanel itself
 	 *
 	 * Default: false
 	 */

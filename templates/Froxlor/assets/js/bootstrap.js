@@ -15,7 +15,7 @@ import Chart from 'chart.js/auto';
 window.Chart = Chart;
 
 // set a default theme
-window.$theme = 'Froxlor';
+window.$theme = 'LibrePanel';
 
 // Axios
 import axios from 'axios';

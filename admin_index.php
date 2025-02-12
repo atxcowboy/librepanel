@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,34 +16,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Api\Commands\Admins as Admins;
-use Froxlor\Api\Commands\Froxlor as Froxlor;
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Language;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\Commands\Admins as Admins;
+use LibrePanel\Api\Commands\LibrePanel as LibrePanel;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Language;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 
 $id = (int)Request::any('id');
 
 if ($action == 'logout') {
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "logged out");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "logged out");
 	unset($_SESSION['userinfo']);
 	CurrentUser::setData();
 	session_destroy();
@@ -57,7 +57,7 @@ if ($action == 'logout') {
 		CurrentUser::setData($result);
 		$target = Request::get('target', 'index');
 		$redirect = "admin_" . $target . ".php";
-		if (!file_exists(\Froxlor\Froxlor::getInstallDir() . "/" . $redirect)) {
+		if (!file_exists(\LibrePanel\LibrePanel::getInstallDir() . "/" . $redirect)) {
 			$redirect = "admin_index.php";
 		}
 		Response::redirectTo($redirect, null, true);
@@ -67,7 +67,7 @@ if ($action == 'logout') {
 }
 
 if ($page == 'overview') {
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_index");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_index");
 	$params = [];
 	if ($userinfo['customers_see_all'] == '0') {
 		$params = [
@@ -113,7 +113,7 @@ if ($page == 'overview') {
 
 	if (Request::get('lookfornewversion') == 'yes' || (isset($lookfornewversion) && $lookfornewversion == 'yes')) {
 		try {
-			$json_result = Froxlor::getLocal($userinfo)->checkUpdate();
+			$json_result = LibrePanel::getLocal($userinfo)->checkUpdate();
 		} catch (Exception $e) {
 			Response::dynamicError($e->getMessage());
 		}
@@ -161,7 +161,7 @@ if ($page == 'overview') {
 	}
 
 	// Try to get the uptime
-	// First: With exec (let's hope it's enabled for the Froxlor - vHost)
+	// First: With exec (let's hope it's enabled for the LibrePanel - vHost)
 	$uptime_array = explode(" ", @file_get_contents("/proc/uptime"));
 	$uptime = '';
 	if (is_array($uptime_array) && isset($uptime_array[0]) && is_numeric($uptime_array[0])) {
@@ -241,7 +241,7 @@ if ($page == 'overview') {
 				} catch (Exception $e) {
 					Response::dynamicError($e->getMessage());
 				}
-				$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, 'changed password');
+				$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, 'changed password');
 				Response::redirectTo($filename);
 			}
 		} elseif (Request::post('send') == 'changetheme') {
@@ -256,7 +256,7 @@ if ($page == 'overview') {
 					Response::dynamicError($e->getMessage());
 				}
 
-				$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "changed his/her theme to '" . $theme . "'");
+				$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "changed his/her theme to '" . $theme . "'");
 			}
 			Response::redirectTo($filename);
 		} elseif (Request::post('send') == 'changelanguage') {
@@ -273,7 +273,7 @@ if ($page == 'overview') {
 					Response::dynamicError($e->getMessage());
 				}
 			}
-			$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "changed his/her default language to '" . $def_language . "'");
+			$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "changed his/her default language to '" . $def_language . "'");
 			Response::redirectTo($filename);
 		}
 	} else {

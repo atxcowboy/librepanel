@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +16,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
 use PDO;
 
 /**
@@ -97,7 +97,7 @@ class Certificates extends ApiCommand implements ResourceEntity
 		}
 		if (!$has_cert) {
 			$this->addOrUpdateCertificate($domain['id'], $ssl_cert_file, $ssl_key_file, $ssl_ca_file, $ssl_cert_chainfile, true);
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added ssl-certificate for '" . $domain['domain'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added ssl-certificate for '" . $domain['domain'] . "'");
 			$result = $this->apiCall('Certificates.get', [
 				'id' => $domain['id']
 			]);
@@ -248,7 +248,7 @@ class Certificates extends ApiCommand implements ResourceEntity
 		$ssl_ca_file = $this->getParam('ssl_ca_file', true, '');
 		$ssl_cert_chainfile = $this->getParam('ssl_cert_chainfile', true, '');
 		$this->addOrUpdateCertificate($domain['id'], $ssl_cert_file, $ssl_key_file, $ssl_ca_file, $ssl_cert_chainfile, false);
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated ssl-certificate for '" . $domain['domain'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated ssl-certificate for '" . $domain['domain'] . "'");
 		$result = $this->apiCall('Certificates.get', [
 			'id' => $domain['id']
 		]);
@@ -300,11 +300,11 @@ class Certificates extends ApiCommand implements ResourceEntity
 		Database::pexecute($certs_stmt, $qry_params, true, true);
 		$result = [];
 		while ($cert = $certs_stmt->fetch(PDO::FETCH_ASSOC)) {
-			// respect froxlor-hostname
+			// respect librepanel-hostname
 			if ($cert['domainid'] == 0) {
 				$cert['domain'] = Settings::Get('system.hostname');
-				$cert['letsencrypt'] = Settings::Get('system.le_froxlor_enabled');
-				$cert['loginname'] = 'froxlor.panel';
+				$cert['letsencrypt'] = Settings::Get('system.le_librepanel_enabled');
+				$cert['loginname'] = 'librepanel.panel';
 			}
 
 			// Set data from certificate
@@ -362,7 +362,7 @@ class Certificates extends ApiCommand implements ResourceEntity
 		$domainid = $domain['id'];
 
 		$stmt = Database::prepare("SELECT * FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "` WHERE `domainid`= :domainid");
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get ssl-certificate for '" . $domain['domain'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get ssl-certificate for '" . $domain['domain'] . "'");
 		$result = Database::pexecute_first($stmt, [
 			"domainid" => $domainid
 		]);
@@ -442,20 +442,20 @@ class Certificates extends ApiCommand implements ResourceEntity
 			}
 			$chk = Database::pexecute_first($chk_stmt, $params);
 			if ($chk == false && $this->getUserDetail('change_serversettings')) {
-				// check whether it might be the froxlor-vhost certificate
+				// check whether it might be the librepanel-vhost certificate
 				$chk_stmt = Database::prepare("
-				SELECT \"" . Settings::Get('system.hostname') . "\" as domain, \"" . Settings::Get('system.le_froxlor_enabled') . "\" as letsencrypt FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "`
+				SELECT \"" . Settings::Get('system.hostname') . "\" as domain, \"" . Settings::Get('system.le_librepanel_enabled') . "\" as letsencrypt FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "`
 				WHERE `id` = :id AND `domainid` = '0'");
 				$params = [
 					'id' => $id
 				];
 				$chk = Database::pexecute_first($chk_stmt, $params);
-				$chk['isFroxlorVhost'] = true;
+				$chk['isLibrePanelVhost'] = true;
 			}
 		}
 		if ($chk !== false) {
 			// additional access check by trying to get the certificate
-			if (isset($chk['isFroxlorVhost']) && $chk['isFroxlorVhost'] == true) {
+			if (isset($chk['isLibrePanelVhost']) && $chk['isLibrePanelVhost'] == true) {
 				$result = $chk;
 			} else {
 				$result = $this->apiCall('Certificates.get', [
@@ -470,7 +470,7 @@ class Certificates extends ApiCommand implements ResourceEntity
 			if ($chk['letsencrypt'] == '1') {
 				Cronjob::inserttask(TaskId::DELETE_DOMAIN_SSL, $chk['domain']);
 			}
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] removed ssl-certificate for '" . $chk['domain'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] removed ssl-certificate for '" . $chk['domain'] . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Unable to determine SSL certificate. Maybe no access?", 406);

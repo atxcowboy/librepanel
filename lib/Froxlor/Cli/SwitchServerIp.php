@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,16 +16,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
-use Froxlor\Database\Database;
+use LibrePanel\Database\Database;
 use PDO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,10 +37,10 @@ final class SwitchServerIp extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:switch-server-ip');
+		$this->setName('librepanel:switch-server-ip');
 		$this->setDescription('Easily switch IP addresses e.g. after server migration');
 		$this->addOption('switch', 's', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Switch IP-address pair. A pair is separated by comma. For example: --switch=A,B')
-			->addOption('list', 'l', InputOption::VALUE_NONE, 'List all IP addresses currently added for this server in froxlor');
+			->addOption('list', 'l', InputOption::VALUE_NONE, 'List all IP addresses currently added for this server in librepanel');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
@@ -130,7 +130,7 @@ final class SwitchServerIp extends CliCommand
 					'newip' => $ip_pair[1]
 				]);
 				if ($ip_check) {
-					$output->writeln('<error>Note: ' . $ip_pair[0] . ' not updated to ' . $ip_pair[1] . ' - IP already exists in froxlor\'s database</>');
+					$output->writeln('<error>Note: ' . $ip_pair[0] . ' not updated to ' . $ip_pair[1] . ' - IP already exists in librepanel\'s database</>');
 					continue;
 				}
 
@@ -141,7 +141,7 @@ final class SwitchServerIp extends CliCommand
 				$rows_updated = $upd_stmt->rowCount();
 
 				if ($rows_updated == 0) {
-					$output->writeln('<error>Note: ' . $ip_pair[0] . ' not updated to ' . $ip_pair[1] . ' (possibly no entry found in froxlor database. Use --list to see what IP addresses are added in froxlor');
+					$output->writeln('<error>Note: ' . $ip_pair[0] . ' not updated to ' . $ip_pair[1] . ' (possibly no entry found in librepanel database. Use --list to see what IP addresses are added in librepanel');
 					continue;
 				}
 

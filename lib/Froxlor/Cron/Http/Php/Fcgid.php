@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http\Php;
+namespace LibrePanel\Cron\Http\Php;
 
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
 
 class Fcgid
 {
@@ -67,7 +67,7 @@ class Fcgid
 		$starter_file = "#!/bin/sh\n\n";
 		$starter_file .= "#\n";
 		$starter_file .= "# starter created/changed on " . date("Y.m.d H:i:s") . " for domain '" . $this->domain['domain'] . "' with id #" . $this->domain['id'] . " from php template '" . $phpconfig['description'] . "' with id #" . $phpconfig['id'] . "\n";
-		$starter_file .= "# Do not change anything in this file, it will be overwritten by the Froxlor Cronjob!\n";
+		$starter_file .= "# Do not change anything in this file, it will be overwritten by the LibrePanel Cronjob!\n";
 		$starter_file .= "#\n\n";
 		$starter_file .= "umask " . $phpconfig['mod_fcgid_umask'] . "\n";
 		$starter_file .= "PHPRC=" . escapeshellarg($this->getConfigDir()) . "\n";
@@ -205,7 +205,7 @@ class Fcgid
 		// insert a small header for the file
 		$phpini_file = ";\n";
 		$phpini_file .= "; php.ini created/changed on " . date("Y.m.d H:i:s") . " for domain '" . $this->domain['domain'] . "' with id #" . $this->domain['id'] . " from php template '" . $phpconfig['description'] . "' with id #" . $phpconfig['id'] . "\n";
-		$phpini_file .= "; Do not change anything in this file, it will be overwritten by the Froxlor Cronjob!\n";
+		$phpini_file .= "; Do not change anything in this file, it will be overwritten by the LibrePanel Cronjob!\n";
 		$phpini_file .= ";\n\n";
 		$phpini_file .= PhpHelper::replaceVariables($phpconfig['phpsettings'], $php_ini_variables);
 		$phpini_file = str_replace('"none"', 'none', $phpini_file);

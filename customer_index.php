@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,34 +16,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'customer';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Api\Commands\Customers as Customers;
-use Froxlor\Cron\TaskId;
-use Froxlor\CurrentUser;
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Language;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\Commands\Customers as Customers;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\CurrentUser;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Language;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 
 if ($action == 'logout') {
-	$log->logAction(FroxlorLogger::USR_ACTION, LOG_INFO, 'logged out');
+	$log->logAction(LibrePanelLogger::USR_ACTION, LOG_INFO, 'logged out');
 
 	unset($_SESSION['userinfo']);
 	CurrentUser::setData();
@@ -58,7 +58,7 @@ if ($action == 'logout') {
 		CurrentUser::setData($result);
 		$target = Request::get('target', 'index');
 		$redirect = "admin_" . $target . ".php";
-		if (!file_exists(Froxlor::getInstallDir() . "/" . $redirect)) {
+		if (!file_exists(LibrePanel::getInstallDir() . "/" . $redirect)) {
 			$redirect = "admin_index.php";
 		}
 		Response::redirectTo($redirect, null, true);
@@ -68,7 +68,7 @@ if ($action == 'logout') {
 }
 
 if ($page == 'overview') {
-	$log->logAction(FroxlorLogger::USR_ACTION, LOG_INFO, "viewed customer_index");
+	$log->logAction(LibrePanelLogger::USR_ACTION, LOG_INFO, "viewed customer_index");
 
 	$domain_stmt = Database::prepare("SELECT `domain` FROM `" . TABLE_PANEL_DOMAINS . "`
 		WHERE `customerid` = :customerid
@@ -183,7 +183,7 @@ if ($page == 'overview') {
 				} catch (Exception $e) {
 					Response::dynamicError($e->getMessage());
 				}
-				$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, 'changed password');
+				$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, 'changed password');
 
 				// Update ftp password
 				if (Request::post('change_main_ftp') == 'true') {
@@ -198,7 +198,7 @@ if ($page == 'overview') {
 						"username" => $userinfo['loginname']
 					];
 					Database::pexecute($stmt, $params);
-					$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, 'changed main ftp password');
+					$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, 'changed main ftp password');
 				}
 
 				// Update statistics password
@@ -253,7 +253,7 @@ if ($page == 'overview') {
 					Response::dynamicError($e->getMessage());
 				}
 
-				$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, "changed default theme to '" . $theme . "'");
+				$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, "changed default theme to '" . $theme . "'");
 			}
 			Response::redirectTo($filename);
 		} elseif (Request::post('send') == 'changelanguage') {
@@ -269,7 +269,7 @@ if ($page == 'overview') {
 					Response::dynamicError($e->getMessage());
 				}
 			}
-			$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, "changed default language to '" . $def_language . "'");
+			$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, "changed default language to '" . $def_language . "'");
 			Response::redirectTo($filename);
 		}
 	} else {

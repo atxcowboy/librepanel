@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +16,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Http;
+namespace LibrePanel\Http;
 
 use Exception;
-use Froxlor\Froxlor;
+use LibrePanel\LibrePanel;
 
 class HttpClient
 {
@@ -44,7 +44,7 @@ class HttpClient
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Froxlor/' . Froxlor::getVersion());
+		curl_setopt($ch, CURLOPT_USERAGENT, 'LibrePanel/' . LibrePanel::getVersion());
 		if ($follow_location) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		}
@@ -74,7 +74,7 @@ class HttpClient
 		$fh = fopen($target, 'w');
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Froxlor/' . Froxlor::getVersion());
+		curl_setopt($ch, CURLOPT_USERAGENT, 'LibrePanel/' . LibrePanel::getVersion());
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 50);
 		// give curl the file pointer so that it can write to it

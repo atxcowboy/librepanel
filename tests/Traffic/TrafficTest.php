@@ -1,17 +1,17 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\Traffic;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\Traffic;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Traffic
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Admins
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Traffic
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Admins
  */
 class TrafficTest extends TestCase
 {

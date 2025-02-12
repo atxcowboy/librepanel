@@ -1,9 +1,9 @@
-name: Froxlor-CI-MariaDB
+name: LibrePanel-CI-MariaDB
 on: [ 'push', 'pull_request', 'create' ]
 
 jobs:
-  froxlor:
-    name: Froxlor (PHP ${{ matrix.php-versions }}, MariaDB ${{ matrix.mariadb-version }})
+  librepanel:
+    name: LibrePanel (PHP ${{ matrix.php-versions }}, MariaDB ${{ matrix.mariadb-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -33,7 +33,7 @@ jobs:
         uses: getong/mariadb-action@v1.1
         with:
           mariadb version: ${{ matrix.mariadb-version }}
-          mysql database: 'froxlor010'
+          mysql database: 'librepanel010'
           mysql root password: 'fr0xl0r.TravisCI'
 
       - name: Wait for database
@@ -41,10 +41,10 @@ jobs:
 
       - name: Setup databases
         run: |
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "CREATE USER 'froxlor010'@'%' IDENTIFIED BY 'fr0xl0r.TravisCI';"
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "GRANT ALL ON froxlor010.* TO 'froxlor010'@'%';"
-          php -r "echo include('install/froxlor.sql.php');" > /tmp/froxlor.sql
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI froxlor010 < /tmp/froxlor.sql
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "CREATE USER 'librepanel010'@'%' IDENTIFIED BY 'fr0xl0r.TravisCI';"
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "GRANT ALL ON librepanel010.* TO 'librepanel010'@'%';"
+          php -r "echo include('install/librepanel.sql.php');" > /tmp/librepanel.sql
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI librepanel010 < /tmp/librepanel.sql
 
       - name: Run testing
         run: ant quick-build
@@ -52,7 +52,7 @@ jobs:
   nightly:
     name: Create nightly/testing tarball
     runs-on: ubuntu-latest
-    needs: froxlor
+    needs: librepanel
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           find -exec chmod ugo+r,u+w,go-w {} \;
           find -type f -exec chmod ugo-x {} \;
           find -type d -exec chmod ugo+x {} \;
-          chmod 0755 bin/froxlor-cli
+          chmod 0755 bin/librepanel-cli
 
       - name: Remove vcs and unneeded files
         run: |
@@ -102,8 +102,8 @@ jobs:
 
       - name: Create empty index.html in built assets directory
         run: |
-          touch templates/Froxlor/build/index.html
-          touch templates/Froxlor/build/assets/index.html
+          touch templates/LibrePanel/build/index.html
+          touch templates/LibrePanel/build/assets/index.html
 
       - name: Set outputs
         id: vars
@@ -111,12 +111,12 @@ jobs:
 
       - name: Set nightly branding
         run: |
-          sed -i "s/const BRANDING = '';/const BRANDING = '+nightly.${{steps.vars.outputs.sha_short}}';/" lib/Froxlor/Froxlor.php
-          zip -r froxlor-nightly.${{steps.vars.outputs.sha_short}}.zip . -x "*.git*"
-          sha256sum froxlor-nightly.${{steps.vars.outputs.sha_short}}.zip > froxlor-nightly.${{steps.vars.outputs.sha_short}}.zip.sha256
+          sed -i "s/const BRANDING = '';/const BRANDING = '+nightly.${{steps.vars.outputs.sha_short}}';/" lib/LibrePanel/LibrePanel.php
+          zip -r librepanel-nightly.${{steps.vars.outputs.sha_short}}.zip . -x "*.git*"
+          sha256sum librepanel-nightly.${{steps.vars.outputs.sha_short}}.zip > librepanel-nightly.${{steps.vars.outputs.sha_short}}.zip.sha256
           mkdir dist
-          mv froxlor-nightly.${{steps.vars.outputs.sha_short}}.zip dist/
-          mv froxlor-nightly.${{steps.vars.outputs.sha_short}}.zip.sha256 dist/
+          mv librepanel-nightly.${{steps.vars.outputs.sha_short}}.zip dist/
+          mv librepanel-nightly.${{steps.vars.outputs.sha_short}}.zip.sha256 dist/
 
       - name: Deploy nightly to server
         uses: easingthemes/ssh-deploy@main

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -95,7 +95,7 @@ class Admins extends ApiCommand implements ResourceEntity
 	public function listing()
 	{
 		if ($this->isAdmin() && $this->getUserDetail('change_serversettings') == 1) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] list admins");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] list admins");
 			$query_fields = [];
 			$result_stmt = Database::prepare("
 				SELECT *
@@ -388,7 +388,7 @@ class Admins extends ApiCommand implements ResourceEntity
 
 				$adminid = Database::lastInsertId();
 				$ins_data['adminid'] = $adminid;
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] added admin '" . $loginname . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] added admin '" . $loginname . "'");
 
 				// get all admin-data for return-array
 				$result = $this->apiCall('Admins.get', [
@@ -427,7 +427,7 @@ class Admins extends ApiCommand implements ResourceEntity
 			];
 			$result = Database::pexecute_first($result_stmt, $params, true, true);
 			if ($result) {
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] get admin '" . $result['loginname'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] get admin '" . $result['loginname'] . "'");
 				return $this->response($result);
 			}
 			$key = ($id > 0 ? "id #" . $id : "loginname '" . $loginname . "'");
@@ -756,7 +756,7 @@ class Admins extends ApiCommand implements ResourceEntity
 						WHERE `adminid` = :adminid
 					");
 					Database::pexecute($upd_stmt, $upd_data, true, true);
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] edited admin '" . $result['loginname'] . "'");
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] edited admin '" . $result['loginname'] . "'");
 
 					// get all admin-data for return-array
 					$result = $this->apiCall('Admins.get', [
@@ -858,7 +858,7 @@ class Admins extends ApiCommand implements ResourceEntity
 				'adminid' => $id
 			], true, true);
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] deleted admin '" . $result['loginname'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] deleted admin '" . $result['loginname'] . "'");
 			User::updateCounters();
 			return $this->response($result);
 		}
@@ -901,7 +901,7 @@ class Admins extends ApiCommand implements ResourceEntity
 			// set the new value for result-array
 			$result['loginfail_count'] = 0;
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] unlocked admin '" . $result['loginname'] . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] unlocked admin '" . $result['loginname'] . "'");
 			return $this->response($result);
 		}
 		throw new Exception("Not allowed to execute given command.", 403);

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -210,7 +210,7 @@ class Emails extends ApiCommand implements ResourceEntity
 			Customers::increaseUsage($customer['customerid'], 'emails_used');
 
 			Cronjob::inserttask(TaskId::REBUILD_RSPAMD);
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added email address '" . $email_full . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added email address '" . $email_full . "'");
 
 			$result = $this->apiCall('Emails.get', [
 				'emailaddr' => $email_full
@@ -250,7 +250,7 @@ class Emails extends ApiCommand implements ResourceEntity
 			));
 		$result = Database::pexecute_first($result_stmt, $params, true, true);
 		if ($result) {
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get email address '" . $result['email_full'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get email address '" . $result['email_full'] . "'");
 			return $this->response($result);
 		}
 		$key = ($id > 0 ? "id #" . $id : "emailaddr '" . $emailaddr . "'");
@@ -394,7 +394,7 @@ class Emails extends ApiCommand implements ResourceEntity
 		];
 		Database::pexecute($stmt, $params, true, true);
 		Cronjob::inserttask(TaskId::REBUILD_RSPAMD);
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] toggled catchall-flag for email address '" . $result['email_full'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] toggled catchall-flag for email address '" . $result['email_full'] . "'");
 
 		$result = $this->apiCall('Emails.get', [
 			'emailaddr' => $result['email_full']
@@ -443,7 +443,7 @@ class Emails extends ApiCommand implements ResourceEntity
 			$row['email_full'] = $idna_convert->decode($row['email_full']);
 			$result[] = $row;
 		}
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] list email-addresses");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] list email-addresses");
 		return $this->response([
 			'count' => count($result),
 			'list' => $result
@@ -548,7 +548,7 @@ class Emails extends ApiCommand implements ResourceEntity
 		], true, true);
 		Customers::decreaseUsage($customer['customerid'], 'emails_used');
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_WARNING, "[API] deleted email address '" . $result['email_full'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_WARNING, "[API] deleted email address '" . $result['email_full'] . "'");
 		return $this->response($result);
 	}
 }

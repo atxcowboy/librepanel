@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,46 +16,46 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Cron\TaskId;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Install\Preconfig;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\User;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Install\Preconfig;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
 
 if ($page == 'overview') {
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_updates");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_updates");
 
-	if (!Froxlor::isFroxlor()) {
+	if (!LibrePanel::isLibrePanel()) {
 		throw new Exception('SysCP/customized upgrades are not supported');
 	}
 
-	if (Froxlor::hasDbUpdates() || Froxlor::hasUpdates()) {
+	if (LibrePanel::hasDbUpdates() || LibrePanel::hasUpdates()) {
 		$successful_update = false;
 		$message = '';
 
 		if (Request::post('send') == 'send') {
 			if ((!empty(Request::post('update_preconfig')) && intval(Request::post('update_changesagreed', 0)) != 0) || empty(Request::post('update_preconfig'))) {
-				include_once Froxlor::getInstallDir() . 'install/updatesql.php';
+				include_once LibrePanel::getInstallDir() . 'install/updatesql.php';
 
 				User::updateCounters();
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
-				@chmod(Froxlor::getInstallDir() . '/lib/userdata.inc.php', 0400);
+				@chmod(LibrePanel::getInstallDir() . '/lib/userdata.inc.php', 0400);
 
 				UI::view('install/update.html.twig', [
 					'checks' => Update::getUpdateTasks()
@@ -71,10 +71,10 @@ if ($page == 'overview') {
 		if (empty($current_db_version)) {
 			$current_db_version = "0";
 		}
-		$new_version = Froxlor::VERSION;
-		$new_db_version = Froxlor::DBVERSION;
+		$new_version = LibrePanel::VERSION;
+		$new_db_version = LibrePanel::DBVERSION;
 
-		if (Froxlor::VERSION != $current_version) {
+		if (LibrePanel::VERSION != $current_version) {
 			$replacer_currentversion = $current_version;
 			$replacer_newversion = $new_version;
 		} else {

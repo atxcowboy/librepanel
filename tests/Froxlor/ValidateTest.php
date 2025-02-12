@@ -1,14 +1,14 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Validate\Validate;
+use LibrePanel\Validate\Validate;
 
 /**
  *
- * @covers \Froxlor\Validate\Validate
- * @covers \Froxlor\UI\Response
- * @covers \Froxlor\FroxlorLogger
- * @covers \Froxlor\Idna\IdnaWrapper
+ * @covers \LibrePanel\Validate\Validate
+ * @covers \LibrePanel\UI\Response
+ * @covers \LibrePanel\LibrePanelLogger
+ * @covers \LibrePanel\Idna\IdnaWrapper
  */
 class ValidateTest extends TestCase
 {
@@ -118,17 +118,17 @@ class ValidateTest extends TestCase
 
 	public function testValidateUrl()
 	{
-		$result = Validate::validateUrl("https://froxlor.org/");
+		$result = Validate::validateUrl("https://librepanel.org/");
 		$this->assertTrue($result);
-		$result = Validate::validateUrl("https://froxlor.org/", true);
+		$result = Validate::validateUrl("https://librepanel.org/", true);
 		$this->assertTrue($result);
-		$result = Validate::validateUrl("http://forum.froxlor.org/");
+		$result = Validate::validateUrl("http://forum.librepanel.org/");
 		$this->assertTrue($result);
-		$result = Validate::validateUrl("https://api.froxlor.org/doc/0.10.0/index.php");
+		$result = Validate::validateUrl("https://api.librepanel.org/doc/0.10.0/index.php");
 		$this->assertTrue($result);
-		$result = Validate::validateUrl("https://api.froxlor.org/doc/0.10.0/index.php", true);
+		$result = Validate::validateUrl("https://api.librepanel.org/doc/0.10.0/index.php", true);
 		$this->assertTrue($result);
-		$result = Validate::validateUrl("#froxlor");
+		$result = Validate::validateUrl("#librepanel");
 		$this->assertFalse($result);
 		$result = Validate::validateUrl("https://82.149.225.211/");
 		$this->assertTrue($result);
@@ -146,14 +146,14 @@ class ValidateTest extends TestCase
 
 	public function testValidateDomain()
 	{
-		$result = Validate::validateDomain('froxlor.org');
-		$this->assertEquals('froxlor.org', $result);
-		$result = Validate::validateDomain('_dmarc.froxlor.org');
+		$result = Validate::validateDomain('librepanel.org');
+		$this->assertEquals('librepanel.org', $result);
+		$result = Validate::validateDomain('_dmarc.librepanel.org');
 		$this->assertFalse($result);
-		$result = Validate::validateDomain('_dmarc.froxlor.org', true);
-		$this->assertEquals('_dmarc.froxlor.org', $result);
-		$result = Validate::validateDomain('test._dmarc.froxlor.org', true);
-		$this->assertEquals('test._dmarc.froxlor.org', $result);
+		$result = Validate::validateDomain('_dmarc.librepanel.org', true);
+		$this->assertEquals('_dmarc.librepanel.org', $result);
+		$result = Validate::validateDomain('test._dmarc.librepanel.org', true);
+		$this->assertEquals('test._dmarc.librepanel.org', $result);
 		$result = Validate::validateDomain('0815');
 		$this->assertFalse($result);
 		$result = Validate::validateDomain('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz');
@@ -164,11 +164,11 @@ class ValidateTest extends TestCase
 	{
 		$result = Validate::validateLocalHostname('localhost');
 		$this->assertEquals('localhost', $result);
-		$result = Validate::validateLocalHostname('froxlor-srv02');
-		$this->assertEquals('froxlor-srv02', $result);
-		$result = Validate::validateLocalHostname('froxlor_org');
+		$result = Validate::validateLocalHostname('librepanel-srv02');
+		$this->assertEquals('librepanel-srv02', $result);
+		$result = Validate::validateLocalHostname('librepanel_org');
 		$this->assertFalse($result);
-		$result = Validate::validateLocalHostname('froxlor.org');
+		$result = Validate::validateLocalHostname('librepanel.org');
 		$this->assertFalse($result);
 		$result = Validate::validateLocalHostname('a--------------------------------------------------------------');
 		$this->assertEquals('a--------------------------------------------------------------', $result);
@@ -180,9 +180,9 @@ class ValidateTest extends TestCase
 
 	public function testValidateEmail()
 	{
-		$result = Validate::validateEmail('team@froxlor.org');
-		$this->assertEquals('team@froxlor.org', $result);
-		$result = Validate::validateEmail('team.froxlor.org');
+		$result = Validate::validateEmail('team@librepanel.org');
+		$this->assertEquals('team@librepanel.org', $result);
+		$result = Validate::validateEmail('team.librepanel.org');
 		$this->assertFalse($result);
 	}
 
@@ -190,7 +190,7 @@ class ValidateTest extends TestCase
 	{
 		$result = Validate::validateUsername('web123sql2');
 		$this->assertTrue($result);
-		$mysql_max = \Froxlor\Database\Database::getSqlUsernameLength() - strlen(\Froxlor\Settings::Get('customer.mysqlprefix'));
+		$mysql_max = \LibrePanel\Database\Database::getSqlUsernameLength() - strlen(\LibrePanel\Settings::Get('customer.mysqlprefix'));
 		$result = Validate::validateUsername('web123sql2', true, $mysql_max);
 		$this->assertTrue($result);
 		// too long

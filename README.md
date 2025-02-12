@@ -3,7 +3,7 @@
 
 # LibrePanel
 
-A modern, open-source hosting control panel, forked from Froxlor, and developed by the [Panomity GmbH](https://www.panomity.com). Its goal is to simplify the effort of managing your hosting platform while providing flexibility and transparency.
+A modern, open-source hosting control panel, forked from LibrePanel, and developed by the [Panomity GmbH](https://www.panomity.com). Its goal is to simplify the effort of managing your hosting platform while providing flexibility and transparency.
 
 ## Installation
 
@@ -25,7 +25,7 @@ A modern, open-source hosting control panel, forked from Froxlor, and developed 
 ### Detailed installation
 
 Coming soon at [librepanel.com](https://librepanel.com/) (in development).  
-*(For reference to Froxlor’s docs, you may still look at [docs.froxlor.org](https://docs.froxlor.org/latest/general/installation/) until LibrePanel’s docs are fully available.)*
+*(For reference to LibrePanel’s docs, you may still look at [docs.librepanel.org](https://docs.librepanel.org/latest/general/installation/) until LibrePanel’s docs are fully available.)*
 
 ## Help & Community
 

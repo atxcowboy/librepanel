@@ -2,14 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\MysqlServer;
+use LibrePanel\Api\Commands\MysqlServer;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
 
- * @covers \Froxlor\Api\Commands\MysqlServer
+ * @covers \LibrePanel\Api\Commands\MysqlServer
  */
 class MysqlServerTest extends TestCase
 {

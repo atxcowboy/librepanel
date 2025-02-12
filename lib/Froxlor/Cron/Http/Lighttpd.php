@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,28 +16,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\Php\PhpInterface;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\Froxlor;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Http\Directory;
-use Froxlor\Http\Statistics;
-use Froxlor\Settings;
-use Froxlor\Validate\Validate;
-use Froxlor\System\Crypt;
-use Froxlor\Idna\IdnaWrapper;
+use LibrePanel\Cron\Http\Php\PhpInterface;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\LibrePanel;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Http\Directory;
+use LibrePanel\Http\Statistics;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Validate;
+use LibrePanel\System\Crypt;
+use LibrePanel\Idna\IdnaWrapper;
 use PDO;
 
 class Lighttpd extends HttpConfigBase
@@ -77,8 +77,8 @@ class Lighttpd extends HttpConfigBase
 				$ipv6 = '';
 			}
 
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'lighttpd::createIpPort: creating ip/port settings for  ' . $ip . ":" . $port);
-			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_froxlor_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'lighttpd::createIpPort: creating ip/port settings for  ' . $ip . ":" . $port);
+			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_librepanel_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
 
 			if (!isset($this->lighttpd_data[$vhost_filename])) {
 				$this->lighttpd_data[$vhost_filename] = '';
@@ -94,7 +94,7 @@ class Lighttpd extends HttpConfigBase
 
 			if ($row_ipsandports['vhostcontainer'] == '1') {
 				$myhost = str_replace('.', '\.', Settings::Get('system.hostname'));
-				$this->lighttpd_data[$vhost_filename] .= '# Froxlor default vhost' . "\n";
+				$this->lighttpd_data[$vhost_filename] .= '# LibrePanel default vhost' . "\n";
 				$this->lighttpd_data[$vhost_filename] .= '$HTTP["host"] =~ "^(?:www\.|)' . $myhost . '$" {' . "\n";
 
 				$mypath = $this->getMyPath($row_ipsandports);
@@ -103,11 +103,11 @@ class Lighttpd extends HttpConfigBase
 
 				$is_redirect = false;
 				// check for SSL redirect
-				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_froxlor_redirect') == '1') {
+				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_librepanel_redirect') == '1') {
 					$is_redirect = true;
-					// check whether froxlor uses Let's Encrypt and not cert is being generated yet
+					// check whether librepanel uses Let's Encrypt and not cert is being generated yet
 					// or a renew is ongoing - disable redirect
-					if (Settings::Get('system.le_froxlor_enabled') && ($this->froxlorVhostHasLetsEncryptCert() == false || $this->froxlorVhostLetsEncryptNeedsRenew())) {
+					if (Settings::Get('system.le_librepanel_enabled') && ($this->librepanelVhostHasLetsEncryptCert() == false || $this->librepanelVhostLetsEncryptNeedsRenew())) {
 						$this->lighttpd_data[$vhost_filename] .= '# temp. disabled ssl-redirect due to Let\'s Encrypt certificate generation.' . PHP_EOL;
 						$is_redirect = false;
 					} else {
@@ -121,10 +121,10 @@ class Lighttpd extends HttpConfigBase
 				}
 
 				if (!$is_redirect) {
-					if (Settings::Get('system.froxlordirectlyviahostname')) {
+					if (Settings::Get('system.librepaneldirectlyviahostname')) {
 						$relpath = "/";
 					} else {
-						$relpath = "/".basename(Froxlor::getInstallDir());
+						$relpath = "/".basename(LibrePanel::getInstallDir());
 					}
 					// protect lib/userdata.inc.php
 					$this->lighttpd_data[$vhost_filename] .= '  $HTTP["url"] =~ "' . rtrim($relpath, "/") . '/lib" {' . "\n";
@@ -167,7 +167,7 @@ class Lighttpd extends HttpConfigBase
 							'guid' => Settings::Get('phpfpm.vhost_httpuser'),
 							'openbasedir' => 0,
 							'email' => Settings::Get('panel.adminmail'),
-							'loginname' => 'froxlor.panel',
+							'loginname' => 'librepanel.panel',
 							'documentroot' => $mypath,
 							'customerroot' => $mypath,
 							'fpm_config_id' => isset($fpm_config['id']) ? $fpm_config['id'] : 1
@@ -192,16 +192,16 @@ class Lighttpd extends HttpConfigBase
 							'guid' => Settings::Get('system.httpuser'),
 							'openbasedir' => 0,
 							'email' => Settings::Get('panel.adminmail'),
-							'loginname' => 'froxlor.panel',
+							'loginname' => 'librepanel.panel',
 							'documentroot' => $mypath,
 							'customerroot' => $mypath
 						];
 					}
 				} else {
-					// fallback of froxlor domain-data for processSpecialConfigTemplate()
+					// fallback of librepanel domain-data for processSpecialConfigTemplate()
 					$domain = [
 						'domain' => Settings::Get('system.hostname'),
-						'loginname' => 'froxlor.panel',
+						'loginname' => 'librepanel.panel',
 						'documentroot' => $mypath,
 						'customerroot' => $mypath
 					];
@@ -220,10 +220,10 @@ class Lighttpd extends HttpConfigBase
 				}
 
 				// check for required fallback
-				if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_froxlor_enabled') == '0' || $this->froxlorVhostHasLetsEncryptCert() == false)) {
+				if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_librepanel_enabled') == '0' || $this->librepanelVhostHasLetsEncryptCert() == false)) {
 					$row_ipsandports['ssl_cert_file'] = Settings::Get('system.ssl_cert_file');
 					if (!file_exists($row_ipsandports['ssl_cert_file'])) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
 						Crypt::createSelfSignedCertificate();
 					}
 				}
@@ -232,7 +232,7 @@ class Lighttpd extends HttpConfigBase
 					if (!file_exists($row_ipsandports['ssl_key_file'])) {
 						// explicitly disable ssl for this vhost
 						$row_ipsandports['ssl_cert_file'] = "";
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
 					}
 				}
 
@@ -244,7 +244,7 @@ class Lighttpd extends HttpConfigBase
 					'id' => 0,
 					'domain' => Settings::Get('system.hostname'),
 					'adminid' => 1, /* first admin-user (superadmin) */
-					'loginname' => 'froxlor.panel',
+					'loginname' => 'librepanel.panel',
 					'documentroot' => $mypath,
 					'customerroot' => $mypath,
 					'parentdomainid' => 0
@@ -265,7 +265,7 @@ class Lighttpd extends HttpConfigBase
 				if ($domain['ssl_cert_file'] != '') {
 					// check for existence, #1485
 					if (!file_exists($domain['ssl_cert_file'])) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ip . ':' . $port . ' :: certificate file "' . $domain['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ip . ':' . $port . ' :: certificate file "' . $domain['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
 						echo $ip . ':' . $port . ' :: certificate file "' . $domain['ssl_cert_file'] . '" does not exist! Cannot create SSL-directives' . "\n";
 					} else {
 						$this->lighttpd_data[$vhost_filename] .= 'ssl.engine = "enable"' . "\n";
@@ -287,7 +287,7 @@ class Lighttpd extends HttpConfigBase
 						if ($domain['ssl_ca_file'] != '') {
 							// check for existence, #1485
 							if (!file_exists($domain['ssl_ca_file'])) {
-								FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ip . ':' . $port . ' :: certificate CA file "' . $domain['ssl_ca_file'] . '" does not exist! Cannot create ssl-directives');
+								LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ip . ':' . $port . ' :: certificate CA file "' . $domain['ssl_ca_file'] . '" does not exist! Cannot create ssl-directives');
 								echo $ip . ':' . $port . ' :: certificate CA file "' . $domain['ssl_ca_file'] . '" does not exist! SSL-directives might not be working' . "\n";
 							} else {
 								$this->lighttpd_data[$vhost_filename] .= 'ssl.ca-file = "' . FileDir::makeCorrectFile($domain['ssl_ca_file']) . '"' . "\n";
@@ -739,7 +739,7 @@ class Lighttpd extends HttpConfigBase
 				if (!file_exists($domain['ssl_cert_file'])) {
 					// explicitly disable ssl for this vhost
 					$domain['ssl_cert_file'] = "";
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
 				}
 			}
 
@@ -866,7 +866,7 @@ class Lighttpd extends HttpConfigBase
 	private function createStandardErrorHandler()
 	{
 		if (Settings::Get('defaultwebsrverrhandler.enabled') == '1' && Settings::Get('defaultwebsrverrhandler.err404') != '') {
-			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/05_froxlor_default_errorhandler.conf');
+			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/05_librepanel_default_errorhandler.conf');
 
 			if (!isset($this->lighttpd_data[$vhost_filename])) {
 				$this->lighttpd_data[$vhost_filename] = '';
@@ -897,7 +897,7 @@ class Lighttpd extends HttpConfigBase
 
 	public function writeConfigs()
 	{
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "lighttpd::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "lighttpd::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
 
 		$vhostDir = new Directory(Settings::Get('system.apacheconf_vhost'));
 		if (!$vhostDir->isConfigDir()) {
@@ -924,7 +924,7 @@ class Lighttpd extends HttpConfigBase
 			fclose($vhosts_file_handler);
 		} else {
 			if (!file_exists(Settings::Get('system.apacheconf_vhost'))) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'lighttpd::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'lighttpd::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 				FileDir::safe_exec('mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 			}
 

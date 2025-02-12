@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
+ * @author     LibrePanel team <team@librepanel.org>
  * @author     Ricardo Luiz Costa <ricardo@winger.com.br>
  * @author     Thiago Goncalves de Castro <thiago@davoi.com.br>
  * @author     Rafael Andrade <slyppp@gmail.com>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -31,7 +31,7 @@ return [
 		'overview' => 'Visão geral',
 		'ressourcedetails' => 'Recursos usados',
 		'systemdetails' => 'Detalhes do sistema',
-		'froxlordetails' => 'Detalhes do Froxlor',
+		'librepaneldetails' => 'Detalhes do LibrePanel',
 		'installedversion' => 'Versão instalada',
 		'latestversion' => 'Ultima Versão',
 		'lookfornewversion' => [
@@ -185,15 +185,15 @@ return [
 		'security_settings' => 'Opções de Segurança',
 		'know_what_youre_doing' => 'Somente altere, se você sabe o que está fazendo',
 		'show_version_login' => [
-			'title' => 'Mostrar versão do Froxlor no login',
-			'description' => 'Mostar a versão do Froxlor no rodapé da página de login',
+			'title' => 'Mostrar versão do LibrePanel no login',
+			'description' => 'Mostar a versão do LibrePanel no rodapé da página de login',
 		],
 		'show_version_footer' => [
-			'title' => 'Mostar versão do Froxlor no rodapé',
-			'description' => 'Mostar a versão do Froxlor no rodapé do resto das páginas',
+			'title' => 'Mostar versão do LibrePanel no rodapé',
+			'description' => 'Mostar a versão do LibrePanel no rodapé do resto das páginas',
 		],
-		'froxlor_graphic' => [
-			'title' => 'Cabeçalho gráfico do Froxlor',
+		'librepanel_graphic' => [
+			'title' => 'Cabeçalho gráfico do LibrePanel',
 			'description' => 'Quais gráficos devem aparece no topor',
 		],
 		'phpsettings' => [
@@ -324,7 +324,7 @@ return [
 		'hasaliasdomains' => 'Possui alinhas de domínio(s)',
 		'statstics' => 'Estatísticas de Uso',
 		'isassigneddomain' => 'É um domínio assinado',
-		'add_date' => 'Adicionado no Froxlor',
+		'add_date' => 'Adicionado no LibrePanel',
 		'registration_date' => 'Adicionado no Registro',
 		'topleveldomain' => 'Top-Level-Domain',
 		'associated_with_domain' => 'Associado',
@@ -491,20 +491,20 @@ return [
 	],
 	'mails' => [
 		'pop_success' => [
-			'mailbody' => 'Olá,\\n\\n sua conta de e-mail {EMAIL}\\n foi criada com sucesso.\\n\\nEsta é uma mensagem automática\\neMail, por favor não responda!\\n\\nAtenciosamente, Equipe de desenvolvimento do Froxlor',
+			'mailbody' => 'Olá,\\n\\n sua conta de e-mail {EMAIL}\\n foi criada com sucesso.\\n\\nEsta é uma mensagem automática\\neMail, por favor não responda!\\n\\nAtenciosamente, Equipe de desenvolvimento do LibrePanel',
 			'subject' => 'Conta de e-mail criada com sucesso!',
 		],
 		'createcustomer' => [
-			'mailbody' => 'Olá {FIRSTNAME} {NAME},\\n\\nseguem os detalhes de sua nova conta de e-mail:\\n\\nUsuario: {USERNAME}\\nSenha: {PASSWORD}\\n\\nObrigado,\\nEquipe de desenvolvimento do Froxlor',
+			'mailbody' => 'Olá {FIRSTNAME} {NAME},\\n\\nseguem os detalhes de sua nova conta de e-mail:\\n\\nUsuario: {USERNAME}\\nSenha: {PASSWORD}\\n\\nObrigado,\\nEquipe de desenvolvimento do LibrePanel',
 			'subject' => 'Informações da conta',
 		],
 		'pop_success_alternative' => [
-			'mailbody' => 'Oi,\\n\\nSua conta de email {EMAIL}\\nfoi configurada corretamente.\\nSua senha é{PASSWORD}.\\n\\nEmail criado automaticamente\\n, Por favor não responda!\\n\\nCumprimentos, Equipe Froxlor.',
+			'mailbody' => 'Oi,\\n\\nSua conta de email {EMAIL}\\nfoi configurada corretamente.\\nSua senha é{PASSWORD}.\\n\\nEmail criado automaticamente\\n, Por favor não responda!\\n\\nCumprimentos, Equipe LibrePanel.',
 			'subject' => 'Conta de email criada com sucesso',
 		],
 		'password_reset' => [
 			'subject' => 'Reset de Senha',
-			'mailbody' => 'Oi {USERNAME},\\n\\nsua senha do Froxlor foi resetada!\\nA nova senha é: {LINK}\\n\\nObrigado,\\nequipe Froxlor',
+			'mailbody' => 'Oi {USERNAME},\\n\\nsua senha do LibrePanel foi resetada!\\nA nova senha é: {LINK}\\n\\nObrigado,\\nequipe LibrePanel',
 		],
 	],
 	'menu' => [
@@ -878,7 +878,7 @@ return [
 		],
 		'panel_allow_domain_change_customer' => [
 			'title' => 'Ativa mover domínios entre clientes',
-			'description' => 'Se ativado você pode trocar o cliente de um domínio para administração de outro.<br /><b>Attention:</b> Froxlor não troca nenhum caminho. Isto pode fazer com que domínios parem de funcionar',
+			'description' => 'Se ativado você pode trocar o cliente de um domínio para administração de outro.<br /><b>Attention:</b> LibrePanel não troca nenhum caminho. Isto pode fazer com que domínios parem de funcionar',
 		],
 	],
 	'traffic' => [

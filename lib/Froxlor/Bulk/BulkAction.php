@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Bulk;
+namespace LibrePanel\Bulk;
 
 use Exception;
-use Froxlor\FileDir;
+use LibrePanel\FileDir;
 
 /**
  * Abstract Class BulkAction to mass-import entities
  *
- * @author Michael Kaufmann (d00p) <d00p@froxlor.org>
+ * @author Michael Kaufmann (d00p) <d00p@librepanel.org>
  *
  */
 abstract class BulkAction
@@ -135,7 +135,7 @@ abstract class BulkAction
 			return null;
 		}
 
-		$module = '\\Froxlor\\Api\\Commands\\' . substr($this->api_call, 0, strpos($this->api_call, "."));
+		$module = '\\LibrePanel\\Api\\Commands\\' . substr($this->api_call, 0, strpos($this->api_call, "."));
 		$function = substr($this->api_call, strpos($this->api_call, ".") + 1);
 
 		$new_data = [];

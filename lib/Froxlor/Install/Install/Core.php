@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Install\Install;
+namespace LibrePanel\Install\Install;
 
 use Exception;
-use Froxlor\Config\ConfigParser;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
 use PDO;
 use PDOException;
 use PDOStatement;
 
 /**
- * Installation of the froxlor core database and set settings.
+ * Installation of the librepanel core database and set settings.
  */
 class Core
 {
@@ -173,7 +173,7 @@ class Core
 			}
 
 			// create temporary backup-filename
-			$filename = "/tmp/froxlor_backup_" . date('YmdHi') . ".sql";
+			$filename = "/tmp/librepanel_backup_" . date('YmdHi') . ".sql";
 
 			// look for mysqldump
 			$section = 'mysqldump';
@@ -187,7 +187,7 @@ class Core
 			}
 
 			// create temporary .cnf file
-			$cnffilename = "/tmp/froxlor_dump.cnf";
+			$cnffilename = "/tmp/librepanel_dump.cnf";
 			$dumpcnf = "[".$section."]" . PHP_EOL . "password=\"" . $this->validatedData['mysql_root_pass'] . "\"" . PHP_EOL;
 			file_put_contents($cnffilename, $dumpcnf);
 
@@ -250,7 +250,7 @@ class Core
 
 		$db_root->query("FLUSH PRIVILEGES;");
 
-		// we have to create a new user and database for the froxlor unprivileged mysql access
+		// we have to create a new user and database for the librepanel unprivileged mysql access
 		$ins_stmt = $db_root->prepare("CREATE DATABASE `" . str_replace('`', '', $this->validatedData['mysql_database']) . "` CHARACTER SET=utf8 COLLATE=utf8_general_ci");
 		$ins_stmt->execute();
 
@@ -330,7 +330,7 @@ class Core
 	}
 
 	/**
-	 * Import froxlor.sql into database
+	 * Import librepanel.sql into database
 	 *
 	 * @return void
 	 * @throws Exception
@@ -345,9 +345,9 @@ class Core
 
 		// actually import data
 		try {
-			$froxlorSQL = include dirname(__FILE__, 5) . '/install/froxlor.sql.php';
+			$librepanelSQL = include dirname(__FILE__, 5) . '/install/librepanel.sql.php';
 
-			$pdo->query($froxlorSQL);
+			$pdo->query($librepanelSQL);
 		} catch (PDOException $e) {
 			throw new Exception(lng('install.errors.sql_import_failed', [$e->getMessage()]), 0, $e);
 		}
@@ -381,7 +381,7 @@ class Core
 		if ($this->validatedData['use_ssl']) {
 			$this->updateSetting($upd_stmt, 1, 'system', 'use_ssl');
 			$this->updateSetting($upd_stmt, 1, 'system', 'leenabled');
-			$this->updateSetting($upd_stmt, 1, 'system', 'le_froxlor_enabled');
+			$this->updateSetting($upd_stmt, 1, 'system', 'le_librepanel_enabled');
 		}
 		$this->updateSetting($upd_stmt, strtolower($this->validatedData['servername']), 'system', 'hostname');
 		$this->updateSetting($upd_stmt, 'en', 'panel', 'standardlanguage'); // TODO: set language
@@ -402,7 +402,7 @@ class Core
 			$this->updateSetting($upd_stmt, 'error', 'system', 'errorlog_level');
 		}
 
-		$distros = glob(FileDir::makeCorrectDir(Froxlor::getInstallDir() . '/lib/configfiles/') . '*.xml');
+		$distros = glob(FileDir::makeCorrectDir(LibrePanel::getInstallDir() . '/lib/configfiles/') . '*.xml');
 		foreach ($distros as $_distribution) {
 			if ($this->validatedData['distribution'] == str_replace(".xml", "", strtolower(basename($_distribution)))) {
 				$dist = new ConfigParser($_distribution);
@@ -450,7 +450,7 @@ class Core
 
 		if ($this->validatedData['use_ssl']) {
 			// enable let's encrypt cron
-			$db_user->query("UPDATE `" . TABLE_PANEL_CRONRUNS . "` SET `isactive` = '1' WHERE `module` = 'froxlor/letsencrypt';");
+			$db_user->query("UPDATE `" . TABLE_PANEL_CRONRUNS . "` SET `isactive` = '1' WHERE `module` = 'librepanel/letsencrypt';");
 		}
 
 		// set specific times for some crons (traffic only at night, etc.)
@@ -479,7 +479,7 @@ class Core
 	}
 
 	/**
-	 * create corresponding entries in froxlor database
+	 * create corresponding entries in librepanel database
 	 *
 	 * @param $db_user
 	 * @return void

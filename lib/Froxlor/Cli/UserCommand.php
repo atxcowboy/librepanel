@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Froxlor;
-use Froxlor\System\Crypt;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\LibrePanel;
+use LibrePanel\System\Crypt;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,7 +41,7 @@ final class UserCommand extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:user');
+		$this->setName('librepanel:user');
 		$this->setDescription('Various user actions');
 		$this->addArgument('user', InputArgument::REQUIRED, 'Loginname of the target user')
 			->addArgument('admin', InputArgument::OPTIONAL, 'Loginname of the executing admin/reseller user', 'admin');
@@ -56,11 +56,11 @@ final class UserCommand extends CliCommand
 
 		$result = $this->validateRequirements($output);
 
-		require Froxlor::getInstallDir() . '/lib/functions.php';
+		require LibrePanel::getInstallDir() . '/lib/functions.php';
 
 		// set error-handler
 		@set_error_handler([
-			'\\Froxlor\\Api\\Api',
+			'\\LibrePanel\\Api\\Api',
 			'phpErrHandler'
 		]);
 

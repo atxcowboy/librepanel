@@ -1,9 +1,9 @@
 <?php
 
-namespace Froxlor\Cron;
+namespace LibrePanel\Cron;
 
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
 
 trait Forkable
 {
@@ -47,7 +47,7 @@ trait Forkable
 				} else {
 					$msg = "PHP compiled without pcntl.";
 				}
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, $msg . " Not forking " . self::class . ", this may take a long time!");
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, $msg . " Not forking " . self::class . ", this may take a long time!");
 			}
 			foreach ($attributes as $closureAttributes) {
 				$closure($closureAttributes);

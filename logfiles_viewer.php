@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 if (!defined('AREA')) {
@@ -28,13 +28,13 @@ if (!defined('AREA')) {
 	exit();
 }
 
-use Froxlor\Api\Commands\SubDomains;
-use Froxlor\Customer\Customer;
-use Froxlor\FileDir;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
+use LibrePanel\Api\Commands\SubDomains;
+use LibrePanel\Customer\Customer;
+use LibrePanel\FileDir;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
 
 // This file is being included in admin_domains and customer_domains
 // and therefore does not need to require lib/init.php
@@ -116,7 +116,7 @@ if (function_exists('exec')) {
 	]);
 } else {
 	if (AREA == 'admin') {
-		Response::dynamicError('You need to allow the exec() function in the froxlor-vhost php-config');
+		Response::dynamicError('You need to allow the exec() function in the librepanel-vhost php-config');
 	} else {
 		Response::dynamicError('Required function exec() is not allowed. Please contact the system administrator.');
 	}

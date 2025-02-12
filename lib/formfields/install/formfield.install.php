@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Froxlor;
+use LibrePanel\LibrePanel;
 
 $httpuser = '';
 $httpgroup = '';
@@ -80,7 +80,7 @@ return [
 						'placeholder' => lng('install.database.user'),
 						'type' => 'text',
 						'mandatory' => true,
-						'value' => old('mysql_unprivileged_user', 'froxlor', 'installation'),
+						'value' => old('mysql_unprivileged_user', 'librepanel', 'installation'),
 					],
 					'mysql_unprivileged_pass' => [
 						'label' => lng('mysql.unprivileged_passwd'),
@@ -94,7 +94,7 @@ return [
 						'placeholder' => lng('install.database.dbname'),
 						'type' => 'text',
 						'mandatory' => true,
-						'value' => old('mysql_database', 'froxlor', 'installation'),
+						'value' => old('mysql_database', 'librepanel', 'installation'),
 					],
 					'mysql_force_create' => [
 						'label' => lng('install.database.force_create'),
@@ -239,8 +239,8 @@ return [
 					'system' => [
 						'label' => lng('install.install.runcmd'),
 						'type' => 'textarea',
-						'value' => (!empty($_SESSION['installation']['ud_str']) ? Froxlor::getInstallDir() . "bin/froxlor-cli froxlor:install -c '" . $_SESSION['installation']['ud_str'] . "'\n" : "") .
-							(!empty($_SESSION['installation']['json_params']) ? Froxlor::getInstallDir() . "bin/froxlor-cli froxlor:config-services -a '" . $_SESSION['installation']['json_params'] . "' --yes-to-all" : "something went wrong..."),
+						'value' => (!empty($_SESSION['installation']['ud_str']) ? LibrePanel::getInstallDir() . "bin/librepanel-cli librepanel:install -c '" . $_SESSION['installation']['ud_str'] . "'\n" : "") .
+							(!empty($_SESSION['installation']['json_params']) ? LibrePanel::getInstallDir() . "bin/librepanel-cli librepanel:config-services -a '" . $_SESSION['installation']['json_params'] . "' --yes-to-all" : "something went wrong..."),
 						'readonly' => true,
 						'rows' => 10,
 						'style' => 'min-height:16rem;'

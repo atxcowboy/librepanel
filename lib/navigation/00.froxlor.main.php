@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,15 +16,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Settings;
-use Froxlor\CurrentUser;
+use LibrePanel\Settings;
+use LibrePanel\CurrentUser;
 
 return [
 	'customer' => [
@@ -161,13 +161,13 @@ return [
 			'show_element' => (!Settings::IsInList('panel.customer_hide_options', 'misc.documentation')),
 			'elements' => [
 				[
-					'url' => \Froxlor\Froxlor::getDocsUrl() . 'user-guide/',
+					'url' => \LibrePanel\LibrePanel::getDocsUrl() . 'user-guide/',
 					'label' => lng('admin.userguide'),
 					'new_window' => true,
 					'is_external' => true,
 				],
 				[
-					'url' => \Froxlor\Froxlor::getDocsUrl() . 'api-guide/',
+					'url' => \LibrePanel\LibrePanel::getDocsUrl() . 'api-guide/',
 					'label' => lng('admin.apiguide'),
 					'new_window' => true,
 					'show_element' => Settings::Get('api.enabled') == 1 && CurrentUser::getField('api_allowed') == 1,
@@ -348,13 +348,13 @@ return [
 			'icon' => 'fa-solid fa-circle-info',
 			'elements' => [
 				[
-					'url' => \Froxlor\Froxlor::getDocsUrl() . 'admin-guide/',
+					'url' => \LibrePanel\LibrePanel::getDocsUrl() . 'admin-guide/',
 					'label' => lng('admin.adminguide'),
 					'new_window' => true,
 					'is_external' => true,
 				],
 				[
-					'url' => \Froxlor\Froxlor::getDocsUrl() . 'api-guide/',
+					'url' => \LibrePanel\LibrePanel::getDocsUrl() . 'api-guide/',
 					'label' => lng('admin.apiguide'),
 					'new_window' => true,
 					'show_element' => Settings::Get('api.enabled') == 1,

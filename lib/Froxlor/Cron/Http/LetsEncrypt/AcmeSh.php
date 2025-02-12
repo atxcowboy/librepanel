@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http\LetsEncrypt;
+namespace LibrePanel\Cron\Http\LetsEncrypt;
 
-use Froxlor\Cron\FroxlorCron;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\Validate\Validate;
+use LibrePanel\Cron\LibrePanelCron;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\Validate\Validate;
 use PDO;
 use PDOStatement;
 
-class AcmeSh extends FroxlorCron
+class AcmeSh extends LibrePanelCron
 {
 
 	const ACME_PROVIDER = [
@@ -79,14 +79,14 @@ class AcmeSh extends FroxlorCron
 			// Let's Encrypt cronjob is combined with regeneration of webserver configuration files.
 			// For debugging purposes you can use the --debug switch and the --force switch to run the cron manually.
 			// check whether we MIGHT need to run although there is no task to regenerate config-files
-			$issue_froxlor = self::issueFroxlorVhost();
+			$issue_librepanel = self::issueLibrePanelVhost();
 			$issue_domains = self::issueDomains();
-			$renew_froxlor = self::renewFroxlorVhost();
+			$renew_librepanel = self::renewLibrePanelVhost();
 			$renew_domains = self::renewDomains(true);
-			if ($issue_froxlor || !empty($issue_domains) || !empty($renew_froxlor) || $renew_domains) {
+			if ($issue_librepanel || !empty($issue_domains) || !empty($renew_librepanel) || $renew_domains) {
 				// insert task to generate certificates and vhost-configs
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
-				if ($renew_froxlor) {
+				if ($renew_librepanel) {
 					Cronjob::inserttask(TaskId::UPDATE_LE_SERVICES);
 				}
 			}
@@ -128,21 +128,21 @@ class AcmeSh extends FroxlorCron
 		self::$upddom_stmt = Database::prepare("UPDATE `" . TABLE_PANEL_DOMAINS . "` SET `ssl_redirect` = '1' WHERE `id` = :domainid");
 
 		// check whether there are certificates to issue
-		$issue_froxlor = self::issueFroxlorVhost();
+		$issue_librepanel = self::issueLibrePanelVhost();
 		$issue_domains = self::issueDomains();
 
 		// first - generate LE for system-vhost if enabled
-		if ($issue_froxlor) {
+		if ($issue_librepanel) {
 			// build row
 			$certrow = [
-				'loginname' => 'froxlor.panel',
+				'loginname' => 'librepanel.panel',
 				'domain' => Settings::Get('system.hostname'),
 				'domainid' => 0,
-				'documentroot' => Froxlor::getInstallDir(),
+				'documentroot' => LibrePanel::getInstallDir(),
 				'leprivatekey' => Settings::Get('system.leprivatekey'),
 				'lepublickey' => Settings::Get('system.lepublickey'),
 				'leregistered' => Settings::Get('system.leregistered'),
-				'ssl_redirect' => Settings::Get('system.le_froxlor_redirect'),
+				'ssl_redirect' => Settings::Get('system.le_librepanel_redirect'),
 				'validfromdate' => null,
 				'validtodate' => null,
 				'issuer' => "",
@@ -159,42 +159,42 @@ class AcmeSh extends FroxlorCron
 		}
 
 		if (count($issue_domains)) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Requesting " . count($issue_domains) . " new Let's Encrypt certificates");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Requesting " . count($issue_domains) . " new Let's Encrypt certificates");
 			self::runIssueFor($issue_domains);
 			$changedetected = 1;
 		}
 
 		// compare file-system certificates with the ones in our database
 		// and update if needed
-		$renew_froxlor = self::renewFroxlorVhost();
+		$renew_librepanel = self::renewLibrePanelVhost();
 		$renew_domains = self::renewDomains();
 
-		if ($renew_froxlor) {
+		if ($renew_librepanel) {
 			// build row
 			$certrow = [
-				'loginname' => 'froxlor.panel',
+				'loginname' => 'librepanel.panel',
 				'domain' => Settings::Get('system.hostname'),
 				'domainid' => 0,
-				'documentroot' => Froxlor::getInstallDir(),
+				'documentroot' => LibrePanel::getInstallDir(),
 				'leprivatekey' => Settings::Get('system.leprivatekey'),
 				'lepublickey' => Settings::Get('system.lepublickey'),
 				'leregistered' => Settings::Get('system.leregistered'),
-				'ssl_redirect' => Settings::Get('system.le_froxlor_redirect'),
-				'validfromdate' => is_array($renew_froxlor) ? $renew_froxlor['validfromdate'] : date('Y-m-d H:i:s', 0),
-				'validtodate' => is_array($renew_froxlor) ? $renew_froxlor['validtodate'] : date('Y-m-d H:i:s', 0),
-				'issuer' => is_array($renew_froxlor) ? $renew_froxlor['issuer'] : "",
-				'ssl_cert_file' => is_array($renew_froxlor) ? $renew_froxlor['ssl_cert_file'] : null,
-				'ssl_key_file' => is_array($renew_froxlor) ? $renew_froxlor['ssl_key_file'] : null,
-				'ssl_ca_file' => is_array($renew_froxlor) ? $renew_froxlor['ssl_ca_file'] : null,
-				'ssl_csr_file' => is_array($renew_froxlor) ? $renew_froxlor['ssl_csr_file'] : null,
-				'id' => is_array($renew_froxlor) ? $renew_froxlor['id'] : null,
+				'ssl_redirect' => Settings::Get('system.le_librepanel_redirect'),
+				'validfromdate' => is_array($renew_librepanel) ? $renew_librepanel['validfromdate'] : date('Y-m-d H:i:s', 0),
+				'validtodate' => is_array($renew_librepanel) ? $renew_librepanel['validtodate'] : date('Y-m-d H:i:s', 0),
+				'issuer' => is_array($renew_librepanel) ? $renew_librepanel['issuer'] : "",
+				'ssl_cert_file' => is_array($renew_librepanel) ? $renew_librepanel['ssl_cert_file'] : null,
+				'ssl_key_file' => is_array($renew_librepanel) ? $renew_librepanel['ssl_key_file'] : null,
+				'ssl_ca_file' => is_array($renew_librepanel) ? $renew_librepanel['ssl_ca_file'] : null,
+				'ssl_csr_file' => is_array($renew_librepanel) ? $renew_librepanel['ssl_csr_file'] : null,
+				'id' => is_array($renew_librepanel) ? $renew_librepanel['id'] : null,
 				'wwwserveralias' => 0
 			];
 			$renew_domains[] = $certrow;
 		}
 
 		foreach ($renew_domains as $domain) {
-			$cronlog = FroxlorLogger::getInstanceOf([
+			$cronlog = LibrePanelLogger::getInstanceOf([
 				'loginname' => $domain['loginname'],
 				'adminsession' => 0
 			]);
@@ -210,31 +210,31 @@ class AcmeSh extends FroxlorCron
 			if (self::$no_inserttask == false) {
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			}
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Let's Encrypt certificates have been updated");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Let's Encrypt certificates have been updated");
 		} else {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "No new certificates or certificate updates found");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "No new certificates or certificate updates found");
 		}
 		return 0;
 	}
 
 	/**
-	 * check whether we need to issue a new certificate for froxlor itself
+	 * check whether we need to issue a new certificate for librepanel itself
 	 *
 	 * @return boolean
 	 * @throws \Exception
 	 */
-	private static function issueFroxlorVhost()
+	private static function issueLibrePanelVhost()
 	{
-		if (Settings::Get('system.le_froxlor_enabled') == '1') {
+		if (Settings::Get('system.le_librepanel_enabled') == '1') {
 			// let's encrypt is enabled, now check whether we have a certificate
-			$froxlor_ssl_settings_stmt = Database::prepare("
+			$librepanel_ssl_settings_stmt = Database::prepare("
 				SELECT * FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "`
 				WHERE `domainid` = '0'
 			");
-			$froxlor_ssl = Database::pexecute_first($froxlor_ssl_settings_stmt);
+			$librepanel_ssl = Database::pexecute_first($librepanel_ssl_settings_stmt);
 			// also check for possible existing certificate
-			if (($froxlor_ssl && empty($froxlor_ssl['validtodate']))
-				|| (!$froxlor_ssl && !self::checkFsFilesAreNewer(Settings::Get('system.hostname'), date('Y-m-d H:i:s')))
+			if (($librepanel_ssl && empty($librepanel_ssl['validtodate']))
+				|| (!$librepanel_ssl && !self::checkFsFilesAreNewer(Settings::Get('system.hostname'), date('Y-m-d H:i:s')))
 			) {
 				return true;
 			}
@@ -342,23 +342,23 @@ EOC;
 	}
 
 	/**
-	 * check whether we need to renew-check the certificate for froxlor itself
+	 * check whether we need to renew-check the certificate for librepanel itself
 	 *
 	 * @return boolean
 	 * @throws \Exception
 	 */
-	private static function renewFroxlorVhost()
+	private static function renewLibrePanelVhost()
 	{
-		if (Settings::Get('system.le_froxlor_enabled') == '1') {
+		if (Settings::Get('system.le_librepanel_enabled') == '1') {
 			// let's encrypt is enabled, now check whether we have a certificate
-			$froxlor_ssl_settings_stmt = Database::prepare("
+			$librepanel_ssl_settings_stmt = Database::prepare("
 				SELECT * FROM `" . TABLE_PANEL_DOMAIN_SSL_SETTINGS . "`
 				WHERE `domainid` = '0'
 			");
-			$froxlor_ssl = Database::pexecute_first($froxlor_ssl_settings_stmt);
+			$librepanel_ssl = Database::pexecute_first($librepanel_ssl_settings_stmt);
 			// also check for possible existing certificate
-			if ($froxlor_ssl && self::checkFsFilesAreNewer(Settings::Get('system.hostname'), $froxlor_ssl['validtodate'])) {
-				return $froxlor_ssl;
+			if ($librepanel_ssl && self::checkFsFilesAreNewer(Settings::Get('system.hostname'), $librepanel_ssl['validtodate'])) {
+				return $librepanel_ssl;
 			}
 		}
 		return false;
@@ -419,12 +419,12 @@ EOC;
 	private static function checkInstall($tries = 0)
 	{
 		if (!file_exists(self::getAcmeSh()) && $tries > 0) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Download/installation of acme.sh seems to have failed. Re-run cronjob to try again or install manually to '" . self::getAcmeSh() . "'");
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Download/installation of acme.sh seems to have failed. Re-run cronjob to try again or install manually to '" . self::getAcmeSh() . "'");
 			echo PHP_EOL . "Download/installation of acme.sh seems to have failed. Re-run cronjob to try again or install manually to '" . self::getAcmeSh() . "'" . PHP_EOL;
 			return false;
 		} else {
 			if (!file_exists(self::getAcmeSh())) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Could not find acme.sh - installing it to /root/.acme.sh/");
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Could not find acme.sh - installing it to /root/.acme.sh/");
 				$return = false;
 				FileDir::safe_exec("wget -O - https://get.acme.sh | sh -s email=" . Settings::Get('panel.adminmail'), $return, [
 					'|'
@@ -434,8 +434,8 @@ EOC;
 				if ($set_path != '/root/.acme.sh/acme.sh') {
 					Settings::Set('system.acmeshpath', '/root/.acme.sh/acme.sh', true);
 					// let the user know
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Acme.sh could not be found in '" . $set_path . "' so froxlor installed it to the default location, which is '/root/.acme.sh/'");
-					echo PHP_EOL . "Acme.sh could not be found in '" . $set_path . "' so froxlor installed it to the default location, which is '/root/.acme.sh/'" . PHP_EOL;
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Acme.sh could not be found in '" . $set_path . "' so librepanel installed it to the default location, which is '/root/.acme.sh/'");
+					echo PHP_EOL . "Acme.sh could not be found in '" . $set_path . "' so librepanel installed it to the default location, which is '/root/.acme.sh/'" . PHP_EOL;
 				}
 				// check whether the installation worked
 				return self::checkInstall(++$tries);
@@ -455,7 +455,7 @@ EOC;
 		// set default CA
 		$acmesh_result3 = FileDir::safe_exec(self::getAcmeSh() . " --set-default-ca --server " . self::$apiserver);
 		// log messages
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Checking for LetsEncrypt client upgrades before renewing certificates:\n" . implode("\n", $acmesh_result) . "\n" . implode("\n", $acmesh_result2) . "\n" . implode("\n", $acmesh_result3));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Checking for LetsEncrypt client upgrades before renewing certificates:\n" . implode("\n", $acmesh_result) . "\n" . implode("\n", $acmesh_result2) . "\n" . implode("\n", $acmesh_result3));
 	}
 
 	/**
@@ -478,7 +478,7 @@ EOC;
 		// iterate through all domains
 		foreach ($certrows as $certrow) {
 			// set logger to corresponding loginname for the log to appear in the users system-log
-			$cronlog = FroxlorLogger::getInstanceOf([
+			$cronlog = LibrePanelLogger::getInstanceOf([
 				'loginname' => $certrow['loginname'],
 				'adminsession' => 0
 			]);
@@ -488,26 +488,26 @@ EOC;
 				if (!empty($certrow['ssl_cert_file']) && empty($certrow['validtodate'])) {
 					// domain changed (SAN or similar)
 					$do_force = true;
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Re-creating certificate for " . $certrow['domain']);
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Re-creating certificate for " . $certrow['domain']);
 				} else {
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Creating certificate for " . $certrow['domain']);
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Creating certificate for " . $certrow['domain']);
 				}
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Adding common-name: " . $certrow['domain']);
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Adding common-name: " . $certrow['domain']);
 				$domains = [
 					strtolower($certrow['domain'])
 				];
 				// add www.<domain> to SAN list
 				if ($certrow['wwwserveralias'] == 1) {
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: www." . $certrow['domain']);
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: www." . $certrow['domain']);
 					$domains[] = strtolower('www.' . $certrow['domain']);
 				}
 				if ($certrow['domainid'] == 0) {
-					$froxlor_aliases = Settings::Get('system.froxloraliases');
-					if (!empty($froxlor_aliases)) {
-						$froxlor_aliases = explode(",", $froxlor_aliases);
-						foreach ($froxlor_aliases as $falias) {
+					$librepanel_aliases = Settings::Get('system.librepanelaliases');
+					if (!empty($librepanel_aliases)) {
+						$librepanel_aliases = explode(",", $librepanel_aliases);
+						foreach ($librepanel_aliases as $falias) {
 							if (Validate::validateDomain(trim($falias))) {
-								$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: " . strtolower(trim($falias)));
+								$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: " . strtolower(trim($falias)));
 								$domains[] = strtolower(trim($falias));
 							}
 						}
@@ -519,10 +519,10 @@ EOC;
 					]);
 					$aliasdomains = $aliasdomains_stmt->fetchAll(PDO::FETCH_ASSOC);
 					foreach ($aliasdomains as $aliasdomain) {
-						$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: " . $aliasdomain['domain']);
+						$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: " . $aliasdomain['domain']);
 						$domains[] = strtolower($aliasdomain['domain']);
 						if ($aliasdomain['wwwserveralias'] == 1) {
-							$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: www." . $aliasdomain['domain']);
+							$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Adding SAN entry: www." . $aliasdomain['domain']);
 							$domains[] = strtolower('www.' . $aliasdomain['domain']);
 						}
 					}
@@ -532,7 +532,7 @@ EOC;
 
 				self::runAcmeSh($certrow, $domains, $cronlog, $do_force, $certrow['domainid'] == 0);
 			} else {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Skipping Let's Encrypt generation for " . $certrow['domain'] . " due to an enabled ssl_redirect");
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Skipping Let's Encrypt generation for " . $certrow['domain'] . " due to an enabled ssl_redirect");
 				// we need another reconfigure in order to get the certificate
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			}
@@ -544,7 +544,7 @@ EOC;
 	 *
 	 * @param array $domains
 	 * @param int $domain_id
-	 * @param FroxlorLogger $cronlog
+	 * @param LibrePanelLogger $cronlog
 	 * @throws \Exception
 	 */
 	private static function validateDns(array &$domains, $domain_id, &$cronlog)
@@ -554,12 +554,12 @@ EOC;
 			// ips according to our system
 			$our_ips = Domain::getIpsOfDomain($domain_id);
 			foreach ($loop_domains as $idx => $domain) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Validating DNS of " . $domain);
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Validating DNS of " . $domain);
 				// ips according to NS
 				$domain_ips = PhpHelper::gethostbynamel6($domain, true, Settings::Get('system.le_domain_dnscheck_resolver'));
 				if ($domain_ips == false || count(array_intersect($our_ips, $domain_ips)) <= 0) {
 					// no common ips...
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Skipping Let's Encrypt generation for " . $domain . " due to no system known IP address via DNS check");
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Skipping Let's Encrypt generation for " . $domain . " due to no system known IP address via DNS check");
 					unset($domains[$idx]);
 					// in order to avoid a cron-loop that tries to get a certificate every 5 minutes, we disable let's encrypt for this domain
 					if ($domain_id > 0) {
@@ -568,10 +568,10 @@ EOC;
 							'did' => $domain_id
 						]);
 					} else {
-						// froxlor's hostname
-						Settings::Set('system.le_froxlor_enabled', 0);
+						// librepanel's hostname
+						Settings::Set('system.le_librepanel_enabled', 0);
 					}
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, "Let's Encrypt deactivated for domain " . $domain);
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, "Let's Encrypt deactivated for domain " . $domain);
 					if (!defined('CRON_IS_FORCED') && !defined('CRON_DEBUG_FLAG')) {
 						// email info to admin that lets encrypt has been disabled for this domain
 						Cronjob::notifyMailToAdmin("Let's Encrypt has been deactivated for domain '" . $domain . "' due to failed dns validation (wrong or no IP address)");
@@ -615,15 +615,15 @@ EOC;
 			$exit_code = null;
 			$acme_result = FileDir::safe_exec($acmesh_cmd, $exit_code);
 			// debug output of acme.sh run
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, implode("\n", $acme_result));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, implode("\n", $acme_result));
 
 			if ($exit_code != 0) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, "Non-successful exit-code returned :(");
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, "Non-successful exit-code returned :(");
 				if (!defined('CRON_IS_FORCED') && !defined('CRON_DEBUG_FLAG')) {
 					Cronjob::notifyMailToAdmin("Let's Encrypt certificate could not be obtained for: " . implode(", ", $domains) . "\n\n" . implode("\n", $acme_result));
 				}
 			} else {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, "Successful exit-code returned - storing certificate");
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, "Successful exit-code returned - storing certificate");
 				$cert_stored = self::certToDb($certrow, $cronlog, $acme_result);
 
 				if ($cert_stored && $renew_hook) {
@@ -639,12 +639,12 @@ EOC;
 			&& !empty(trim(Settings::Get('system.le_renew_hook') ?? ""))
 		) {
 
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, "Renew-hook is enabled - adjusting configurations");
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, "Renew-hook is enabled - adjusting configurations");
 
 			$certificate_folder = self::getCertificateFolder(strtolower(Settings::Get('system.hostname')));
 
 			if (empty($certificate_folder)) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "No certificate folder for '" . Settings::Get('system.hostname') . "' found");
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "No certificate folder for '" . Settings::Get('system.hostname') . "' found");
 				return;
 			}
 
@@ -653,11 +653,11 @@ EOC;
 			$ca_file = FileDir::makeCorrectFile($certificate_folder . '/ca.cer');
 
 			if (!file_exists($fullchain) || !file_exists($keyfile) || !file_exists($ca_file)) {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "At least one of the required certificate files for '" . Settings::Get('system.hostname') . "' could not be found");
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "At least one of the required certificate files for '" . Settings::Get('system.hostname') . "' could not be found");
 				return;
 			}
 
-			$dovecot_conf = '/etc/dovecot/conf.d/99-froxlor.ssl.conf'; // @fixme setting?
+			$dovecot_conf = '/etc/dovecot/conf.d/99-librepanel.ssl.conf'; // @fixme setting?
 
 			if (Settings::IsInList('system.le_renew_services', 'postfix')) {
 				// "postconf -e" for postfix
@@ -667,7 +667,7 @@ EOC;
 			if (Settings::IsInList('system.le_renew_services', 'dovecot')) {
 				// custom config for dovecot
 				$ssl_content = <<<EOSSL
-# Autogenerated configuration by froxlor.
+# Autogenerated configuration by librepanel.
 # Do not manually edit this file as it will be overwritten.
 
 ssl = yes
@@ -736,13 +736,13 @@ EOSSL;
 					]);
 				}
 
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "Updated Let's Encrypt certificate for " . $certrow['domain']);
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "Updated Let's Encrypt certificate for " . $certrow['domain']);
 				return true;
 			} else {
-				$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Got non-successful Let's Encrypt response for " . $certrow['domain'] . ":\n" . implode("\n", $acme_result));
+				$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Got non-successful Let's Encrypt response for " . $certrow['domain'] . ":\n" . implode("\n", $acme_result));
 			}
 		} else {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Could not get Let's Encrypt certificate for " . $certrow['domain'] . ":\n" . implode("\n", $acme_result));
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Could not get Let's Encrypt certificate for " . $certrow['domain'] . ":\n" . implode("\n", $acme_result));
 		}
 		return false;
 	}
@@ -771,12 +771,12 @@ EOSSL;
 				if (file_exists($ssl_file)) {
 					$return[$index] = file_get_contents($ssl_file);
 				} else {
-					$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Could not find file '" . $sslfile . "' in '" . $certificate_folder . "'");
+					$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Could not find file '" . $sslfile . "' in '" . $certificate_folder . "'");
 					$return[$index] = null;
 				}
 			}
 		} else {
-			$cronlog->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Could not find certificate-folder '" . $certificate_folder . "'");
+			$cronlog->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Could not find certificate-folder '" . $certificate_folder . "'");
 		}
 	}
 
@@ -790,7 +790,7 @@ EOSSL;
 		if (file_exists($certificate_folder_ecc)) {
 			return $certificate_folder_ecc;
 		}
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, "Could not find certificate-folder for domain '" . $domain . "'");
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, "Could not find certificate-folder for domain '" . $domain . "'");
 		return "";
 	}
 }

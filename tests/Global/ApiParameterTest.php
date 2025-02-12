@@ -1,13 +1,13 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Froxlor;
+use LibrePanel\Api\Commands\LibrePanel;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Froxlor
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\LibrePanel
  */
 class ApiParameterTest extends TestCase
 {
@@ -16,7 +16,7 @@ class ApiParameterTest extends TestCase
 	{
 		global $admin_userdata;
 		$this->expectExceptionCode(404);
-		$this->expectExceptionMessage('Requested parameter "key" could not be found for "Froxlor:getSetting"');
-		Froxlor::getLocal($admin_userdata)->getSetting();
+		$this->expectExceptionMessage('Requested parameter "key" could not be found for "LibrePanel:getSetting"');
+		LibrePanel::getLocal($admin_userdata)->getSetting();
 	}
 }

@@ -1,8 +1,8 @@
-{% extends "Froxlor/user/table.html.twig" %}
+{% extends "LibrePanel/user/table.html.twig" %}
 
 {% block content %}
 	<div class="pb-2">
-		{% include 'Froxlor/misc/alertbox.html.twig' %}
+		{% include 'LibrePanel/misc/alertbox.html.twig' %}
 	</div>
 
 	<ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
@@ -18,7 +18,7 @@
 		<div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
 			{{ parent() }}
 
-			{% import "Froxlor/form/form.html.twig" as form %}
+			{% import "LibrePanel/form/form.html.twig" as form %}
 			{{ form.form(formdata, formaction|default('#'), formdata.title, editid|default('')) }}
 		</div>
 		<div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">

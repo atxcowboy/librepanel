@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,32 +16,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'login';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Api\FroxlorRPC;
-use Froxlor\CurrentUser;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\FroxlorTwoFactorAuth;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\LibrePanelRPC;
+use LibrePanel\CurrentUser;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\LibrePanelTwoFactorAuth;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 
 if ($action == '') {
 	$action = 'login';
@@ -75,7 +75,7 @@ if ($action == '2fa_entercode') {
 	$code = Request::post('2fa_code');
 	$remember = Request::post('2fa_remember');
 	// verify entered code
-	$tfa = new FroxlorTwoFactorAuth('Froxlor ' . Settings::Get('system.hostname'));
+	$tfa = new LibrePanelTwoFactorAuth('LibrePanel ' . Settings::Get('system.hostname'));
 	// get user-data
 	$table = $_SESSION['uidtable_2fa'];
 	$field = $_SESSION['uidfield_2fa'];
@@ -118,8 +118,8 @@ if ($action == '2fa_entercode') {
 
 		// when remember is activated, set the cookie
 		if ($remember) {
-			$selector = base64_encode(Froxlor::genSessionId(9));
-			$authenticator = Froxlor::genSessionId(33);
+			$selector = base64_encode(LibrePanel::genSessionId(9));
+			$authenticator = LibrePanel::genSessionId(33);
 			$valid_until = time()+60*60*24*30;
 			$ins_stmt = Database::prepare("
 				INSERT INTO `".TABLE_PANEL_2FA_TOKENS."` SET
@@ -175,10 +175,10 @@ if ($action == '2fa_entercode') {
 
 	if ($fail_user['loginfail_count'] >= Settings::Get('login.maxloginattempts') && $fail_user['lastlogin_fail'] > (time() - Settings::Get('login.deactivatetime'))) {
 		// Log failed login
-		$rstlog = FroxlorLogger::getInstanceOf([
+		$rstlog = LibrePanelLogger::getInstanceOf([
 			'loginname' => $_SERVER['REMOTE_ADDR']
 		]);
-		$rstlog->logAction(FroxlorLogger::LOGIN_ACTION, LOG_WARNING, "User '" . $fail_user['loginname'] . "' entered wrong 2fa code too often.");
+		$rstlog->logAction(LibrePanelLogger::LOGIN_ACTION, LOG_WARNING, "User '" . $fail_user['loginname'] . "' entered wrong 2fa code too often.");
 		unset($fail_user);
 		Response::redirectTo('index.php', [
 			'showmessage' => '3'
@@ -261,13 +261,13 @@ if ($action == '2fa_entercode') {
 			$is_admin = true;
 		}
 
-		if ((Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) && $is_admin == false) {
+		if ((LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) && $is_admin == false) {
 			Response::redirectTo('index.php');
 			exit();
 		}
 
 		if ($is_admin) {
-			if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
+			if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
 				$stmt = Database::prepare("
 					SELECT `loginname` AS `admin` FROM `" . TABLE_PANEL_ADMINS . "`
 					WHERE `loginname`= :loginname
@@ -305,10 +305,10 @@ if ($action == '2fa_entercode') {
 				$adminsession = '1';
 			} else {
 				// Log failed login
-				$rstlog = FroxlorLogger::getInstanceOf([
+				$rstlog = LibrePanelLogger::getInstanceOf([
 					'loginname' => $_SERVER['REMOTE_ADDR']
 				]);
-				$rstlog->logAction(FroxlorLogger::LOGIN_ACTION, LOG_WARNING, "Unknown user tried to login.");
+				$rstlog->logAction(LibrePanelLogger::LOGIN_ACTION, LOG_WARNING, "Unknown user tried to login.");
 
 				Response::redirectTo('index.php', [
 					'showmessage' => '2'
@@ -367,10 +367,10 @@ if ($action == '2fa_entercode') {
 			]);
 
 			// Log failed login
-			$rstlog = FroxlorLogger::getInstanceOf([
+			$rstlog = LibrePanelLogger::getInstanceOf([
 				'loginname' => $_SERVER['REMOTE_ADDR']
 			]);
-			$rstlog->logAction(FroxlorLogger::LOGIN_ACTION, LOG_WARNING, "User tried to login with wrong password.");
+			$rstlog->logAction(LibrePanelLogger::LOGIN_ACTION, LOG_WARNING, "User tried to login with wrong password.");
 
 			unset($userinfo);
 			Response::redirectTo('index.php', [
@@ -409,7 +409,7 @@ if ($action == '2fa_entercode') {
 			// send mail if type_2fa = 1 (email)
 			if ($userinfo['type_2fa'] == 1) {
 				// generate code
-				$tfa = new FroxlorTwoFactorAuth('Froxlor ' . Settings::Get('system.hostname'));
+				$tfa = new LibrePanelTwoFactorAuth('LibrePanel ' . Settings::Get('system.hostname'));
 				$secret = $tfa->createSecret();
 				$code = $tfa->getCode($secret);
 				// set code for user
@@ -441,10 +441,10 @@ if ($action == '2fa_entercode') {
 				}
 
 				if ($_mailerror) {
-					$rstlog = FroxlorLogger::getInstanceOf([
+					$rstlog = LibrePanelLogger::getInstanceOf([
 						'loginname' => '2fa code-sending'
 					]);
-					$rstlog->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
+					$rstlog->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
 					Response::redirectTo('index.php', [
 						'showmessage' => '4',
 						'customermail' => $userinfo['email']
@@ -499,7 +499,7 @@ if ($action == '2fa_entercode') {
 		}
 
 		$update_in_progress = false;
-		if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
+		if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
 			$update_in_progress = true;
 		}
 
@@ -610,10 +610,10 @@ if ($action == 'forgotpwd') {
 							];
 							Database::pexecute($stmt, $params);
 
-							$rstlog = FroxlorLogger::getInstanceOf([
+							$rstlog = LibrePanelLogger::getInstanceOf([
 								'loginname' => 'password_reset'
 							]);
-							$rstlog->logAction(FroxlorLogger::USR_ACTION, LOG_WARNING, "User '" . $user['loginname'] . "' requested a link for setting a new password.");
+							$rstlog->logAction(LibrePanelLogger::USR_ACTION, LOG_WARNING, "User '" . $user['loginname'] . "' requested a link for setting a new password.");
 
 							// Set together our activation link
 							$protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
@@ -626,7 +626,7 @@ if ($action == 'forgotpwd') {
 							}
 							// there can be only one script to handle this so we can use a fixed value here
 							$script = "/index.php"; // $_SERVER['SCRIPT_NAME'];
-							if (Settings::Get('system.froxlordirectlyviahostname') == 0) {
+							if (Settings::Get('system.librepaneldirectlyviahostname') == 0) {
 								$script = FileDir::makeCorrectFile("/" . basename(__DIR__) . "/" . $script);
 							}
 							$activationlink = $protocol . '://' . $host . $port . $script . '?action=resetpwd&resetcode=' . $activationcode;
@@ -683,10 +683,10 @@ if ($action == 'forgotpwd') {
 							}
 
 							if ($_mailerror) {
-								$rstlog = FroxlorLogger::getInstanceOf([
+								$rstlog = LibrePanelLogger::getInstanceOf([
 									'loginname' => 'password_reset'
 								]);
-								$rstlog->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
+								$rstlog->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, "Error sending mail: " . $mailerr_msg);
 								Response::redirectTo('index.php', [
 									'showmessage' => '4',
 									'customermail' => $user['email']
@@ -700,10 +700,10 @@ if ($action == 'forgotpwd') {
 							]);
 							exit();
 						} else {
-							$rstlog = FroxlorLogger::getInstanceOf([
+							$rstlog = LibrePanelLogger::getInstanceOf([
 								'loginname' => 'password_reset'
 							]);
-							$rstlog->logAction(FroxlorLogger::USR_ACTION, LOG_WARNING, "Unknown user requested to set a new password, but was not found in database!");
+							$rstlog->logAction(LibrePanelLogger::USR_ACTION, LOG_WARNING, "Unknown user requested to set a new password, but was not found in database!");
 							$message = lng('login.usernotfound');
 						}
 
@@ -776,10 +776,10 @@ if ($action == 'resetpwd') {
 							"userid" => $result['userid']
 						]);
 
-						$rstlog = FroxlorLogger::getInstanceOf([
+						$rstlog = LibrePanelLogger::getInstanceOf([
 							'loginname' => 'password_reset'
 						]);
-						$rstlog->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, "changed password using password reset.");
+						$rstlog->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, "changed password using password reset.");
 
 						// Remove activation code from DB
 						$stmt = Database::prepare("DELETE FROM `" . TABLE_PANEL_ACTIVATION . "`
@@ -817,7 +817,7 @@ if ($action == 'resetpwd') {
 
 // one-time link login
 if ($action == 'll') {
-	if (!Froxlor::hasUpdates() && !Froxlor::hasDbUpdates()) {
+	if (!LibrePanel::hasUpdates() && !LibrePanel::hasDbUpdates()) {
 		$loginname = Request::get('ln');
 		$hash = Request::get('h');
 		if ($loginname && $hash) {
@@ -840,7 +840,7 @@ if ($action == 'll') {
 					if (!empty($entry['allowed_from'])) {
 						$valid = false;
 						$ip_list = explode(",", $entry['allowed_from']);
-						if (FroxlorRPC::validateAllowedFrom($ip_list, $_SERVER['REMOTE_ADDR'])) {
+						if (LibrePanelRPC::validateAllowedFrom($ip_list, $_SERVER['REMOTE_ADDR'])) {
 							$valid = true;
 						}
 					}
@@ -890,7 +890,7 @@ function finishLogin($userinfo)
 		}
 
 		if ($userinfo['adminsession'] == '1') {
-			if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
+			if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
 				Response::redirectTo('admin_updates.php?page=overview');
 			} else {
 				if (!empty($_SESSION['lastscript'])) {

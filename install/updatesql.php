@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Froxlor;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\UI\Response;
-use Froxlor\Database\IntegrityCheck;
-use Froxlor\Install\Update;
+use LibrePanel\LibrePanel;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\UI\Response;
+use LibrePanel\Database\IntegrityCheck;
+use LibrePanel\Install\Update;
 
 if (!defined('_CRON_UPDATE')) {
 	if (!defined('AREA') || (defined('AREA') && AREA != 'admin') || !isset($userinfo['loginname']) || (isset($userinfo['loginname']) && $userinfo['loginname'] == '')) {
@@ -38,26 +38,26 @@ if (!defined('_CRON_UPDATE')) {
 	}
 }
 
-$filelog = FroxlorLogger::getInstanceOf(array(
+$filelog = LibrePanelLogger::getInstanceOf(array(
 	'loginname' => 'updater'
 ));
 
 // if first writing does not work we'll stop, tell the user to fix it
 // and then let him try again.
 try {
-	$filelog->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, '-------------- START LOG --------------');
+	$filelog->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, '-------------- START LOG --------------');
 } catch (Exception $e) {
 	Response::standardError('exception', $e->getMessage());
 }
 
-if (Froxlor::isFroxlor()) {
+if (LibrePanel::isLibrePanel()) {
 
-	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/froxlor/update_0.10.inc.php'));
-	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/froxlor/update_2.0.inc.php'));
-	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/froxlor/update_2.1.inc.php'));
-	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/froxlor/update_2.2.inc.php'));
+	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/librepanel/update_0.10.inc.php'));
+	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/librepanel/update_2.0.inc.php'));
+	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/librepanel/update_2.1.inc.php'));
+	include_once(FileDir::makeCorrectFile(dirname(__FILE__) . '/updates/librepanel/update_2.2.inc.php'));
 
-	// Check Froxlor - database integrity (only happens after all updates are done, so we know the db-layout is okay)
+	// Check LibrePanel - database integrity (only happens after all updates are done, so we know the db-layout is okay)
 	Update::showUpdateStep("Checking database integrity");
 
 	$integrity = new IntegrityCheck();
@@ -76,6 +76,6 @@ if (Froxlor::isFroxlor()) {
 	// reset cached version check
 	Settings::Set('system.updatecheck_data', '');
 
-	$filelog->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, '--------------- END LOG ---------------');
+	$filelog->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, '--------------- END LOG ---------------');
 	unset($filelog);
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 
 class DomainSSL
 {
@@ -84,7 +84,7 @@ class DomainSSL
 			];
 
 			if (!$this->validateCertificate($dom_certs)) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, 'Given SSL private key for ' . $domain['domain'] . ' does not seem to match the certificate. Cannot create ssl-directives');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, 'Given SSL private key for ' . $domain['domain'] . ' does not seem to match the certificate. Cannot create ssl-directives');
 				return;
 			}
 
@@ -109,7 +109,7 @@ class DomainSSL
 					$ssl_files['ssl_cert_chainfile'] = FileDir::makeCorrectFile($sslcertpath . '/' . ($parent_certificate ? $dom_certs['domain'] : $domain['domain']) . '_chain.pem');
 				}
 			}
-			// will only be generated to be used externally, froxlor does not need this
+			// will only be generated to be used externally, librepanel does not need this
 			if ($dom_certs['ssl_fullchain_file'] != '') {
 				$ssl_files['ssl_fullchain_file'] = FileDir::makeCorrectFile($sslcertpath . '/' . ($parent_certificate ? $dom_certs['domain'] : $domain['domain']) . '_fullchain.pem');
 			}

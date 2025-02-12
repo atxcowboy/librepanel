@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,27 +16,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\Php\PhpInterface;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\Froxlor;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Http\Directory;
-use Froxlor\Http\Statistics;
-use Froxlor\Settings;
-use Froxlor\Validate\Validate;
-use Froxlor\System\Crypt;
+use LibrePanel\Cron\Http\Php\PhpInterface;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\LibrePanel;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Http\Directory;
+use LibrePanel\Http\Statistics;
+use LibrePanel\Settings;
+use LibrePanel\Validate\Validate;
+use LibrePanel\System\Crypt;
 use PDO;
 
 class Nginx extends HttpConfigBase
@@ -97,8 +97,8 @@ class Nginx extends HttpConfigBase
 			}
 			$port = $row_ipsandports['port'];
 
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'nginx::createIpPort: creating ip/port settings for  ' . $ip . ":" . $port);
-			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_froxlor_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'nginx::createIpPort: creating ip/port settings for  ' . $ip . ":" . $port);
+			$vhost_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_librepanel_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
 
 			if (!isset($this->nginx_data[$vhost_filename])) {
 				$this->nginx_data[$vhost_filename] = '';
@@ -114,10 +114,10 @@ class Nginx extends HttpConfigBase
 				$ssl_vhost = false;
 				if ($row_ipsandports['ssl'] == '1') {
 					// check for required fallback
-					if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_froxlor_enabled') == '0' || $this->froxlorVhostHasLetsEncryptCert() == false)) {
+					if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_librepanel_enabled') == '0' || $this->librepanelVhostHasLetsEncryptCert() == false)) {
 						$row_ipsandports['ssl_cert_file'] = Settings::Get('system.ssl_cert_file');
 						if (!file_exists($row_ipsandports['ssl_cert_file'])) {
-							FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
+							LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
 							Crypt::createSelfSignedCertificate();
 						}
 					}
@@ -126,7 +126,7 @@ class Nginx extends HttpConfigBase
 						if (!file_exists($row_ipsandports['ssl_key_file'])) {
 							// explicitly disable ssl for this vhost
 							$row_ipsandports['ssl_cert_file'] = "";
-							FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
+							LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
 						}
 					}
 					if ($row_ipsandports['ssl_ca_file'] == '') {
@@ -140,7 +140,7 @@ class Nginx extends HttpConfigBase
 						'id' => 0,
 						'domain' => Settings::Get('system.hostname'),
 						'adminid' => 1, /* first admin-user (superadmin) */
-						'loginname' => 'froxlor.panel',
+						'loginname' => 'librepanel.panel',
 						'documentroot' => $mypath,
 						'customerroot' => $mypath,
 						'parentdomainid' => 0
@@ -177,13 +177,13 @@ class Nginx extends HttpConfigBase
 				if ($http2 && $this->http2_on_directive) {
 					$this->nginx_data[$vhost_filename] .= "\t" . 'http2 on;' . "\n";
 				}
-				$this->nginx_data[$vhost_filename] .= "\t" . '# Froxlor default vhost' . "\n";
+				$this->nginx_data[$vhost_filename] .= "\t" . '# LibrePanel default vhost' . "\n";
 
 				$aliases = "";
-				$froxlor_aliases = Settings::Get('system.froxloraliases');
-				if (!empty($froxlor_aliases)) {
-					$froxlor_aliases = explode(",", $froxlor_aliases);
-					foreach ($froxlor_aliases as $falias) {
+				$librepanel_aliases = Settings::Get('system.librepanelaliases');
+				if (!empty($librepanel_aliases)) {
+					$librepanel_aliases = explode(",", $librepanel_aliases);
+					foreach ($librepanel_aliases as $falias) {
 						if (Validate::validateDomain(trim($falias))) {
 							$aliases .= trim($falias) . " ";
 						}
@@ -198,18 +198,18 @@ class Nginx extends HttpConfigBase
 				}
 				$this->nginx_data[$vhost_filename] .= "\t" . 'access_log     /var/log/nginx/access.log ' . $logtype . ';' . "\n";
 
-				if (Settings::Get('system.use_ssl') == '1' && Settings::Get('system.leenabled') == '1' && Settings::Get('system.le_froxlor_enabled') == '1') {
+				if (Settings::Get('system.use_ssl') == '1' && Settings::Get('system.leenabled') == '1' && Settings::Get('system.le_librepanel_enabled') == '1') {
 					$acmeConfFilename = Settings::Get('system.letsencryptacmeconf');
 					$this->nginx_data[$vhost_filename] .= "\t" . 'include ' . $acmeConfFilename . ';' . "\n";
 				}
 
 				$is_redirect = false;
 				// check for SSL redirect
-				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_froxlor_redirect') == '1') {
+				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_librepanel_redirect') == '1') {
 					$is_redirect = true;
-					// check whether froxlor uses Let's Encrypt and not cert is being generated yet
+					// check whether librepanel uses Let's Encrypt and not cert is being generated yet
 					// or a renew is ongoing - disable redirect
-					if (Settings::Get('system.le_froxlor_enabled') && ($this->froxlorVhostHasLetsEncryptCert() == false || $this->froxlorVhostLetsEncryptNeedsRenew())) {
+					if (Settings::Get('system.le_librepanel_enabled') && ($this->librepanelVhostHasLetsEncryptCert() == false || $this->librepanelVhostLetsEncryptNeedsRenew())) {
 						$this->nginx_data[$vhost_filename] .= '# temp. disabled ssl-redirect due to Let\'s Encrypt certificate generation.' . PHP_EOL;
 						$is_redirect = false;
 					} else {
@@ -227,10 +227,10 @@ class Nginx extends HttpConfigBase
 					$this->nginx_data[$vhost_filename] .= "\t" . 'location / {' . "\n";
 					$this->nginx_data[$vhost_filename] .= "\t" . '}' . "\n";
 
-					if (Settings::Get('system.froxlordirectlyviahostname')) {
+					if (Settings::Get('system.librepaneldirectlyviahostname')) {
 						$relpath = "/";
 					} else {
-						$relpath = "/".basename(Froxlor::getInstallDir());
+						$relpath = "/".basename(LibrePanel::getInstallDir());
 					}
 					// protect lib/userdata.inc.php
 					$this->nginx_data[$vhost_filename] .= "\t" . 'location = ' . rtrim($relpath, "/") . '/lib/userdata.inc.php {' . "\n";
@@ -301,7 +301,7 @@ class Nginx extends HttpConfigBase
 							'guid' => Settings::Get('phpfpm.vhost_httpuser'),
 							'openbasedir' => 0,
 							'email' => Settings::Get('panel.adminmail'),
-							'loginname' => 'froxlor.panel',
+							'loginname' => 'librepanel.panel',
 							'documentroot' => $mypath,
 							'customerroot' => $mypath,
 							'fpm_config_id' => isset($fpm_config['id']) ? $fpm_config['id'] : 1
@@ -318,7 +318,7 @@ class Nginx extends HttpConfigBase
 				}
 
 				$this->nginx_data[$vhost_filename] .= "}\n\n";
-				// End of Froxlor server{}-part
+				// End of LibrePanel server{}-part
 			}
 		}
 
@@ -340,7 +340,7 @@ class Nginx extends HttpConfigBase
 				$vhosts_folder = FileDir::makeCorrectDir(dirname(Settings::Get('system.apacheconf_vhost')));
 			}
 
-			$vhosts_filename = FileDir::makeCorrectFile($vhosts_folder . '/02_froxlor_logfiles_format.conf');
+			$vhosts_filename = FileDir::makeCorrectFile($vhosts_folder . '/02_librepanel_logfiles_format.conf');
 
 			if (!isset($this->nginx_data[$vhosts_filename])) {
 				$this->nginx_data[$vhosts_filename] = '';
@@ -360,7 +360,7 @@ class Nginx extends HttpConfigBase
 			if (!file_exists($domain_or_ip['ssl_cert_file'])) {
 				// explicitly disable ssl for this vhost
 				$domain_or_ip['ssl_cert_file'] = "";
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain_or_ip['domain'] . '"');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain_or_ip['domain'] . '"');
 			}
 		}
 
@@ -371,7 +371,7 @@ class Nginx extends HttpConfigBase
 			if (!file_exists($domain_or_ip['ssl_key_file'])) {
 				// explicitly disable ssl for this vhost
 				$domain_or_ip['ssl_cert_file'] = "";
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain_or_ip['domain'] . '"');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain_or_ip['domain'] . '"');
 			}
 		}
 
@@ -387,7 +387,7 @@ class Nginx extends HttpConfigBase
 		if ($domain_or_ip['ssl_cert_file'] != '') {
 			// check for existence, #1485
 			if (!file_exists($domain_or_ip['ssl_cert_file'])) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $domain_or_ip['domain'] . ' :: certificate file "' . $domain_or_ip['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $domain_or_ip['domain'] . ' :: certificate file "' . $domain_or_ip['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
 			} else {
 				$ssl_protocols = (isset($domain_or_ip['override_tls']) && $domain_or_ip['override_tls'] == '1' && !empty($domain_or_ip['ssl_protocols'])) ? $domain_or_ip['ssl_protocols'] : Settings::Get('system.ssl_protocols');
 				$ssl_cipher_list = (isset($domain_or_ip['override_tls']) && $domain_or_ip['override_tls'] == '1' && !empty($domain_or_ip['ssl_cipher_list'])) ? $domain_or_ip['ssl_cipher_list'] : Settings::Get('system.ssl_cipher_list');
@@ -406,7 +406,7 @@ class Nginx extends HttpConfigBase
 				// When <1.11.0: Defaults to prime256v1, similar to first curve recommendation by Mozilla.
 				// (When specifyng just one, there's no fallback when specific curve is not supported by client.)
 				// When >1.11.0: Defaults to auto, using recommended curves provided by OpenSSL.
-				// see https://github.com/Froxlor/Froxlor/issues/652
+				// see https://github.com/LibrePanel/LibrePanel/issues/652
 				// $sslsettings .= "\t" . 'ssl_ecdh_curve secp384r1;' . "\n";
 				$sslsettings .= "\t" . 'ssl_prefer_server_ciphers ' . (isset($domain_or_ip['ssl_honorcipherorder']) && $domain_or_ip['ssl_honorcipherorder'] == '1' ? 'on' : 'off') . ';' . "\n";
 				if (Settings::Get('system.sessionticketsenabled') == '1') {
@@ -418,7 +418,7 @@ class Nginx extends HttpConfigBase
 				if ($domain_or_ip['ssl_key_file'] != '') {
 					// check for existence, #1485
 					if (!file_exists($domain_or_ip['ssl_key_file'])) {
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $domain_or_ip['domain'] . ' :: certificate key file "' . $domain_or_ip['ssl_key_file'] . '" does not exist! Cannot create ssl-directives');
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $domain_or_ip['domain'] . ' :: certificate key file "' . $domain_or_ip['ssl_key_file'] . '" does not exist! Cannot create ssl-directives');
 					} else {
 						$sslsettings .= "\t" . 'ssl_certificate_key ' . FileDir::makeCorrectFile($domain_or_ip['ssl_key_file']) . ';' . "\n";
 					}
@@ -815,7 +815,7 @@ class Nginx extends HttpConfigBase
 
 	protected function mergeVhostCustom($vhost_frx, $vhost_usr)
 	{
-		// Clean froxlor defined settings
+		// Clean librepanel defined settings
 		$vhost_frx = $this->cleanVhostStruct($vhost_frx);
 		// Clean user defined settings
 		$vhost_usr = $this->cleanVhostStruct($vhost_usr);
@@ -1180,7 +1180,7 @@ class Nginx extends HttpConfigBase
 	private function createStandardErrorHandler()
 	{
 		if (Settings::Get('defaultwebsrverrhandler.enabled') == '1' && (Settings::Get('defaultwebsrverrhandler.err401') != '' || Settings::Get('defaultwebsrverrhandler.err403') != '' || Settings::Get('defaultwebsrverrhandler.err404') != '' || Settings::Get('defaultwebsrverrhandler.err500') != '')) {
-			$vhosts_filename = $this->getCustomVhostFilename('05_froxlor_default_errorhandler.conf');
+			$vhosts_filename = $this->getCustomVhostFilename('05_librepanel_default_errorhandler.conf');
 
 			if (!isset($this->nginx_data[$vhosts_filename])) {
 				$this->nginx_data[$vhosts_filename] = '';
@@ -1211,7 +1211,7 @@ class Nginx extends HttpConfigBase
 
 	public function writeConfigs()
 	{
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "nginx::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "nginx::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
 
 		$vhostDir = new Directory(Settings::Get('system.apacheconf_vhost'));
 		if (!$vhostDir->isConfigDir()) {
@@ -1237,7 +1237,7 @@ class Nginx extends HttpConfigBase
 			fclose($vhosts_file_handler);
 		} else {
 			if (!file_exists(Settings::Get('system.apacheconf_vhost'))) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'nginx::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'nginx::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 				FileDir::safe_exec('mkdir -p ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 			}
 
@@ -1262,7 +1262,7 @@ class Nginx extends HttpConfigBase
 				mkdir(Settings::Get('system.apacheconf_htpasswddir'), 0751);
 				umask($umask);
 			} elseif (!is_dir(Settings::Get('system.apacheconf_htpasswddir'))) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, 'WARNING!!! ' . Settings::Get('system.apacheconf_htpasswddir') . ' is not a directory. htpasswd directory protection is disabled!!!');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, 'WARNING!!! ' . Settings::Get('system.apacheconf_htpasswddir') . ' is not a directory. htpasswd directory protection is disabled!!!');
 			}
 
 			if (is_dir(Settings::Get('system.apacheconf_htpasswddir'))) {

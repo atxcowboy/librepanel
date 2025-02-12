@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -54,7 +54,7 @@ return [
 		'overview' => 'Übersicht',
 		'ressourcedetails' => 'Verbrauchte Ressourcen',
 		'systemdetails' => 'Systemdetails',
-		'froxlordetails' => 'Froxlor-Details',
+		'librepaneldetails' => 'LibrePanel-Details',
 		'installedversion' => 'Installierte Version',
 		'latestversion' => 'Neueste Version',
 		'lookfornewversion' => [
@@ -80,7 +80,7 @@ return [
 		'customers_see_all' => 'Zugriff auf Resourcen anderer Admins/Reseller?',
 		'change_serversettings' => 'Kann Servereinstellungen bearbeiten?',
 		'serversettings' => 'Einstellungen',
-		'serversettings_desc' => 'Verwalte dein froxlor System',
+		'serversettings_desc' => 'Verwalte dein librepanel System',
 		'rebuildconf' => 'Configs neu schreiben',
 		'stdsubdomain' => 'Standardsubdomain',
 		'stdsubdomain_add' => 'Standardsubdomain anlegen',
@@ -109,7 +109,7 @@ return [
 			'compactoverview' => 'Kompakt-Übersicht',
 			'legend' => '<h3>Sie konfigurieren nun einen Service/Daemon.</h3>',
 			'commands' => '<span class="text-danger">Kommandos:</span> Die angezeigten Befehle müssen als Benutzer root in einer Shell ausgeführt werden. Es kann auch problemlos der ganze Block kopiert und in die Shell eingefügt werden.',
-			'files' => '<span class="text-danger">Konfigurationsdateien:</span> Der Befehl direkt vor dem Textfeld sollte einen Editor mit der Zieldatei öffnen. Der Inhalt kann nun einfach kopiert und in den Editor eingefügt und die Datei gespeichert werden.<br><span class="text-danger">Bitte beachten:</span> Das MySQL-Passwort wurde aus Sicherheitsgründen nicht ersetzt. Bitte ersetzen Sie "FROXLOR_MYSQL_PASSWORD" manuell oder nutzen Sie das folgende Formular, um es temporär auf dieser Seite zu setzen. Falls das Passwort vergessen wurde, findet es sich in der Datei "lib/userdata.inc.php".',
+			'files' => '<span class="text-danger">Konfigurationsdateien:</span> Der Befehl direkt vor dem Textfeld sollte einen Editor mit der Zieldatei öffnen. Der Inhalt kann nun einfach kopiert und in den Editor eingefügt und die Datei gespeichert werden.<br><span class="text-danger">Bitte beachten:</span> Das MySQL-Passwort wurde aus Sicherheitsgründen nicht ersetzt. Bitte ersetzen Sie "LIBREPANEL_MYSQL_PASSWORD" manuell oder nutzen Sie das folgende Formular, um es temporär auf dieser Seite zu setzen. Falls das Passwort vergessen wurde, findet es sich in der Datei "lib/userdata.inc.php".',
 			'finishnote' => 'Parameter Datei erfolgreich erstellt. Folgende Befehle müssen als root ausgeführt werden:',
 			'description' => 'System-Dienste konfigurieren',
 			'minihowto' => 'Auf dieser Seite können die verschiedenen Konfigurationsvorlagen für jeden Dienst angezeigt werden, bestimmte Dienste bei Bedarf (erneut) konfiguriert oder die aktuelle Auswahl in eine JSON-Datei exportiert werden, um sie in den CLI-Skripten oder auf einem anderen Server zu verwenden.<br><br><b>Beachte</b>, dass die hervorgehobenen Dienste nicht die auf dem Server genutzten Dienste widerspiegeln, sondern Anforderungen/Empfehlungen aus den aktuellen Einstellungswerten zeigen.',
@@ -144,7 +144,7 @@ return [
 			'EMAIL_PASSWORD' => 'Wird mit dem Passwort des neuen POP3/IMAP Kontos ersetzt.',
 			'index_html' => 'index Datei für neu erzeugte Kundenverzeichnisse',
 			'unconfigured_html' => 'index Datei für unkonfigurierte/unbekannte Domains',
-			'unconfigured_content_fallback' => 'Diese Domain muss über das Froxlor-Serververwaltungspanel konfiguriert werden, da sie derzeit keinem Kunden zugewiesen ist.',
+			'unconfigured_content_fallback' => 'Diese Domain muss über das LibrePanel-Serververwaltungspanel konfiguriert werden, da sie derzeit keinem Kunden zugewiesen ist.',
 			'file_extension' => [
 				'description' => 'Die Dateiendung für die index Datei muss zwischen 1 und 6 Zeichen lang sein und darf nur aus den Zeichen a-z, A-Z und 0-9 bestehen<br><br>Standard: html',
 				'title' => 'Dateiendung für Datei Vorlage',
@@ -178,7 +178,7 @@ return [
 			'DISKAVAILABLE' => 'Wird mit dem Webspace, der dem Kunden zugewiesen wurde, ersetzt.',
 			'DISKUSED' => 'Wird mit dem Webspace, welcher vom Kunden bereits verbraucht wurde, ersetzt.',
 			'LINK' => 'Wird mit dem Link zum Zurücksetzen des Passworts ersetzt.',
-			'SERVER_HOSTNAME' => 'Wird mit dem System-Hostname (URL zu froxlor) ersetzt',
+			'SERVER_HOSTNAME' => 'Wird mit dem System-Hostname (URL zu librepanel) ersetzt',
 			'SERVER_IP' => 'Wird mit der Standard-System-IP-Adresse ersetzt',
 			'SERVER_PORT' => 'Wird mit dem Standard-Port ersetzt',
 			'DOMAINNAME' => 'Wird mit der Standardsubdomain des Kunden ersetzt (kann leer sein, wenn keine erstellt werden soll)',
@@ -211,7 +211,7 @@ return [
 				'description' => 'Meist CA_Bundle, o. Ä. Dies ist das Feld, das gesetzt werden sollte, wenn ein gekauftes SSL-Zertifikat vorliegt.',
 			],
 			'docroot' => [
-				'title' => 'Benutzerdefinierter Docroot (wenn leer, zeige auf Froxlor)',
+				'title' => 'Benutzerdefinierter Docroot (wenn leer, zeige auf LibrePanel)',
 				'description' => 'Hier kann ein benutzerdefinierter Document-Root (der Zielordner für einen Zugriff) für diese IP/Port Kombination gesetzt werden.<br /><strong>ACHTUNG:</strong> Bitte überlege vorher, welchen Pfad du hier angibst!',
 			],
 			'ssl_paste_description' => 'Bitte den Inhalt der Zertifikatsdatei in das Textfeld kopieren.',
@@ -278,16 +278,16 @@ return [
 		'nouptimeavailable' => 'nicht verfügbar',
 		'nosubject' => '(Kein Betreff)',
 		'show_version_login' => [
-			'title' => 'Zeige Froxlor Version beim Login',
-			'description' => 'Zeige Froxlor Version in der Fußzeile der Loginseite',
+			'title' => 'Zeige LibrePanel Version beim Login',
+			'description' => 'Zeige LibrePanel Version in der Fußzeile der Loginseite',
 		],
 		'show_version_footer' => [
-			'title' => 'Zeige Froxlor Version in Fußzeile',
-			'description' => 'Zeige Froxlor Version in der Fußzeile aller anderen Seiten',
+			'title' => 'Zeige LibrePanel Version in Fußzeile',
+			'description' => 'Zeige LibrePanel Version in der Fußzeile aller anderen Seiten',
 		],
-		'froxlor_graphic' => [
+		'librepanel_graphic' => [
 			'title' => 'Grafik im Kopfbereich des Panels',
-			'description' => 'Welche Grafik soll im Kopfbereich des Panels anstatt des Froxlor Logos angezeigt werden?',
+			'description' => 'Welche Grafik soll im Kopfbereich des Panels anstatt des LibrePanel Logos angezeigt werden?',
 		],
 		'phpsettings' => [
 			'title' => 'PHP-Konfiguration',
@@ -346,7 +346,7 @@ return [
 		'accountdata' => 'Benutzerdaten',
 		'contactdata' => 'Kontaktdaten',
 		'servicedata' => 'Dienstleistungsdaten',
-		'newerversionavailable' => 'Eine neuere Version von Froxlor wurde veröffentlicht.',
+		'newerversionavailable' => 'Eine neuere Version von LibrePanel wurde veröffentlicht.',
 		'newerversiondetails' => 'Jetzt auf Version <b>%s</b> aktualisieren?<br/>(Aktuelle Version ist: %s)',
 		'extractdownloadedzip' => 'Heruntergeladenes Archiv "%s" entpacken?',
 		'cron' => [
@@ -362,8 +362,8 @@ return [
 		'webserver_group' => 'Gruppenname Webserver',
 		'perlenabled' => 'Perl verfügbar',
 		'fcgid_settings' => 'FCGID',
-		'mod_fcgid_user' => 'Lokaler Benutzer für FCGID (Froxlor Vhost)',
-		'mod_fcgid_group' => 'Lokale Gruppe für FCGID (Froxlor Vhost)',
+		'mod_fcgid_user' => 'Lokaler Benutzer für FCGID (LibrePanel Vhost)',
+		'mod_fcgid_group' => 'Lokale Gruppe für FCGID (LibrePanel Vhost)',
 		'perl_settings' => 'Perl/CGI',
 		'notgiven' => '[nicht angegeben]',
 		'store_defaultindex' => 'Standard-Index-Datei im Kundenordner erstellen',
@@ -396,7 +396,7 @@ return [
 		'selectserveralias_desc' => 'Wählen Sie hier, ob für diese Domain ein Wildcard-Eintrag (*.domain.tld), ein www-Alias (www.domain.tld) oder gar kein Alias angelegt werden soll.',
 		'show_news_feed' => [
 			'title' => 'Zeige Newsfeed im Admin-Dashboard',
-			'description' => 'Aktivieren Sie diese Option, um das offizielle Froxlor newsfeed (https://inside.froxlor.org/news/) auf deinem Dashboard anzuzeigen und verpasse keine wichtigen Informationen oder Release-Announcements.',
+			'description' => 'Aktivieren Sie diese Option, um das offizielle LibrePanel newsfeed (https://inside.librepanel.org/news/) auf deinem Dashboard anzuzeigen und verpasse keine wichtigen Informationen oder Release-Announcements.',
 		],
 		'cronsettings' => 'Cronjob-Einstellungen',
 		'integritycheck' => 'Datenbankprüfung',
@@ -406,7 +406,7 @@ return [
 		'customer_show_news_feed' => 'Zeige Newsfeed im Kunden-Dashboard',
 		'customer_news_feed_url' => [
 			'title' => 'Benutzerdefiniertes RSS-Feed',
-			'description' => 'Hier kann ein eigenes RSS-Feed angegeben werden, welches den Kunden auf dem Dashboard angezeigt wird.<br /><small>Leerlassen um das offizielle Froxlor Newsfeed (https://inside.froxlor.org/news/) zu verwenden.</small>',
+			'description' => 'Hier kann ein eigenes RSS-Feed angegeben werden, welches den Kunden auf dem Dashboard angezeigt wird.<br /><small>Leerlassen um das offizielle LibrePanel Newsfeed (https://inside.librepanel.org/news/) zu verwenden.</small>',
 		],
 		'movetoadmin' => 'Kunde verschieben',
 		'movecustomertoadmin' => [
@@ -423,7 +423,7 @@ return [
 		],
 		'autoupdate' => 'Auto-Update',
 		'dnsenabled' => 'Zugriff auf DNS Editor',
-		'froxlorvhost' => 'Froxlor VirtualHost Einstellungen',
+		'librepanelvhost' => 'LibrePanel VirtualHost Einstellungen',
 		'hostname' => 'Hostname',
 		'memory' => 'Speicherauslastung',
 		'webserversettings_ssl' => 'Webserver SSL-Einstellungen',
@@ -532,7 +532,7 @@ return [
 		'interval' => 'Intervall',
 		'isactive' => 'Aktiv',
 		'description' => 'Beschreibung',
-		'changewarning' => 'Änderungen an diesen Werten können einen negativen Effekt auf das Verhalten von Froxlor und seinen automatisierten Aufgaben haben.<br />Ändern Sie hier bitte nur etwas, wenn Sie sich über die Folgen im Klaren sind.',
+		'changewarning' => 'Änderungen an diesen Werten können einen negativen Effekt auf das Verhalten von LibrePanel und seinen automatisierten Aufgaben haben.<br />Ändern Sie hier bitte nur etwas, wenn Sie sich über die Folgen im Klaren sind.',
 	],
 	'crondesc' => [
 		'cron_unknown_desc' => 'Keine Beschreibung angegeben',
@@ -672,7 +672,7 @@ return [
 		'priority20' => 'Priorität 20',
 		'txtrecords' => 'TXT-Einträge definieren',
 		'txtexample' => 'Beispiel (SPF-Eintrag):<br />v=spf1 ip4:xxx.xxx.xx.0/23 -all',
-		'howitworks' => 'Hier können DNS Einträge für die Domain verwaltet werden. Beachten Sie, dass Froxlor automatisch NS/MX/A/AAAA Einträge generiert. Die benutzerdefinierten Einträge werden bevorzugt, nur fehlende Einträge werden automatisch generiert.',
+		'howitworks' => 'Hier können DNS Einträge für die Domain verwaltet werden. Beachten Sie, dass LibrePanel automatisch NS/MX/A/AAAA Einträge generiert. Die benutzerdefinierten Einträge werden bevorzugt, nur fehlende Einträge werden automatisch generiert.',
 	],
 	'dnseditor' => [
 		'edit' => 'DNS editieren',
@@ -697,7 +697,7 @@ return [
 		'hasaliasdomains' => 'Hat Aliasdomain(s)',
 		'statstics' => 'Statistiken',
 		'isassigneddomain' => 'zugewiesene Domain',
-		'add_date' => 'Zu Froxlor hinzugefügt',
+		'add_date' => 'Zu LibrePanel hinzugefügt',
 		'registration_date' => 'Registriert am',
 		'topleveldomain' => 'Top-Level-Domain',
 		'associated_with_domain' => 'Verbunden mit',
@@ -722,7 +722,7 @@ return [
 		'import_separator' => 'Trennzeichen',
 		'import_offset' => 'Versatz (offset)',
 		'import_file' => 'CSV-Datei',
-		'import_description' => 'Detaillierte Informationen über den Aufbau der Importdatei und einen erfolgreichen Import gibt es hier: <a href="https://docs.froxlor.org/latest/admin-guide/domain-import/" target="_blank" class="alert-link">https://docs.froxlor.org/latest/admin-guide/domain-import/</a> (englisch)',
+		'import_description' => 'Detaillierte Informationen über den Aufbau der Importdatei und einen erfolgreichen Import gibt es hier: <a href="https://docs.librepanel.org/latest/admin-guide/domain-import/" target="_blank" class="alert-link">https://docs.librepanel.org/latest/admin-guide/domain-import/</a> (englisch)',
 		'ssl_redirect_temporarilydisabled' => '<br>Die SSL-Umleitung ist, während ein neues Let\'s Encrypt - Zertifikat erstellt wird, temporär deaktiviert. Die Umleitung wird nach der Zertifikatserstellung wieder aktiviert.',
 		'termination_date' => 'Kündigungsdatum',
 		'termination_date_overview' => 'gekündigt zum ',
@@ -907,11 +907,11 @@ return [
 		'sslredirectonlypossiblewithsslipport' => 'Die Nutzung von Let\'s Encrypt ist nur möglich, wenn die Domain mindestens eine IP/Port - Kombination mit aktiviertem SSL zugewiesen hat.',
 		'fcgidstillenableddeadlock' => 'FCGID ist derzeit aktiviert.<br />Bitte deaktiviere es, um einen anderen Webserver als Apache2 oder lighttpd auswählen zu können.',
 		'send_report_title' => 'Fehler melden',
-		'send_report_desc' => 'Danke, dass Sie uns diesen Fehler melden und damit helfen Froxlor zu verbessern.<br />Folgender Bericht wird per Mail an das Froxlor Entwickler Team gesendet.',
+		'send_report_desc' => 'Danke, dass Sie uns diesen Fehler melden und damit helfen LibrePanel zu verbessern.<br />Folgender Bericht wird per Mail an das LibrePanel Entwickler Team gesendet.',
 		'send_report' => 'Fehlerbericht senden',
 		'send_report_error' => 'Fehler beim Senden des Berichts: <br />%s',
 		'notallowedtouseaccounts' => 'Ihrem Konto ist die Nutzung von IMAP/POP3 nicht erlaubt, daher können keine E-Mail-Konten angelegt werden',
-		'cannotdeletehostnamephpconfig' => 'Diese PHP-Konfiguration ist dem Froxlor-Vhost zugewiesen und kann daher nicht gelöscht werden.',
+		'cannotdeletehostnamephpconfig' => 'Diese PHP-Konfiguration ist dem LibrePanel-Vhost zugewiesen und kann daher nicht gelöscht werden.',
 		'cannotdeletedefaultphpconfig' => 'Diese PHP-Konfiguration ist als Standard hinterlegt und kann daher nicht gelöscht werden.',
 		'passwordshouldnotbeusername' => 'Das Passwort sollte nicht mit dem Benutzernamen übereinstimmen.',
 		'no_phpinfo' => 'Entschuldigung, es ist nicht möglich die phpinfo() auszulesen.',
@@ -922,12 +922,12 @@ return [
 		'no_opcacheinfo' => 'Keine OPCache Informationen verfügbar. OPCache scheint nicht installiert zu sein.',
 		'inactive_opcacheinfo' => 'OPCache ist installiert, aber nicht aktiviert.',
 		'nowildcardwithletsencrypt' => 'Let\'s Encrypt kann mittels ACME Wildcard-Domains nur via DNS validieren, sorry. Bitte den ServerAlias auf WWW setzen oder deaktivieren',
-		'customized_version' => 'Es scheint als wäre die Froxlor Installation angepasst worden. Kein Support, sorry.',
+		'customized_version' => 'Es scheint als wäre die LibrePanel Installation angepasst worden. Kein Support, sorry.',
 		'autoupdate_0' => 'Unbekannter Fehler',
 		'autoupdate_1' => 'PHP Einstellung allow_url_fopen ist deaktiviert. Autoupdate benötigt diese Option, bitte in der php.ini aktivieren.',
 		'autoupdate_2' => 'PHP zip Erweiterung nicht gefunden, bitte prüfen, ob diese installiert und aktiviert ist.',
-		'autoupdate_4' => 'Das froxlor Archiv konnte nicht auf der Festplatte gespeichert werden :(',
-		'autoupdate_5' => 'version.froxlor.org gab ungültige Werte zurück :(',
+		'autoupdate_4' => 'Das librepanel Archiv konnte nicht auf der Festplatte gespeichert werden :(',
+		'autoupdate_5' => 'version.librepanel.org gab ungültige Werte zurück :(',
 		'autoupdate_6' => 'Woops, keine (gültige) Version angegeben für den Download :(',
 		'autoupdate_7' => 'Das heruntergeladene Archiv konnte nicht gefunden werden :(',
 		'autoupdate_8' => 'Das Archiv konnte nicht entpackt werden :(',
@@ -1025,7 +1025,7 @@ return [
 		'databaseCharset' => 'Characterset der Datenbank (sollte UTF-8 sein)',
 		'domainIpTable' => 'IP &lt;&dash;&gt; Domain Verkn&uuml;pfung',
 		'subdomainSslRedirect' => 'Falsches SSL-redirect Flag bei nicht-SSL Domains',
-		'froxlorLocalGroupMemberForFcgidPhpFpm' => 'froxlor-Benutzer in Kunden-Gruppen (f&uuml;r FCGID/php-fpm)',
+		'librepanelLocalGroupMemberForFcgidPhpFpm' => 'librepanel-Benutzer in Kunden-Gruppen (f&uuml;r FCGID/php-fpm)',
 		'webserverGroupMemberForFcgidPhpFpm' => 'Webserver-Benutzer in Kunden-Gruppen (f&uuml;r FCGID/php-fpm)',
 		'subdomainLetsencrypt' => 'Hauptdomains ohne zugewiesenen SSL-Port haben keine Subdomain mit aktiviertem SSL-Redirect',
 	],
@@ -1079,7 +1079,7 @@ return [
 			'mailbody' => 'Hallo {SALUTATION},\\n\\nhiermit erhalten Sie den Link, um ein neues Passwort zu setzen. Dieser Link ist für die nächsten 24 Stunden gültig.\\n\\n{LINK}\\n\\nVielen Dank,\\nIhr Administrator',
 		],
 		'new_database_by_customer' => [
-			'subject' => '[Froxlor] Neue Datenbank erstellt',
+			'subject' => '[LibrePanel] Neue Datenbank erstellt',
 			'mailbody' => 'Hallo {CUST_NAME},
 
 du hast gerade eine neue Datenbank angelegt. Hier die angegebenen Informationen:
@@ -1113,7 +1113,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'2fa' => [
 			'mailbody' => 'Hallo,\\n\\nihr 2FA-Login Code lautet: {CODE}\\n\\nDies ist eine automatisch generierte\\neMail, bitte antworten Sie nicht auf\\ndiese Mitteilung.\\n\\nIhr Administrator',
-			'subject' => 'Froxlor - 2FA Code',
+			'subject' => 'LibrePanel - 2FA Code',
 		],
 	],
 	'menue' => [
@@ -1182,7 +1182,7 @@ Vielen Dank, Ihr Administrator',
 		'unprivileged_passwd' => 'Passwort für nicht privilegierten Benutzer',
 		'mysql_ssl_ca_file' => 'SSL-Serverzertifikat',
 		'mysql_ssl_verify_server_certificate' => 'Verifizieren des SSL-Serverzertifikats',
-		'globaluserinfo' => 'Um auf Datenbanken zuzugreifen, kann zusätzlich der Froxlor-Login (Benutzer: %s) verwendet werden, dieser hat automatisch Zugriff auf alle Datenbanken.<br />Es wird empfohlen diesen <b>nicht</b> für Applikationen zu nutzen, lediglich zur Administration (z.B. via phpMyAdmin).',
+		'globaluserinfo' => 'Um auf Datenbanken zuzugreifen, kann zusätzlich der LibrePanel-Login (Benutzer: %s) verwendet werden, dieser hat automatisch Zugriff auf alle Datenbanken.<br />Es wird empfohlen diesen <b>nicht</b> für Applikationen zu nutzen, lediglich zur Administration (z.B. via phpMyAdmin).',
 		'edit_global_user' => 'Admin Benutzer bearbeiten',
 	],
 	'panel' => [
@@ -1208,7 +1208,7 @@ Vielen Dank, Ihr Administrator',
 		'reset' => 'Änderungen verwerfen',
 		'pathDescription' => 'Sollte das Verzeichnis nicht existieren, wird es automatisch erstellt.',
 		'pathDescriptionEx' => '<br /><br /><span class="text-danger">Bitte beachten:</span> Der Pfad <code>/</code> ist nicht erlaubt aufgrund administrativer Einstellungen, er wird automatisch auf <code>/gewaehlte.subdomain.tld/</code> gesetzt, sofern nicht ein anderer Ordner angegeben wird.',
-		'pathDescriptionSubdomain' => 'Sollte das Verzeichnis nicht existieren, wird es automatisch erstellt.<br />Sollte eine Weiterleitung auf eine andere Domain gewünscht sein, muss der Eintrag mit http:// oder https:// beginnen.<br />Endet die URL mit einem / (Slash) geht Froxlor von einem Ordner aus, wenn nicht, wird es wie eine Datei behandelt.',
+		'pathDescriptionSubdomain' => 'Sollte das Verzeichnis nicht existieren, wird es automatisch erstellt.<br />Sollte eine Weiterleitung auf eine andere Domain gewünscht sein, muss der Eintrag mit http:// oder https:// beginnen.<br />Endet die URL mit einem / (Slash) geht LibrePanel von einem Ordner aus, wenn nicht, wird es wie eine Datei behandelt.',
 		'back' => 'Zurück',
 		'reseller' => 'Reseller',
 		'admin' => 'Administrator',
@@ -1291,11 +1291,11 @@ Vielen Dank, Ihr Administrator',
 		'use_checkbox_to_disable' => 'Zum Deaktivieren, klicke die Checkbox auf der rechten Seite des Eingabefeldes',
 	],
 	'phpfpm' => [
-		'vhost_httpuser' => 'Lokaler Benutzer für PHP-FPM (Froxlor-Vhost)',
-		'vhost_httpgroup' => 'Lokale Gruppe für PHP-FPM (Froxlor-Vhost)',
+		'vhost_httpuser' => 'Lokaler Benutzer für PHP-FPM (LibrePanel-Vhost)',
+		'vhost_httpgroup' => 'Lokale Gruppe für PHP-FPM (LibrePanel-Vhost)',
 		'ownvhost' => [
-			'title' => 'Verwende PHP-FPM im Froxlor-Vhost',
-			'description' => 'Wenn verwendet, wird Froxlor selbst unter einem lokalen Benutzer ausgeführt',
+			'title' => 'Verwende PHP-FPM im LibrePanel-Vhost',
+			'description' => 'Wenn verwendet, wird LibrePanel selbst unter einem lokalen Benutzer ausgeführt',
 		],
 		'use_mod_proxy' => [
 			'title' => 'Verwende mod_proxy / mod_proxy_fcgi',
@@ -1496,7 +1496,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'mailpwcleartext' => [
 			'title' => 'Passwörter der Mail-Konten auch im Klartext in der Datenbank speichern',
-			'description' => 'Wenn diese Einstellung auf Ja gesetzt wird, werden alle Passwörter auch unverschlüsselt (also im Klartext, für jeden mit Zugriff auf die Froxlor-Datenbank sofort lesbar) in der mail_users-Tabelle gespeichert. Aktivieren Sie diese Option nur dann, wenn Sie SASL nutzen!',
+			'description' => 'Wenn diese Einstellung auf Ja gesetzt wird, werden alle Passwörter auch unverschlüsselt (also im Klartext, für jeden mit Zugriff auf die LibrePanel-Datenbank sofort lesbar) in der mail_users-Tabelle gespeichert. Aktivieren Sie diese Option nur dann, wenn Sie SASL nutzen!',
 		],
 		'ftpdomain' => [
 			'title' => 'FTP-Benutzerkonten @domain',
@@ -1504,7 +1504,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'mod_fcgid' => [
 			'title' => 'PHP über mod_fcgid/suexec einbinden',
-			'description' => 'PHP wird unter dem Benutzer des Kunden ausgeführt.<br /><br /><b>Dies benötigt eine spezielle Webserver-Konfiguration für Apache, siehe <a target="_blank" href="https://docs.froxlor.org/latest/admin-guide/configuration/fcgid/">FCGID-Handbuch</a>.</b>',
+			'description' => 'PHP wird unter dem Benutzer des Kunden ausgeführt.<br /><br /><b>Dies benötigt eine spezielle Webserver-Konfiguration für Apache, siehe <a target="_blank" href="https://docs.librepanel.org/latest/admin-guide/configuration/fcgid/">FCGID-Handbuch</a>.</b>',
 			'configdir' => [
 				'title' => 'Konfigurations-Verzeichnis',
 				'description' => 'Wo sollen alle Konfigurationsdateien von fcgid liegen? Wenn Sie keine selbst kompilierte suexec Binary benutzen, was in der Regel der Fall ist, muss dieser Pfad unter /var/www/ liegen.<br /><br /><div class="text-danger">ACHTUNG: Der Inhalt dieses Ordners wird regelmäßig geleert, daher sollten dort keinerlei Daten manuell abgelegt werden.</div>',
@@ -1530,7 +1530,7 @@ Vielen Dank, Ihr Administrator',
 				'description' => 'Wieviele PHP-Requests pro Domain sollen erlaubt werden?',
 			],
 			'defaultini' => 'Voreingestellte PHP-Konfiguration für neue Domains',
-			'defaultini_ownvhost' => 'Voreingestellte PHP-Konfiguration für den Froxlor-Vhost',
+			'defaultini_ownvhost' => 'Voreingestellte PHP-Konfiguration für den LibrePanel-Vhost',
 			'idle_timeout' => [
 				'title' => 'Idle-Timeout',
 				'description' => 'Timeout-Einstellung für mod_FastCGI.',
@@ -1569,7 +1569,7 @@ Vielen Dank, Ihr Administrator',
 			],
 			'logfile' => [
 				'title' => 'Dateiname der Logdatei',
-				'description' => 'Wird nur verwendet, wenn die Log-Art "file" ausgewählt ist. Diese Datei wird unter froxlor/logs/ geschrieben. Dieser Ordner ist vor Webzugriff geschützt.',
+				'description' => 'Wird nur verwendet, wenn die Log-Art "file" ausgewählt ist. Diese Datei wird unter librepanel/logs/ geschrieben. Dieser Ordner ist vor Webzugriff geschützt.',
 			],
 			'logcron' => 'Logge Cronjobs',
 			'logcronoption' => [
@@ -1622,7 +1622,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'apache_globaldiropt' => [
 			'title' => 'Kunden-Prefix Ordner-Optionen',
-			'description' => 'Der Inhalt dieses Feldes wird in die 05_froxlor_dirfix_nofcgid.conf Apache Konfigurationsdatei eingefügt. Wenn leer werden folgende Standardwerte verwendet:<br><br>apache >=2.4<br><code>Require all granted<br>AllowOverride All</code><br><br>apache <=2.2<br><code>Order allow,deny<br>allow from all</code>',
+			'description' => 'Der Inhalt dieses Feldes wird in die 05_librepanel_dirfix_nofcgid.conf Apache Konfigurationsdatei eingefügt. Wenn leer werden folgende Standardwerte verwendet:<br><br>apache >=2.4<br><code>Require all granted<br>AllowOverride All</code><br><br>apache <=2.2<br><code>Order allow,deny<br>allow from all</code>',
 		],
 		'decimal_places' => 'Nachkommastellen bei der Ausgabe von Traffic/Webspace',
 		'selfdns' => [
@@ -1714,7 +1714,7 @@ Vielen Dank, Ihr Administrator',
 			'description' => 'Dieser Redirect wird immer genutzt, sofern der Kunde keinen anderen auswählt.',
 		],
 		'mail_also_with_mxservers' => 'Erstelle mail-, imap-, pop3- and smtp-"A Record" auch wenn MX-Server angegeben sind',
-		'froxlordirectlyviahostname' => 'Froxlor direkt über den Hostnamen erreichbar machen',
+		'librepaneldirectlyviahostname' => 'LibrePanel direkt über den Hostnamen erreichbar machen',
 		'panel_password_regex' => [
 			'title' => 'Regulärer Ausdruck für Passwörter',
 			'description' => 'Hier können Sie einen regulären Ausdruck für Passwort-Komplexität festlegen.<br />Leer = keine bestimmten Anforderungen',
@@ -1724,13 +1724,13 @@ Vielen Dank, Ihr Administrator',
 			'description' => 'Standard ist /usr/bin/perl',
 		],
 		'mod_fcgid_ownvhost' => [
-			'title' => 'Verwende FCGID im Froxlor-Vhost',
-			'description' => 'Wenn verwendet, wird Froxlor selbst unter einem lokalen Benutzer ausgeführt',
+			'title' => 'Verwende FCGID im LibrePanel-Vhost',
+			'description' => 'Wenn verwendet, wird LibrePanel selbst unter einem lokalen Benutzer ausgeführt',
 		],
 		'perl' => [
 			'suexecworkaround' => [
 				'title' => 'Aktiviere SuExec-Workaround',
-				'description' => 'Aktivieren Sie den Workaround nur, wenn die Kunden-Heimatverzeichnisse sich nicht unterhalb des suexec-Pfades liegen.<br />Wenn aktiviert erstellt Froxlor eine Verknüpfung des vom Kunden für Perl aktiviertem Pfad + /cgi-bin/ im angegebenen suexec-Pfad.<br />Bitte beachten Sie, dass Perl dann nur im Unterordner /cgi-bin/ des Kunden-Ordners funktioniert und nicht direkt in diesem Ordner (wie es ohne den Workaround wäre!)',
+				'description' => 'Aktivieren Sie den Workaround nur, wenn die Kunden-Heimatverzeichnisse sich nicht unterhalb des suexec-Pfades liegen.<br />Wenn aktiviert erstellt LibrePanel eine Verknüpfung des vom Kunden für Perl aktiviertem Pfad + /cgi-bin/ im angegebenen suexec-Pfad.<br />Bitte beachten Sie, dass Perl dann nur im Unterordner /cgi-bin/ des Kunden-Ordners funktioniert und nicht direkt in diesem Ordner (wie es ohne den Workaround wäre!)',
 			],
 			'suexeccgipath' => [
 				'title' => 'Pfad für Verknüpfungen zu Kunden-Perl-Verzeichnis',
@@ -1757,7 +1757,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'phpfpm' => [
 			'title' => 'Aktiviere PHP-FPM',
-			'description' => '<b>Dies benötigt eine spezielle Webserver-Konfiguration, siehe <a target="_blank" href="https://docs.froxlor.org/latest/admin-guide/configuration/php-fpm/">PHP-FPM Handbuch</a></b>',
+			'description' => '<b>Dies benötigt eine spezielle Webserver-Konfiguration, siehe <a target="_blank" href="https://docs.librepanel.org/latest/admin-guide/configuration/php-fpm/">PHP-FPM Handbuch</a></b>',
 		],
 		'phpfpm_settings' => [
 			'configdir' => 'Pfad zu php-fpm-Konfigurationen',
@@ -1882,11 +1882,11 @@ Vielen Dank, Ihr Administrator',
 			'description' => 'Wo sollen kundenspezifizierte SSL-Zertifikate erstellt werden?<br /><br /><div class="text-danger">ACHTUNG: Der Inhalt dieses Ordners wird regelmäßig geleert, daher sollten dort keinerlei Daten manuell abgelegt werden.</div>',
 		],
 		'allow_error_report_admin' => [
-			'title' => 'Erlaube Administrator/Reseller das Melden von Datenbankfehlern an Froxlor',
+			'title' => 'Erlaube Administrator/Reseller das Melden von Datenbankfehlern an LibrePanel',
 			'description' => 'Bitte beachten: Senden Sie zu keiner Zeit irgendwelche datenschutzrelevanten/persönlichen (Kunden-)Daten an uns!',
 		],
 		'allow_error_report_customer' => [
-			'title' => 'Erlaube Kunden das Melden von Datenbankfehlern an Froxlor',
+			'title' => 'Erlaube Kunden das Melden von Datenbankfehlern an LibrePanel',
 			'description' => 'Bitte beachten: Senden Sie zu keiner Zeit irgendwelche datenschutzrelevanten/persönlichen (Kunden-)Daten an uns!',
 		],
 		'mailtraffic_enabled' => [
@@ -1911,7 +1911,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'system_cronconfig' => [
 			'title' => 'Cron-Konfigurationsdatei',
-			'description' => 'Pfad zur Konfigurationsdatei des Cron-Dienstes. Diese Datei wird von Froxlor automatisch aktualisiert.<br />Hinweis: Bitte verwenden Sie <strong>exakt</strong> die gleiche Datei wie für den Froxlor-Haupt-Cronjob (Standard: /etc/cron.d/froxlor)!<br><br>Wird <b>FreeBSD</b> verwendet, sollte hier <i>/etc/crontab</i> angegeben werden!',
+			'description' => 'Pfad zur Konfigurationsdatei des Cron-Dienstes. Diese Datei wird von LibrePanel automatisch aktualisiert.<br />Hinweis: Bitte verwenden Sie <strong>exakt</strong> die gleiche Datei wie für den LibrePanel-Haupt-Cronjob (Standard: /etc/cron.d/librepanel)!<br><br>Wird <b>FreeBSD</b> verwendet, sollte hier <i>/etc/crontab</i> angegeben werden!',
 		],
 		'system_crondreload' => [
 			'title' => 'Cron-Daemon reload Befehl',
@@ -1968,7 +1968,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'leenabled' => [
 			'title' => 'Let\'s Encrypt verwenden',
-			'description' => 'Wenn dies aktiviert ist, können Kunden durch Froxlor automatisch generierte und verlängerbare Let\'s Encrypt SSL-Zertifikate für Domains mit SSL IP/Port nutzen.<br /><br />Bitte die Webserver-Konfiguration beachten wenn aktiviert, da dieses Feature eine spezielle Konfiguration benötigt.',
+			'description' => 'Wenn dies aktiviert ist, können Kunden durch LibrePanel automatisch generierte und verlängerbare Let\'s Encrypt SSL-Zertifikate für Domains mit SSL IP/Port nutzen.<br /><br />Bitte die Webserver-Konfiguration beachten wenn aktiviert, da dieses Feature eine spezielle Konfiguration benötigt.',
 		],
 		'caa_entry' => [
 			'title' => 'CAA DNS Einträge generieren',
@@ -1988,7 +1988,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'dns_server' => [
 			'title' => 'DNS Server Dienst',
-			'description' => 'Dienste müssen mit den froxlor Konfigurationstemplates konfiguriert werden',
+			'description' => 'Dienste müssen mit den librepanel Konfigurationstemplates konfiguriert werden',
 		],
 		'panel_customer_hide_options' => [
 			'title' => 'Menüpunkte und Traffic-Charts im Kundenbereich ausblenden',
@@ -2002,12 +2002,12 @@ Vielen Dank, Ihr Administrator',
 			'title' => 'Liste der verfügbaren Shells',
 			'description' => 'Komma-getrennte Liste von Shells, die der Kunde für seine FTP-Konten wählen kann.<br><br>Hinweis: Die Standard-Shell <strong>/bin/false</strong> wird immer eine Auswahlmöglichkeit sein (wenn aktiviert), auch wenn diese Einstellung leer ist. Sie ist in jedem Fall der Standardwert für alle FTP-Konten',
 		],
-		'le_froxlor_enabled' => [
-			'title' => 'Let\'s Encrypt für den froxlor Vhost verwenden',
-			'description' => 'Wenn dies aktiviert ist, erstellt froxlor für seinen vhost automatisch ein Let\'s Encrypt Zertifikat.',
+		'le_librepanel_enabled' => [
+			'title' => 'Let\'s Encrypt für den librepanel Vhost verwenden',
+			'description' => 'Wenn dies aktiviert ist, erstellt librepanel für seinen vhost automatisch ein Let\'s Encrypt Zertifikat.',
 		],
-		'le_froxlor_redirect' => [
-			'title' => 'SSL-Weiterleitung für den froxlor Vhost aktivieren',
+		'le_librepanel_redirect' => [
+			'title' => 'SSL-Weiterleitung für den librepanel Vhost aktivieren',
 			'description' => 'Wenn dies aktiviert ist, werden alle HTTP Anfragen an die entsprechende SSL Seite weitergeleitet.',
 		],
 		'option_unavailable_websrv' => '<br><em class="text-danger">Nur verfügbar für: %s</em>',
@@ -2033,7 +2033,7 @@ Vielen Dank, Ihr Administrator',
 		],
 		'le_domain_dnscheck' => [
 			'title' => 'Validiere DNS der Domains wenn Let\'s Encrypt genutzt wird',
-			'description' => 'Wenn aktiviert wird froxlor überprüfen ob die DNS Einträge der Domains, welche ein Let\'s Encrypt Zertifikat beantragt, mindestens auf eine der System IP Adressen auflöst.',
+			'description' => 'Wenn aktiviert wird librepanel überprüfen ob die DNS Einträge der Domains, welche ein Let\'s Encrypt Zertifikat beantragt, mindestens auf eine der System IP Adressen auflöst.',
 		],
 		'le_domain_dnscheck_resolver' => [
 			'title' => 'DNS Resolver für die DNS Überprüfung',
@@ -2044,11 +2044,11 @@ Vielen Dank, Ihr Administrator',
 		],
 		'leapiversion' => [
 			'title' => 'Wählen Sie die Let\'s Encrypt ACME Implementierung',
-			'description' => 'Aktuell unterstützt froxlor lediglich die ACME v2 Implementierung von Let\'s Encrypt.',
+			'description' => 'Aktuell unterstützt librepanel lediglich die ACME v2 Implementierung von Let\'s Encrypt.',
 		],
 		'enable_api' => [
 			'title' => 'Aktiviere externe API Nutzung',
-			'description' => 'Um die froxlor API nutzen zu können, muss diese Option aktiviert sein. Für detaillierte Informationen siehe <a href="https://docs.froxlor.org/latest/api-guide/" target="_new">https://docs.froxlor.org/</a>',
+			'description' => 'Um die librepanel API nutzen zu können, muss diese Option aktiviert sein. Für detaillierte Informationen siehe <a href="https://docs.librepanel.org/latest/api-guide/" target="_new">https://docs.librepanel.org/</a>',
 		],
 		'api_customer_default' => '"Erlaube API Nutzung" Vorbelegung für neue Kunden',
 		'dhparams_file' => [
@@ -2063,9 +2063,9 @@ Vielen Dank, Ihr Administrator',
 			'title' => 'ECC / ECDSA Zertifikate ausstellen',
 			'description' => 'Wenn eine Schlüsselgröße ausgewählt wird, werden ECC / ECDSA Zertifikate erstellt',
 		],
-		'froxloraliases' => [
-			'title' => 'Domain Aliase für Froxlor Vhost',
-			'description' => 'Komma getrennte Liste von Domains, welche als Server Alias zum Froxlor Vhost hinzugefügt werden',
+		'librepanelaliases' => [
+			'title' => 'Domain Aliase für LibrePanel Vhost',
+			'description' => 'Komma getrennte Liste von Domains, welche als Server Alias zum LibrePanel Vhost hinzugefügt werden',
 		],
 		'default_sslvhostconf' => [
 			'title' => 'Standard SSL vHost-Einstellungen',
@@ -2114,7 +2114,7 @@ Vielen Dank, Ihr Administrator',
 			'title' => 'Standardwert für "Standardsubdomain anlegen" bei Erstellung eines Kunden',
 			'description' => '',
 		],
-		'froxlorusergroup' => [
+		'librepanelusergroup' => [
 			'title' => 'Benutzerdefinierte Gruppe für alle Kunden-Benutzer',
 			'description' => 'Voraussetzung hierfür ist die Nutzung von libnss-extrausers (System-Einstellungen). Ein leerer Wert bedeutet, es wird keine Gruppe erstellt, bzw. vorhandene Gruppe wird entfernt.',
 		],
@@ -2123,7 +2123,7 @@ Vielen Dank, Ihr Administrator',
 			'description' => 'Installationspfad zu acme.sh, inklusive acme.sh Script<br>Standard ist <b>/root/.acme.sh/acme.sh</b>',
 		],
 		'update_channel' => [
-			'title' => 'froxlor Update Kanal',
+			'title' => 'librepanel Update Kanal',
 			'description' => 'Wähle den bevorzugten Update Kanal. Standard ist "stable"',
 		],
 		'traffictool' => [
@@ -2132,7 +2132,7 @@ Vielen Dank, Ihr Administrator',
 		'requires_reconfiguration' => 'Änderungen an dieser Einstellungen benötigen unter Umständen eine erneute Konfiguration der folgenden Dienste:<br><strong>%s</strong>',
 		'req_limit_per_interval' => [
 			'title' => 'Anzahl der HTTP-Anfragen pro Intervall',
-			'description' => 'Erlaubte Anzahl von HTTP-Anfragen pro Intervall (siehe unten) auf froxlor, Standard ist "60"',
+			'description' => 'Erlaubte Anzahl von HTTP-Anfragen pro Intervall (siehe unten) auf librepanel, Standard ist "60"',
 		],
 		'req_limit_interval' => [
 			'title' => 'Rate-Limit-Intervall',
@@ -2144,7 +2144,7 @@ Vielen Dank, Ihr Administrator',
 			'description' => 'Bei Deaktivierung werden die Menübereiche auf der linken Seite immer aufgeklappt angezeigt.',
 		],
 		'le_renew_services' => [
-			'title' => 'Verwende das froxlor Let\'s Encrypt Zertifikat für folgende Dienste',
+			'title' => 'Verwende das librepanel Let\'s Encrypt Zertifikat für folgende Dienste',
 			'description' => 'Wenn auf "Keine" gesetzt (oder der Renew-Hook-Befehl unten leer ist), werden keine Konfigurationsanpassungen bezüglich SSL an den ausgewählten Diensten vorgenommen.<br><br>Der Reload-Befehl für die ausgewählten Dienste sollte im Renew-Hook-Befehl hinzugefügt werden, da sonst die Konfigurationsänderungen oder erneuerten Zertifikate möglicherweise nicht korrekt angewendet werden.',
 		],
 		'le_renew_hook' => [
@@ -2187,7 +2187,7 @@ Vielen Dank, Ihr Administrator',
 		'REBUILD_DNS' => 'Neuerstellung der Bind-Konfiguration',
 		'CREATE_FTP' => 'Erstelle Verzeichnis für neuen FTP-Benutzer',
 		'DELETE_CUSTOMER_FILES' => 'Löschen von Kunden-Dateien %s',
-		'noneoutstanding' => 'Zur Zeit gibt es keine ausstehenden Aufgaben für Froxlor',
+		'noneoutstanding' => 'Zur Zeit gibt es keine ausstehenden Aufgaben für LibrePanel',
 		'DELETE_EMAIL_DATA' => 'E-Mail-Dateien des Kunden löschen',
 		'DELETE_FTP_DATA' => 'Kunden FTP-Konto Dateien löschen',
 		'REBUILD_RSPAMD' => 'Neuerstellung der Antispam-Konfiguration',
@@ -2258,18 +2258,18 @@ Vielen Dank, Ihr Administrator',
 	],
 	'translator' => '',
 	'update' => [
-		'updateinprogress_onlyadmincanlogin' => 'Eine neuere Version von Froxlor wurde installiert, aber noch nicht eingerichtet.<br />Nur der Administrator kann sich anmelden und die Aktualisierung abschließen.',
-		'update' => 'Froxlor Aktualisierung',
+		'updateinprogress_onlyadmincanlogin' => 'Eine neuere Version von LibrePanel wurde installiert, aber noch nicht eingerichtet.<br />Nur der Administrator kann sich anmelden und die Aktualisierung abschließen.',
+		'update' => 'LibrePanel Aktualisierung',
 		'proceed' => 'Ausführen',
 		'update_information' => [
-			'part_a' => 'Die Froxlor-Dateien wurden aktualisiert. Neue Version ist <strong>%s</strong>. Die bisher installierte Version ist <strong>%s</strong>',
+			'part_a' => 'Die LibrePanel-Dateien wurden aktualisiert. Neue Version ist <strong>%s</strong>. Die bisher installierte Version ist <strong>%s</strong>',
 			'part_b' => '<br /><br />Ein Kunden-Login ist vor Abschluss des Aktualisierungsvorganges nicht möglich.<br /><strong>Aktualisierung ausführen?</strong>',
 		],
-		'noupdatesavail' => 'Die genutzte %sVersion von Froxlor ist aktuell.',
-		'description' => 'Aktualisierung der froxlor Datenbank',
+		'noupdatesavail' => 'Die genutzte %sVersion von LibrePanel ist aktuell.',
+		'description' => 'Aktualisierung der librepanel Datenbank',
 		'uc_newinfo' => 'Eine neuere %sVersion ist verfügbar: "%s" (Aktuell installierte Version: %s)',
 		'notify_subject' => 'Neues Update verfügbar',
-		'dbupdate_required' => 'Froxlor-Dateien wurden aktualisiert, Datenbank-Aktualisierung notwendig',
+		'dbupdate_required' => 'LibrePanel-Dateien wurden aktualisiert, Datenbank-Aktualisierung notwendig',
 	],
 	'usersettings' => [
 		'custom_notes' => [
@@ -2279,12 +2279,12 @@ Vielen Dank, Ihr Administrator',
 		],
 		'api_allowed' => [
 			'title' => 'Erlaube API Zugriff',
-			'description' => 'Wenn in den Einstellungen aktiviert, kann der Benutzer API Schlüssel erstellen und auf die froxlor API Zugreifen',
+			'description' => 'Wenn in den Einstellungen aktiviert, kann der Benutzer API Schlüssel erstellen und auf die librepanel API Zugreifen',
 			'notice' => 'API Zugriff ist für dieses Konto deaktiviert.',
 		],
 		'gui_access' => [
 			'title' => 'WebUI-Anmeldung zulassen',
-			'description' => 'Wenn diese Option deaktiviert ist, kann sich der Benutzer nicht bei der Froxlor-Weboberfläche anmelden, aber alle Dienste (Web, FTP, E-Mail, Datenbanken, API-Zugriff, usw.) funktionieren normal.',
+			'description' => 'Wenn diese Option deaktiviert ist, kann sich der Benutzer nicht bei der LibrePanel-Weboberfläche anmelden, aber alle Dienste (Web, FTP, E-Mail, Datenbanken, API-Zugriff, usw.) funktionieren normal.',
 		],
 	],
 	'install' => [
@@ -2300,13 +2300,13 @@ Vielen Dank, Ihr Administrator',
 		'switchmode_advanced' => 'Erweiterte Optionen anzeigen',
 		'switchmode_basic' => 'Erweiterte Optionen ausblenden',
 		'dependency_check' => [
-			'title' => 'Willkommen bei froxlor',
-			'description' => 'Das System wird auf Abhängigkeiten überprüft, um sicher zu stellen das alle erforderlichen PHP Erweiterungen vorhanden und aktiviert sind, so dass froxlor einwandfrei funktioniert.',
+			'title' => 'Willkommen bei librepanel',
+			'description' => 'Das System wird auf Abhängigkeiten überprüft, um sicher zu stellen das alle erforderlichen PHP Erweiterungen vorhanden und aktiviert sind, so dass librepanel einwandfrei funktioniert.',
 		],
 		'database' => [
 			'top' => 'Datenbank',
 			'title' => 'Datenbank und Benutzer erstellen',
-			'description' => 'Froxlor benötigt eine Datenbank und zusätzlich <a href="https://docs.froxlor.org/latest/general/installation/tarball.html#_3-create-privileged-database-user" target="_blank">einen Benutzer mit privilegierten Rechten</a>, welcher Benutzer und Datenbanken erstellen darf (GRANT Option). Die angegebene Datenbank und der unprivilegierte Benutzer werden automatisch in diesem Prozess erstellt. Der privilegierte Benutzer muss existieren.',
+			'description' => 'LibrePanel benötigt eine Datenbank und zusätzlich <a href="https://docs.librepanel.org/latest/general/installation/tarball.html#_3-create-privileged-database-user" target="_blank">einen Benutzer mit privilegierten Rechten</a>, welcher Benutzer und Datenbanken erstellen darf (GRANT Option). Die angegebene Datenbank und der unprivilegierte Benutzer werden automatisch in diesem Prozess erstellt. Der privilegierte Benutzer muss existieren.',
 			'user' => 'Unprivilegierter Datenbank Benutzer',
 			'dbname' => 'Datenbank Name',
 			'force_create' => 'Sichern und überschreiben, sofern Datenbank existiert?',
@@ -2321,12 +2321,12 @@ Vielen Dank, Ihr Administrator',
 		'system' => [
 			'top' => 'System Setup',
 			'title' => 'Detailangaben zum Server',
-			'description' => 'Gebe hier Informationen und relevante Daten zu dem Server an damit froxlor dein System kennt. Diese Angaben sind entscheidend für die Konfiguration und den Betrieb der Dienste.',
+			'description' => 'Gebe hier Informationen und relevante Daten zu dem Server an damit librepanel dein System kennt. Diese Angaben sind entscheidend für die Konfiguration und den Betrieb der Dienste.',
 			'ipv4' => 'Primäre IPv4 Adresse (sofern zutreffend)',
 			'ipv6' => 'Primäre IPv6 Adresse (sofern zutreffend)',
 			'servername' => 'Server Name (FQDN, keine IP Adresse)',
 			'phpbackend' => 'PHP Backend',
-			'activate_newsfeed' => 'Offizielles Newsfeed aktivieren<br><small>(externe Quelle: https://inside.froxlor.org/news/)</small>',
+			'activate_newsfeed' => 'Offizielles Newsfeed aktivieren<br><small>(externe Quelle: https://inside.librepanel.org/news/)</small>',
 		],
 		'install' => [
 			'top' => 'Abschluss',
@@ -2337,7 +2337,7 @@ Vielen Dank, Ihr Administrator',
 			'waitforconfig' => 'Warte auf Abschluss der Dienstkonfiguration...',
 		],
 		'errors' => [
-			'wrong_ownership' => 'Die froxlor Dateien gehören nicht vollständig dem Benutzer %s:%s',
+			'wrong_ownership' => 'Die librepanel Dateien gehören nicht vollständig dem Benutzer %s:%s',
 			'missing_extensions' => 'Folgende PHP Erweiterungen werden zusätzlich benötigt',
 			'suggestedextensions' => 'Folgende PHP Erweiterungen werden empfohlen',
 			'databaseexists' => 'Datenbank existiert bereits, Uberschreiben-Option oder anderen Namen wählen.',
@@ -2365,8 +2365,8 @@ Vielen Dank, Ihr Administrator',
 		]
 	],
 	'welcome' => [
-		'title' => 'Willkommen bei froxlor!',
-		'config_note' => 'Damit froxlor mit dem Backend vernünftig kommunizieren kann, musst du dieses noch konfigurieren.',
+		'title' => 'Willkommen bei librepanel!',
+		'config_note' => 'Damit librepanel mit dem Backend vernünftig kommunizieren kann, musst du dieses noch konfigurieren.',
 		'config_now' => 'Jetzt konfigurieren'
 	],
 ];

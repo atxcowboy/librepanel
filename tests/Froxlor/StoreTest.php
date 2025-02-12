@@ -1,30 +1,30 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use Froxlor\Settings;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Database\Database;
-use Froxlor\Settings\Store;
+use LibrePanel\Settings;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Database\Database;
+use LibrePanel\Settings\Store;
 
 /**
  *
- * @covers \Froxlor\Settings\Store
+ * @covers \LibrePanel\Settings\Store
  */
 class StoreTest extends TestCase
 {
 
 	public function testStoreSettingClearCertificates()
 	{
-		// when froxlor vhost setting "use lets encrypt" is set to false, the corresponding
+		// when librepanel vhost setting "use lets encrypt" is set to false, the corresponding
 		// certificate needs to be cleaned
 		// for testing purposes, let's add some entry to the table
 		Database::query("INSERT INTO `domain_ssl_settings` SET `domainid` = '0', `ssl_cert_file` = 'test-content'");
 
 		$fielddata = array(
-			'label' => 'le_froxlor_enabled',
+			'label' => 'le_librepanel_enabled',
 			'settinggroup' => 'system',
-			'varname' => 'le_froxlor_enabled'
+			'varname' => 'le_librepanel_enabled'
 		);
-		Store::storeSettingClearCertificates('system_le_froxlor_enabled', $fielddata, 0);
+		Store::storeSettingClearCertificates('system_le_librepanel_enabled', $fielddata, 0);
 
 		// there should be no entry in domain_ssl_settings now
 		$result = Database::query("SELECT COUNT(*) as entries FROM `domain_ssl_settings` WHERE `domainid` = '0'");

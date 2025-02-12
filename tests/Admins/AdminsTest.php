@@ -1,14 +1,14 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Admins;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Admins;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\Admins
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\Admins
  */
 class AdminsTest extends TestCase
 {
@@ -19,7 +19,7 @@ class AdminsTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'reseller',
-			'email' => 'testreseller@froxlor.org',
+			'email' => 'testreseller@librepanel.org',
 			'name' => 'Testreseller',
 			'admin_password' => 'h0lYmo1y',
 			'diskspace' => - 1,
@@ -50,7 +50,7 @@ class AdminsTest extends TestCase
 		$result = json_decode($json_result, true)['data'];
 
 		$this->assertEquals('reseller', $result['loginname']);
-		$this->assertEquals('testreseller@froxlor.org', $result['email']);
+		$this->assertEquals('testreseller@librepanel.org', $result['email']);
 		$this->assertEquals(0, $result['customers_see_all']);
 	}
 
@@ -64,7 +64,7 @@ class AdminsTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'reseller',
-			'email' => 'testreseller@froxlor.org',
+			'email' => 'testreseller@librepanel.org',
 			'name' => 'Testreseller'
 		];
 
@@ -82,7 +82,7 @@ class AdminsTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'web2',
-			'email' => 'testreseller@froxlor.org',
+			'email' => 'testreseller@librepanel.org',
 			'name' => 'Testreseller'
 		];
 
@@ -100,7 +100,7 @@ class AdminsTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'reslr-',
-			'email' => 'testreseller@froxlor.org',
+			'email' => 'testreseller@librepanel.org',
 			'name' => 'Testreseller'
 		];
 
@@ -118,11 +118,11 @@ class AdminsTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'reslr',
-			'email' => 'testreseller.froxlor.org',
+			'email' => 'testreseller.librepanel.org',
 			'name' => 'Testreseller'
 		];
 
-		$this->expectExceptionMessage('Email-address testreseller.froxlor.org contains invalid characters or is incomplete');
+		$this->expectExceptionMessage('Email-address testreseller.librepanel.org contains invalid characters or is incomplete');
 		Admins::getLocal($admin_userdata, $data)->add();
 	}
 
@@ -279,7 +279,7 @@ class AdminsTest extends TestCase
 		// add test reseller
 		$data = [
 			'new_loginname' => 'resellertest',
-			'email' => 'testreseller2@froxlor.org',
+			'email' => 'testreseller2@librepanel.org',
 			'name' => 'Testreseller'
 		];
 
@@ -313,14 +313,14 @@ class AdminsTest extends TestCase
 	{
 		global $admin_userdata;
 		// update admin to have correct test-data
-		Database::query("UPDATE `" . TABLE_PANEL_ADMINS . "` SET `theme` = 'Froxlor', `def_language` = 'Deutsch' WHERE `loginname` = 'admin'");
+		Database::query("UPDATE `" . TABLE_PANEL_ADMINS . "` SET `theme` = 'LibrePanel', `def_language` = 'Deutsch' WHERE `loginname` = 'admin'");
 		$json_result = Admins::getLocal($admin_userdata, array(
 			'loginname' => 'admin',
 			'theme' => '',
 			'def_language' => 'English'
 		))->update();
 		$result = json_decode($json_result, true)['data'];
-		$this->assertEquals('Froxlor', $result['theme']);
+		$this->assertEquals('LibrePanel', $result['theme']);
 		$this->assertEquals('English', $result['def_language']);
 	}
 

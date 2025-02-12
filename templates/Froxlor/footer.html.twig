@@ -1,14 +1,14 @@
 <footer class="text-center mb-3">
 	<span>
-		<img src="{{ basehref|default("") }}templates/Froxlor/assets/img/logo_grey.png" alt="Froxlor"/>
+		<img src="{{ basehref|default("") }}templates/LibrePanel/assets/img/logo_grey.png" alt="LibrePanel"/>
 		{% if install_mode is not defined  %}
 			{% if (get_setting('admin.show_version_login') == '1'
 				and area == 'login') or (area != 'login'
 				and get_setting('admin.show_version_footer') == '1') %}
-				{{ call_static('\\Froxlor\\Froxlor', 'getFullVersion') }}
+				{{ call_static('\\LibrePanel\\LibrePanel', 'getFullVersion') }}
 			{% endif %}
 		{% endif %}
-		&copy; 2009-{{ "now"|date("Y") }} by <a href="https://www.froxlor.org/" rel="external" target="_blank">the froxlor team</a><br>
+		&copy; 2009-{{ "now"|date("Y") }} by <a href="https://www.librepanel.org/" rel="external" target="_blank">the librepanel team</a><br>
 		{% if install_mode is not defined %}
 			{% if (get_setting('panel.imprint_url') != '') %}<a href="{{ get_setting('panel.imprint_url') }}" target="_blank" class="footer-link">{{ lng('imprint') }}</a>{% endif %}
 			{% if (get_setting('panel.terms_url') != '') %}<a href="{{ get_setting('panel.terms_url') }}" target="_blank" class="footer-link">{{ lng('terms') }}</a>{% endif %}

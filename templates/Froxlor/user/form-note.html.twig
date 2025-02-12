@@ -1,9 +1,9 @@
-{% extends "Froxlor/user/form.html.twig" %}
+{% extends "LibrePanel/user/form.html.twig" %}
 
 {% block content %}
 	{% if alert_msg is defined and alert_msg is not empty %}
 		<div class="mb-4">
-			{% include 'Froxlor/misc/alertbox.html.twig' %}
+			{% include 'LibrePanel/misc/alertbox.html.twig' %}
 		</div>
 	{% endif %}
 	{{ parent() }}

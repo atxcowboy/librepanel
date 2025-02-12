@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Froxlor;
-use Froxlor\Install\AutoUpdate;
-use Froxlor\Install\Preconfig;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
-use Froxlor\System\Mailer;
+use LibrePanel\LibrePanel;
+use LibrePanel\Install\AutoUpdate;
+use LibrePanel\Install\Preconfig;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
+use LibrePanel\System\Mailer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,8 +45,8 @@ final class UpdateCommand extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:update');
-		$this->setDescription('Check for newer version and update froxlor');
+		$this->setName('librepanel:update');
+		$this->setDescription('Check for newer version and update librepanel');
 		$this->addOption('check-only', 'c', InputOption::VALUE_NONE, 'Only check for newer version and exit')
 			->addOption('show-update-options', 'o', InputOption::VALUE_NONE, 'Show possible update option parameter for the update if any. Only usable in combination with "check-only".')
 			->addOption('update-options', 'O', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Parameter list of update options.')
@@ -64,8 +64,8 @@ final class UpdateCommand extends CliCommand
 		if ($input->getOption('database')) {
 			$result = $this->validateRequirements($output, true);
 			if ($result == self::SUCCESS) {
-				require Froxlor::getInstallDir() . '/lib/functions.php';
-				if (Froxlor::hasUpdates() || Froxlor::hasDbUpdates()) {
+				require LibrePanel::getInstallDir() . '/lib/functions.php';
+				if (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates()) {
 					$output->writeln('<info>' . lng('update.dbupdate_required') . '</>');
 					if ($input->getOption('check-only')) {
 						$output->writeln('<comment>Doing nothing because of "check-only" flag.</>');
@@ -95,7 +95,7 @@ final class UpdateCommand extends CliCommand
 			return $result;
 		}
 
-		require Froxlor::getInstallDir() . '/lib/functions.php';
+		require LibrePanel::getInstallDir() . '/lib/functions.php';
 
 		// version check
 		$newversionavail = false;
@@ -111,9 +111,9 @@ final class UpdateCommand extends CliCommand
 					}
 					// there is a new version
 					if ($input->getOption('check-only')) {
-						$text = lng('update.uc_newinfo', [(Settings::Get('system.update_channel') != 'stable' ? Settings::Get('system.update_channel') . ' ' : ''), AutoUpdate::getFromResult('version'), Froxlor::VERSION]);
+						$text = lng('update.uc_newinfo', [(Settings::Get('system.update_channel') != 'stable' ? Settings::Get('system.update_channel') . ' ' : ''), AutoUpdate::getFromResult('version'), LibrePanel::VERSION]);
 					} else {
-						$text = lng('admin.newerversionavailable') . ' ' . lng('admin.newerversiondetails', [AutoUpdate::getFromResult('version'), Froxlor::VERSION]);
+						$text = lng('admin.newerversionavailable') . ' ' . lng('admin.newerversiondetails', [AutoUpdate::getFromResult('version'), LibrePanel::VERSION]);
 					}
 					$text = str_replace("<br/>", " ", $text);
 					$text = str_replace("<b>", "<info>", $text);
@@ -181,9 +181,9 @@ final class UpdateCommand extends CliCommand
 						if ($yestoall || $helper->ask($input, $output, $question)) {
 							// do extract
 							$output->writeln('Extracting...');
-							$auex = AutoUpdate::extractZip(Froxlor::getInstallDir() . '/updates/' . $audl);
+							$auex = AutoUpdate::extractZip(LibrePanel::getInstallDir() . '/updates/' . $audl);
 							if ($auex == 0) {
-								$output->writeln("<info>Froxlor files updated successfully.</>");
+								$output->writeln("<info>LibrePanel files updated successfully.</>");
 								$result = self::SUCCESS;
 
 								$this->askUpdateOptions($input, $output, $helper, $yestoall);
@@ -343,10 +343,10 @@ final class UpdateCommand extends CliCommand
 		if ($input->getOption('mail-notify')) {
 			$last_check_version = Settings::Get('system.update_notify_last');
 			if (Update::versionInUpdate($last_check_version, AutoUpdate::getFromResult('version'))) {
-				$text = lng('update.uc_newinfo', [(Settings::Get('system.update_channel') != 'stable' ? Settings::Get('system.update_channel') . ' ' : ''), AutoUpdate::getFromResult('version'), Froxlor::VERSION]);
+				$text = lng('update.uc_newinfo', [(Settings::Get('system.update_channel') != 'stable' ? Settings::Get('system.update_channel') . ' ' : ''), AutoUpdate::getFromResult('version'), LibrePanel::VERSION]);
 				$mail = new Mailer(true);
 				$mail->Body = $text;
-				$mail->Subject = "[froxlor] " . lng('update.notify_subject');
+				$mail->Subject = "[librepanel] " . lng('update.notify_subject');
 				$mail->AddAddress(Settings::Get('panel.adminmail'), Settings::Get('panel.adminmail_defname'));
 				if (!$mail->Send() && $input->getOption('integer-return') == null) {
 					$output->writeln('<error>' . $mail->ErrorInfo . '</>');

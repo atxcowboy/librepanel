@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-return <<<'FROXLORSQL'
+return <<<'LIBREPANELSQL'
 DROP TABLE IF EXISTS `ftp_groups`;
 CREATE TABLE `ftp_groups` (
   `id` int(20) NOT NULL auto_increment,
@@ -154,7 +154,7 @@ CREATE TABLE `panel_admins` (
   `lastlogin_fail` int(11) unsigned NOT NULL default '0',
   `loginfail_count` int(11) unsigned NOT NULL default '0',
   `reportsent` tinyint(4) unsigned NOT NULL default '0',
-  `theme` varchar(50) NOT NULL default 'Froxlor',
+  `theme` varchar(50) NOT NULL default 'LibrePanel',
   `custom_notes` text,
   `custom_notes_show` tinyint(1) NOT NULL default '0',
   `type_2fa` tinyint(1) NOT NULL default '0',
@@ -217,7 +217,7 @@ CREATE TABLE `panel_customers` (
   `imap` tinyint(1) NOT NULL default '1',
   `perlenabled` tinyint(1) NOT NULL default '0',
   `dnsenabled` tinyint(1) NOT NULL default '0',
-  `theme` varchar(50) NOT NULL default 'Froxlor',
+  `theme` varchar(50) NOT NULL default 'LibrePanel',
   `custom_notes` text,
   `custom_notes_show` tinyint(1) NOT NULL default '0',
   `lepublickey` mediumtext default NULL,
@@ -388,7 +388,7 @@ INSERT INTO `panel_settings` (`settinggroup`, `varname`, `value`) VALUES
 	('logger', 'logtypes', 'syslog,mysql'),
 	('logger', 'severity', '1'),
 	('antispam', 'activated', '0'),
-	('antispam', 'config_file', '/etc/rspamd/local.d/froxlor_settings.conf'),
+	('antispam', 'config_file', '/etc/rspamd/local.d/librepanel_settings.conf'),
 	('antispam', 'reload_command', 'service rspamd restart'),
 	('antispam', 'dkim_keylength', '1024'),
 	('antispam', 'default_bypass_spam', '2'),
@@ -419,8 +419,8 @@ INSERT INTO `panel_settings` (`settinggroup`, `varname`, `value`) VALUES
 	('phpfpm', 'peardir', '/usr/share/php/:/usr/share/php5/'),
 	('phpfpm', 'envpath', '/usr/local/bin:/usr/bin:/bin'),
 	('phpfpm', 'enabled_ownvhost', '0'),
-	('phpfpm', 'vhost_httpuser', 'froxlorlocal'),
-	('phpfpm', 'vhost_httpgroup', 'froxlorlocal'),
+	('phpfpm', 'vhost_httpuser', 'librepanellocal'),
+	('phpfpm', 'vhost_httpgroup', 'librepanellocal'),
 	('phpfpm', 'aliasconfigdir', '/var/www/php-fpm/'),
 	('phpfpm', 'defaultini', '1'),
 	('phpfpm', 'vhost_defaultini', '2'),
@@ -542,7 +542,7 @@ opcache.validate_timestamps'),
 	('system', 'defaultip', '1'),
 	('system', 'defaultsslip', ''),
 	('system', 'phpappendopenbasedir', '/tmp/'),
-	('system', 'deactivateddocroot', '/var/www/html/froxlor/templates/misc/deactivated/'),
+	('system', 'deactivateddocroot', '/var/www/html/librepanel/templates/misc/deactivated/'),
 	('system', 'mailpwcleartext', '0'),
 	('system', 'last_tasks_run', '000000'),
 	('system', 'nameservers', ''),
@@ -550,12 +550,12 @@ opcache.validate_timestamps'),
 	('system', 'mod_fcgid', '0'),
 	('system', 'apacheconf_vhost', '/etc/apache2/sites-enabled/'),
 	('system', 'apacheconf_diroptions', '/etc/apache2/sites-enabled/'),
-	('system', 'apacheconf_htpasswddir', '/etc/apache2/froxlor-htpasswd/'),
+	('system', 'apacheconf_htpasswddir', '/etc/apache2/librepanel-htpasswd/'),
 	('system', 'webalizer_quiet', '2'),
 	('system', 'last_archive_run', '000000'),
 	('system', 'mod_fcgid_configdir', '/var/www/php-fcgi-scripts'),
 	('system', 'mod_fcgid_tmpdir', '/var/customers/tmp'),
-	('system', 'ssl_cert_file', '/etc/ssl/froxlor_selfsigned.pem'),
+	('system', 'ssl_cert_file', '/etc/ssl/librepanel_selfsigned.pem'),
 	('system', 'use_ssl', '0'),
 	('system', 'default_vhostconf', ''),
 	('system', 'default_sslvhostconf', ''),
@@ -568,7 +568,7 @@ opcache.validate_timestamps'),
 	('system', 'mod_fcgid_starter', '0'),
 	('system', 'mod_fcgid_peardir', '/usr/share/php/:/usr/share/php5/'),
 	('system', 'mod_fcgid_maxrequests', '250'),
-	('system', 'ssl_key_file','/etc/ssl/froxlor_selfsigned.key'),
+	('system', 'ssl_key_file','/etc/ssl/librepanel_selfsigned.key'),
 	('system', 'ssl_ca_file', ''),
 	('system', 'debug_cron', '0'),
 	('system', 'store_index_file_subs', '1'),
@@ -581,7 +581,7 @@ opcache.validate_timestamps'),
 	('system', 'ftpserver', 'proftpd'),
 	('system', 'dns_createmailentry', '0'),
 	('system', 'dns_createcaaentry', '1'),
-	('system', 'froxlordirectlyviahostname', '1'),
+	('system', 'librepaneldirectlyviahostname', '1'),
 	('system', 'report_enable', '1'),
 	('system', 'report_webmax', '90'),
 	('system', 'report_trafficmax', '90'),
@@ -593,8 +593,8 @@ opcache.validate_timestamps'),
 	('system', 'mod_fcgid_idle_timeout', '30'),
 	('system', 'perl_path', '/usr/bin/perl'),
 	('system', 'mod_fcgid_ownvhost', '0'),
-	('system', 'mod_fcgid_httpuser', 'froxlorlocal'),
-	('system', 'mod_fcgid_httpgroup', 'froxlorlocal'),
+	('system', 'mod_fcgid_httpuser', 'librepanellocal'),
+	('system', 'mod_fcgid_httpgroup', 'librepanellocal'),
 	('system', 'awstats_awstatspath', '/usr/lib/cgi-bin/'),
 	('system', 'mod_fcgid_defaultini_ownvhost', '2'),
 	('system', 'awstats_icons', '/usr/share/awstats/icon/'),
@@ -610,7 +610,7 @@ opcache.validate_timestamps'),
 	('system', 'passwordcryptfunc', '2y'),
 	('system', 'axfrservers', ''),
 	('system', 'powerdns_mode', 'Native'),
-	('system', 'customer_ssl_path', '/etc/ssl/froxlor-custom/'),
+	('system', 'customer_ssl_path', '/etc/ssl/librepanel-custom/'),
 	('system', 'allow_error_report_admin', '1'),
 	('system', 'allow_error_report_customer', '0'),
 	('system', 'mdalog', '/var/log/mail.log'),
@@ -618,7 +618,7 @@ opcache.validate_timestamps'),
 	('system', 'mdaserver', 'dovecot'),
 	('system', 'mtaserver', 'postfix'),
 	('system', 'mailtraffic_enabled', '1'),
-	('system', 'cronconfig', '/etc/cron.d/froxlor'),
+	('system', 'cronconfig', '/etc/cron.d/librepanel'),
 	('system', 'crondreload', 'service cron reload'),
 	('system', 'croncmdline', '/usr/bin/nice -n 5 /usr/bin/php -q'),
 	('system', 'cron_allowautoupdate', '0'),
@@ -628,7 +628,7 @@ opcache.validate_timestamps'),
 	('system', 'leprivatekey', 'unset'),
 	('system', 'lepublickey', 'unset'),
 	('system', 'letsencryptca', 'letsencrypt'),
-	('system', 'letsencryptchallengepath', '/var/www/html/froxlor'),
+	('system', 'letsencryptchallengepath', '/var/www/html/librepanel'),
 	('system', 'letsencryptkeysize', '4096'),
 	('system', 'letsencryptreuseold', 0),
 	('system', 'leenabled', '0'),
@@ -639,8 +639,8 @@ opcache.validate_timestamps'),
 	('system', 'apacheglobaldiropt', ''),
 	('system', 'allow_customer_shell', '0'),
 	('system', 'available_shells', ''),
-	('system', 'le_froxlor_enabled', '0'),
-	('system', 'le_froxlor_redirect', '0'),
+	('system', 'le_librepanel_enabled', '0'),
+	('system', 'le_librepanel_redirect', '0'),
 	('system', 'le_renew_hook', 'systemctl restart postfix dovecot proftpd'),
 	('system', 'le_renew_services', ''),
 	('system', 'letsencryptacmeconf', '/etc/apache2/conf-enabled/acme.conf'),
@@ -671,7 +671,7 @@ opcache.validate_timestamps'),
 	('system', 'dhparams_file', ''),
 	('system', 'errorlog_level', 'warn'),
 	('system', 'leecc', '0'),
-	('system', 'froxloraliases', ''),
+	('system', 'librepanelaliases', ''),
 	('system', 'apply_specialsettings_default', '1'),
 	('system', 'apply_phpconfigs_default', '1'),
 	('system', 'hide_incompatible_settings', '1'),
@@ -679,8 +679,8 @@ opcache.validate_timestamps'),
 	('system', 'soaemail', ''),
 	('system', 'domaindefaultalias', '0'),
 	('system', 'createstdsubdom_default', '1'),
-	('system', 'froxlorusergroup', ''),
-	('system', 'froxlorusergroup_gid', ''),
+	('system', 'librepanelusergroup', ''),
+	('system', 'librepanelusergroup_gid', ''),
 	('system', 'acmeshpath', '/root/.acme.sh/acme.sh'),
 	('system', 'distribution', ''),
 	('system', 'update_channel', 'stable'),
@@ -704,10 +704,10 @@ opcache.validate_timestamps'),
 	('panel', 'sendalternativemail', '0'),
 	('panel', 'allow_domain_change_admin', '0'),
 	('panel', 'allow_domain_change_customer', '0'),
-	('panel', 'frontend', 'froxlor'),
-	('panel', 'default_theme', 'Froxlor'),
+	('panel', 'frontend', 'librepanel'),
+	('panel', 'default_theme', 'LibrePanel'),
 	('panel', 'password_min_length', '0'),
-	('panel', 'adminmail_defname', 'Froxlor Administrator'),
+	('panel', 'adminmail_defname', 'LibrePanel Administrator'),
 	('panel', 'adminmail_return', ''),
 	('panel', 'unix_names', '1'),
 	('panel', 'allow_preset', '1'),
@@ -881,7 +881,7 @@ CREATE TABLE `panel_phpconfigs` (
 
 INSERT INTO `panel_phpconfigs` (`id`, `description`, `binary`, `file_extensions`, `mod_fcgid_starter`, `mod_fcgid_maxrequests`, `pass_authorizationheader`, `phpsettings`) VALUES
 (1, 'Default Config', '/usr/bin/php-cgi', 'php', '-1', '-1', '1', 'allow_url_fopen = Off\r\nallow_url_include = Off\r\nauto_append_file =\r\nauto_globals_jit = On\r\nauto_prepend_file =\r\nbcmath.scale = 0\r\ncli_server.color = On\r\ndefault_charset = "UTF-8"\r\ndefault_mimetype = "text/html"\r\ndefault_socket_timeout = 60\r\nasp_tags = Off\r\ndisable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,curl_exec,curl_multi_exec,exec,parse_ini_file,passthru,popen,proc_close,proc_get_status,proc_nice,proc_open,proc_terminate,shell_exec,show_source,system\r\ndisplay_errors = Off\r\ndisplay_startup_errors = Off\r\ndoc_root =\r\nenable_dl = Off\r\nerror_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE\r\nexpose_php = Off\r\nfile_uploads = On\r\nhtml_errors = On\r\nignore_repeated_errors = Off\r\nignore_repeated_source = Off\r\ninclude_path = ".:{PEAR_DIR}"\r\nimplicit_flush = Off\r\nldap.max_links = -1\r\nlog_errors = On\r\nlog_errors_max_len = 1024\r\nmail.add_x_header = Off\r\nmax_execution_time = 30\r\nmax_file_uploads = 20\r\nmax_input_time = 60\r\nmemory_limit = 128M\r\n{OPEN_BASEDIR_C}open_basedir = "{OPEN_BASEDIR}"\r\noutput_buffering = 4096\r\npost_max_size = 16M\r\nprecision = 14\r\nregister_argc_argv = Off\r\nreport_memleaks = On\r\nrequest_order = "GP"\r\nsendmail_path = "/usr/sbin/sendmail -t -i -f {CUSTOMER_EMAIL}"\r\nserialize_precision = -1\r\nsession.auto_start = 0\r\nsession.cache_expire = 180\r\nsession.cache_limiter = nocache\r\nsession.cookie_domain =\r\nsession.cookie_httponly =\r\nsession.cookie_lifetime = 0\r\nsession.cookie_path = /\r\nsession.cookie_samesite =\r\nsession.gc_divisor = 1000\r\nsession.gc_maxlifetime = 1440\r\nsession.gc_probability = 0\r\nsession.name = PHPSESSID\r\nsession.referer_check =\r\nsession.save_handler = files\r\nsession.save_path = "{TMP_DIR}"\r\nsession.serialize_handler = php\r\nsession.sid_bits_per_character = 5\r\nsession.sid_length = 26\r\nsession.trans_sid_tags = "a=href,area=href,frame=src,form="\r\nsession.use_cookies = 1\r\nsession.use_only_cookies = 1\r\nsession.use_strict_mode = 0\r\nsession.use_trans_sid = 0\r\nshort_open_tag = On\r\nupload_max_filesize = 32M\r\nupload_tmp_dir = "{TMP_DIR}"\r\nvariables_order = "GPCS"\r\nopcache.restrict_api = "{DOCUMENT_ROOT}"\r\n'),
-(2, 'Froxlor Vhost Config', '/usr/bin/php-cgi', 'php', '-1', '-1', '1', 'allow_url_fopen = On\r\nallow_url_include = Off\r\nauto_append_file =\r\nauto_globals_jit = On\r\nauto_prepend_file =\r\nbcmath.scale = 0\r\ncli_server.color = On\r\ndefault_charset = "UTF-8"\r\ndefault_mimetype = "text/html"\r\ndefault_socket_timeout = 60\r\nasp_tags = Off\r\ndisable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,curl_multi_exec,parse_ini_file,passthru,popen,proc_close,proc_get_status,proc_nice,proc_open,proc_terminate,shell_exec,show_source,system\r\ndisplay_errors = Off\r\ndisplay_startup_errors = Off\r\ndoc_root =\r\nenable_dl = Off\r\nerror_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE\r\nexpose_php = Off\r\nfile_uploads = On\r\nhtml_errors = On\r\nignore_repeated_errors = Off\r\nignore_repeated_source = Off\r\ninclude_path = ".:{PEAR_DIR}"\r\nimplicit_flush = Off\r\nldap.max_links = -1\r\nlog_errors = On\r\nlog_errors_max_len = 1024\r\nmail.add_x_header = Off\r\nmax_execution_time = 60\r\nmax_file_uploads = 20\r\nmax_input_time = 60\r\nmemory_limit = 128M\r\noutput_buffering = 4096\r\npost_max_size = 16M\r\nprecision = 14\r\nregister_argc_argv = Off\r\nreport_memleaks = On\r\nrequest_order = "GP"\r\nsendmail_path = "/usr/sbin/sendmail -t -i -f {CUSTOMER_EMAIL}"\r\nserialize_precision = -1\r\nsession.auto_start = 0\r\nsession.cache_expire = 180\r\nsession.cache_limiter = nocache\r\nsession.cookie_domain =\r\nsession.cookie_httponly =\r\nsession.cookie_lifetime = 0\r\nsession.cookie_path = /\r\nsession.cookie_samesite =\r\nsession.gc_divisor = 1000\r\nsession.gc_maxlifetime = 1440\r\nsession.gc_probability = 0\r\nsession.name = PHPSESSID\r\nsession.referer_check =\r\nsession.save_handler = files\r\nsession.save_path = "{TMP_DIR}"\r\nsession.serialize_handler = php\r\nsession.sid_bits_per_character = 5\r\nsession.sid_length = 26\r\nsession.trans_sid_tags = "a=href,area=href,frame=src,form="\r\nsession.use_cookies = 1\r\nsession.use_only_cookies = 1\r\nsession.use_strict_mode = 0\r\nsession.use_trans_sid = 0\r\nshort_open_tag = On\r\nupload_max_filesize = 32M\r\nupload_tmp_dir = "{TMP_DIR}"\r\nvariables_order = "GPCS"\r\nopcache.restrict_api = ""\r\n');
+(2, 'LibrePanel Vhost Config', '/usr/bin/php-cgi', 'php', '-1', '-1', '1', 'allow_url_fopen = On\r\nallow_url_include = Off\r\nauto_append_file =\r\nauto_globals_jit = On\r\nauto_prepend_file =\r\nbcmath.scale = 0\r\ncli_server.color = On\r\ndefault_charset = "UTF-8"\r\ndefault_mimetype = "text/html"\r\ndefault_socket_timeout = 60\r\nasp_tags = Off\r\ndisable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,curl_multi_exec,parse_ini_file,passthru,popen,proc_close,proc_get_status,proc_nice,proc_open,proc_terminate,shell_exec,show_source,system\r\ndisplay_errors = Off\r\ndisplay_startup_errors = Off\r\ndoc_root =\r\nenable_dl = Off\r\nerror_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE\r\nexpose_php = Off\r\nfile_uploads = On\r\nhtml_errors = On\r\nignore_repeated_errors = Off\r\nignore_repeated_source = Off\r\ninclude_path = ".:{PEAR_DIR}"\r\nimplicit_flush = Off\r\nldap.max_links = -1\r\nlog_errors = On\r\nlog_errors_max_len = 1024\r\nmail.add_x_header = Off\r\nmax_execution_time = 60\r\nmax_file_uploads = 20\r\nmax_input_time = 60\r\nmemory_limit = 128M\r\noutput_buffering = 4096\r\npost_max_size = 16M\r\nprecision = 14\r\nregister_argc_argv = Off\r\nreport_memleaks = On\r\nrequest_order = "GP"\r\nsendmail_path = "/usr/sbin/sendmail -t -i -f {CUSTOMER_EMAIL}"\r\nserialize_precision = -1\r\nsession.auto_start = 0\r\nsession.cache_expire = 180\r\nsession.cache_limiter = nocache\r\nsession.cookie_domain =\r\nsession.cookie_httponly =\r\nsession.cookie_lifetime = 0\r\nsession.cookie_path = /\r\nsession.cookie_samesite =\r\nsession.gc_divisor = 1000\r\nsession.gc_maxlifetime = 1440\r\nsession.gc_probability = 0\r\nsession.name = PHPSESSID\r\nsession.referer_check =\r\nsession.save_handler = files\r\nsession.save_path = "{TMP_DIR}"\r\nsession.serialize_handler = php\r\nsession.sid_bits_per_character = 5\r\nsession.sid_length = 26\r\nsession.trans_sid_tags = "a=href,area=href,frame=src,form="\r\nsession.use_cookies = 1\r\nsession.use_only_cookies = 1\r\nsession.use_strict_mode = 0\r\nsession.use_trans_sid = 0\r\nshort_open_tag = On\r\nupload_max_filesize = 32M\r\nupload_tmp_dir = "{TMP_DIR}"\r\nvariables_order = "GPCS"\r\nopcache.restrict_api = ""\r\n');
 
 
 DROP TABLE IF EXISTS `cronjobs_run`;
@@ -899,12 +899,12 @@ CREATE TABLE IF NOT EXISTS `cronjobs_run` (
 
 
 INSERT INTO `cronjobs_run` (`id`, `module`, `cronfile`, `cronclass`, `interval`, `isactive`, `desc_lng_key`) VALUES
-	(1, 'froxlor/core', 'tasks', '\\Froxlor\\Cron\\System\\TasksCron', '5 MINUTE', '1', 'cron_tasks'),
-	(2, 'froxlor/core', 'traffic', '\\Froxlor\\Cron\\Traffic\\TrafficCron', '1 DAY', '1', 'cron_traffic'),
-	(3, 'froxlor/reports', 'usage_report', '\\Froxlor\\Cron\\Traffic\\ReportsCron', '1 DAY', '1', 'cron_usage_report'),
-	(4, 'froxlor/core', 'mailboxsize', '\\Froxlor\\Cron\\System\\MailboxsizeCron', '6 HOUR', '1', 'cron_mailboxsize'),
-	(5, 'froxlor/letsencrypt', 'letsencrypt', '\\Froxlor\\Cron\\Http\\LetsEncrypt\\AcmeSh', '5 MINUTE', '0', 'cron_letsencrypt'),
-	(6, 'froxlor/export', 'export', '\\Froxlor\\Cron\\System\\ExportCron', '1 HOUR', '0', 'cron_export');
+	(1, 'librepanel/core', 'tasks', '\\LibrePanel\\Cron\\System\\TasksCron', '5 MINUTE', '1', 'cron_tasks'),
+	(2, 'librepanel/core', 'traffic', '\\LibrePanel\\Cron\\Traffic\\TrafficCron', '1 DAY', '1', 'cron_traffic'),
+	(3, 'librepanel/reports', 'usage_report', '\\LibrePanel\\Cron\\Traffic\\ReportsCron', '1 DAY', '1', 'cron_usage_report'),
+	(4, 'librepanel/core', 'mailboxsize', '\\LibrePanel\\Cron\\System\\MailboxsizeCron', '6 HOUR', '1', 'cron_mailboxsize'),
+	(5, 'librepanel/letsencrypt', 'letsencrypt', '\\LibrePanel\\Cron\\Http\\LetsEncrypt\\AcmeSh', '5 MINUTE', '0', 'cron_letsencrypt'),
+	(6, 'librepanel/export', 'export', '\\LibrePanel\\Cron\\System\\ExportCron', '1 HOUR', '0', 'cron_export');
 
 
 DROP TABLE IF EXISTS `ftp_quotalimits`;
@@ -923,7 +923,7 @@ CREATE TABLE IF NOT EXISTS `ftp_quotalimits` (
 
 
 INSERT INTO `ftp_quotalimits` (`name`, `quota_type`, `per_session`, `limit_type`, `bytes_in_avail`, `bytes_out_avail`, `bytes_xfer_avail`, `files_in_avail`, `files_out_avail`, `files_xfer_avail`) VALUES
-	('froxlor', 'user', 'false', 'hard', 0, 0, 0, 0, 0, 0);
+	('librepanel', 'user', 'false', 'hard', 0, 0, 0, 0, 0, 0);
 
 
 DROP TABLE IF EXISTS `ftp_quotatallies`;
@@ -1063,4 +1063,4 @@ CREATE TABLE `panel_2fa_tokens` (
   `valid_until` int(15) NOT NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-FROXLORSQL;
+LIBREPANELSQL;

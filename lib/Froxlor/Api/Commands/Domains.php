@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -72,7 +72,7 @@ class Domains extends ApiCommand implements ResourceEntity
 	{
 		if ($this->isAdmin()) {
 			$with_ips = $this->getParam('with_ips', true, true);
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] list domains");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] list domains");
 			$query_fields = [];
 			$result_stmt = Database::prepare("
 				SELECT
@@ -144,7 +144,7 @@ class Domains extends ApiCommand implements ResourceEntity
 	public function listingCount()
 	{
 		if ($this->isAdmin()) {
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] list domains");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] list domains");
 			$result_stmt = Database::prepare("
 				SELECT
 				COUNT(*) as num_domains
@@ -458,7 +458,7 @@ class Domains extends ApiCommand implements ResourceEntity
 						];
 						foreach ($p_ssl_protocols as $ssl_protocol) {
 							if (!in_array(trim($ssl_protocol), $protocols_available)) {
-								$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_DEBUG, "[API] unknown SSL protocol '" . trim($ssl_protocol) . "'");
+								$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_DEBUG, "[API] unknown SSL protocol '" . trim($ssl_protocol) . "'");
 								continue;
 							}
 							$ssl_protocols[] = $ssl_protocol;
@@ -842,7 +842,7 @@ class Domains extends ApiCommand implements ResourceEntity
 						Cronjob::inserttask(TaskId::REBUILD_RSPAMD);
 					}
 
-					$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] added domain '" . $domain . "'");
+					$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] added domain '" . $domain . "'");
 
 					$result = $this->apiCall('Domains.get', [
 						'domainname' => $domain
@@ -905,7 +905,7 @@ class Domains extends ApiCommand implements ResourceEntity
 					$result['ipsandports'] = $this->getIpsForDomain($result['id']);
 				}
 				$result['domain_hascert'] = $this->getHasCertValueForDomain((int)$result['id'], (int)$result['parentdomainid']);
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "[API] get domain '" . $result['domain'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "[API] get domain '" . $result['domain'] . "'");
 				return $this->response($result);
 			}
 			$key = ($id > 0 ? "id #" . $id : "domainname '" . $domainname . "'");
@@ -1450,7 +1450,7 @@ class Domains extends ApiCommand implements ResourceEntity
 					];
 					foreach ($p_ssl_protocols as $ssl_protocol) {
 						if (!in_array(trim($ssl_protocol), $protocols_available)) {
-							$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_DEBUG, "[API] unknown SSL protocol '" . trim($ssl_protocol) . "'");
+							$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_DEBUG, "[API] unknown SSL protocol '" . trim($ssl_protocol) . "'");
 							continue;
 						}
 						$ssl_protocols[] = $ssl_protocol;
@@ -1722,7 +1722,7 @@ class Domains extends ApiCommand implements ResourceEntity
 				Database::pexecute($del_stmt, [
 					'id' => $id
 				], true, true);
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] deleted domain #" . $id . " from mail-tables as is-email-domain was set to 0");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] deleted domain #" . $id . " from mail-tables as is-email-domain was set to 0");
 			}
 
 			// check whether LE has been disabled, so we remove the certificate
@@ -1818,7 +1818,7 @@ class Domains extends ApiCommand implements ResourceEntity
 				Database::pexecute($upd_stmt, [
 					'id' => $id
 				], true, true);
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] removed specialsettings on all subdomains of domain #" . $id);
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] removed specialsettings on all subdomains of domain #" . $id);
 			}
 
 			$wwwserveralias = ($serveraliasoption == '1') ? '1' : '0';
@@ -1941,7 +1941,7 @@ class Domains extends ApiCommand implements ResourceEntity
 					'domainid' => $id
 				]);
 
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] " . ($deactivated ? 'deactivated' : 'reactivated') . " domain '" . $result['domain'] . "'");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] " . ($deactivated ? 'deactivated' : 'reactivated') . " domain '" . $result['domain'] . "'");
 				Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			}
 
@@ -2100,7 +2100,7 @@ class Domains extends ApiCommand implements ResourceEntity
 			}
 
 			$idna_convert = new IdnaWrapper();
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] updated domain '" . $idna_convert->decode($result['domain']) . "'");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] updated domain '" . $idna_convert->decode($result['domain']) . "'");
 			$result = $this->apiCall('Domains.get', [
 				'domainname' => $result['domain']
 			]);
@@ -2171,7 +2171,7 @@ class Domains extends ApiCommand implements ResourceEntity
 				$del_stmt = Database::prepare("
 						DELETE FROM `" . TABLE_MAIL_VIRTUAL . "` WHERE " . $idString);
 				Database::pexecute($del_stmt, $paramString, true, true);
-				$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "[API] deleted domain/s from mail-tables");
+				$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "[API] deleted domain/s from mail-tables");
 			}
 
 			$del_stmt = Database::prepare("
@@ -2253,7 +2253,7 @@ class Domains extends ApiCommand implements ResourceEntity
 			// remove domain from acme.sh / lets encrypt if used
 			Cronjob::inserttask(TaskId::DELETE_DOMAIN_SSL, $result['domain']);
 
-			$this->logger()->logAction(FroxlorLogger::ADM_ACTION, LOG_WARNING, "[API] deleted domain/subdomains (#" . $result['id'] . ")");
+			$this->logger()->logAction(LibrePanelLogger::ADM_ACTION, LOG_WARNING, "[API] deleted domain/subdomains (#" . $result['id'] . ")");
 			User::updateCounters();
 			Cronjob::inserttask(TaskId::REBUILD_VHOST);
 			// Using nameserver, insert a task which rebuilds the server config

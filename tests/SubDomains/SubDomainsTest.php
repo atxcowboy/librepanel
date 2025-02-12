@@ -1,18 +1,18 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\SubDomains;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\SubDomains;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\SubDomains
- * @covers \Froxlor\Api\Commands\Domains
- * @covers \Froxlor\Api\Commands\Customers
- * @covers \Froxlor\Api\Commands\Admins
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\SubDomains
+ * @covers \LibrePanel\Api\Commands\Domains
+ * @covers \LibrePanel\Api\Commands\Customers
+ * @covers \LibrePanel\Api\Commands\Admins
  */
 class SubDomainsTest extends TestCase
 {
@@ -68,7 +68,7 @@ class SubDomainsTest extends TestCase
 
 		$data = [
 			'subdomain' => 'xn--asd',
-			'domain' => 'unknown.froxlor.org'
+			'domain' => 'unknown.librepanel.org'
 		];
 		$this->expectExceptionMessage('You must not specify punycode (IDNA). The domain will automatically be converted');
 		SubDomains::getLocal($customer_userdata, $data)->add();
@@ -86,9 +86,9 @@ class SubDomainsTest extends TestCase
 
 		$data = [
 			'subdomain' => 'wohoo',
-			'domain' => 'unknown.froxlor.org'
+			'domain' => 'unknown.librepanel.org'
 		];
-		$this->expectExceptionMessage('The main-domain unknown.froxlor.org does not exist.');
+		$this->expectExceptionMessage('The main-domain unknown.librepanel.org does not exist.');
 		SubDomains::getLocal($customer_userdata, $data)->add();
 	}
 
@@ -104,7 +104,7 @@ class SubDomainsTest extends TestCase
 
 		$data = [
 			'subdomain' => '#+?',
-			'domain' => 'unknown.froxlor.org'
+			'domain' => 'unknown.librepanel.org'
 		];
 		$this->expectExceptionMessage("Wrong Input in Field 'Domain'");
 		SubDomains::getLocal($customer_userdata, $data)->add();
@@ -181,12 +181,12 @@ class SubDomainsTest extends TestCase
 		$customer_userdata = json_decode($json_result, true)['data'];
 		$data = [
 			'domainname' => 'mysub.test2.local',
-			'url' => 'https://www.froxlor.org/',
+			'url' => 'https://www.librepanel.org/',
 			'isemaildomain' => 0
 		];
 		$json_result = SubDomains::getLocal($customer_userdata, $data)->update();
 		$result = json_decode($json_result, true)['data'];
-		$this->assertEquals('https://www.froxlor.org/', $result['documentroot']);
+		$this->assertEquals('https://www.librepanel.org/', $result['documentroot']);
 	}
 
 	public function testCustomerSubDomainsList()
@@ -268,7 +268,7 @@ class SubDomainsTest extends TestCase
 		$json_result = Customers::getLocal($admin_userdata, array(
 			'loginname' => 'test1'
 		))->get();
-		\Froxlor\Settings::Set('system.le_domain_dnscheck', 1);
+		\LibrePanel\Settings::Set('system.le_domain_dnscheck', 1);
 		$customer_userdata = json_decode($json_result, true)['data'];
 		$data = [
 			'subdomain' => 'nodns',

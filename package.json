@@ -1,5 +1,5 @@
 {
-	"name": "froxlor",
+	"name": "librepanel",
 	"private": true,
 	"scripts": {
 		"dev": "vite",

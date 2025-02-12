@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http\Php;
+namespace LibrePanel\Cron\Http\Php;
 
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
 
 class Fpm
 {
@@ -153,7 +153,7 @@ pm.max_children = 1
 			$fpm_config = ';PHP-FPM configuration for "' . $this->domain['domain'] . '" created on ' . date("Y.m.d H:i:s") . "\n";
 			$fpm_config .= '[' . $this->domain['domain'] . ']' . "\n";
 			$fpm_config .= 'listen = ' . $this->getSocketFile() . "\n";
-			if ($this->domain['loginname'] == 'froxlor.panel') {
+			if ($this->domain['loginname'] == 'librepanel.panel') {
 				$fpm_config .= 'listen.owner = ' . $this->domain['guid'] . "\n";
 				$fpm_config .= 'listen.group = ' . $this->domain['guid'] . "\n";
 			} else {
@@ -163,7 +163,7 @@ pm.max_children = 1
 			// see #1418 why this is 0660
 			$fpm_config .= 'listen.mode = 0660' . "\n";
 
-			if ($this->domain['loginname'] == 'froxlor.panel') {
+			if ($this->domain['loginname'] == 'librepanel.panel') {
 				$fpm_config .= 'user = ' . $this->domain['guid'] . "\n";
 				$fpm_config .= 'group = ' . $this->domain['guid'] . "\n";
 			} else {
@@ -224,7 +224,7 @@ pm.max_children = 1
 			$fpm_config .= 'env[TEMP] = ' . $tmpdir . "\n";
 
 			$openbasedir = '';
-			if ($this->domain['loginname'] != 'froxlor.panel') {
+			if ($this->domain['loginname'] != 'librepanel.panel') {
 				if ($this->domain['openbasedir'] == '1') {
 					$_phpappendopenbasedir = '';
 					$_custom_openbasedir = explode(':', Settings::Get('phpfpm.peardir'));

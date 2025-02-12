@@ -1,13 +1,13 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Domains;
-use Froxlor\Bulk\DomainBulkAction;
+use LibrePanel\Api\Commands\Domains;
+use LibrePanel\Bulk\DomainBulkAction;
 
 /**
  *
- * @covers \Froxlor\Bulk\BulkAction
- * @covers \Froxlor\Bulk\DomainBulkAction
+ * @covers \LibrePanel\Bulk\BulkAction
+ * @covers \LibrePanel\Bulk\DomainBulkAction
  */
 class DomainBulkTest extends TestCase
 {

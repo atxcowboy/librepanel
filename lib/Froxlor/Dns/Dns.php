@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Dns;
+namespace LibrePanel\Dns;
 
-use Froxlor\Database\Database;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\Settings;
-use Froxlor\UI\Response;
+use LibrePanel\Database\Database;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Response;
 use PDO;
 
 class Dns
@@ -76,16 +76,16 @@ class Dns
 	}
 
 	/**
-	 * @param int|array $domain_id id of domain or in case of froxlorhostname, a domain-array with the needed data
-	 * @param bool $froxlorhostname
+	 * @param int|array $domain_id id of domain or in case of librepanelhostname, a domain-array with the needed data
+	 * @param bool $librepanelhostname
 	 * @param bool $isMainButSubTo
 	 *
 	 * @return DnsZone|void
 	 * @throws \Exception
 	 */
-	public static function createDomainZone($domain_id, bool $froxlorhostname = false, bool $isMainButSubTo = false)
+	public static function createDomainZone($domain_id, bool $librepanelhostname = false, bool $isMainButSubTo = false)
 	{
-		if (!$froxlorhostname) {
+		if (!$librepanelhostname) {
 			// get domain-name
 			$dom_stmt = Database::prepare("SELECT * FROM `" . TABLE_PANEL_DOMAINS . "` WHERE id = :did");
 			$domain = Database::pexecute_first($dom_stmt, [
@@ -100,7 +100,7 @@ class Dns
 		}
 
 		$dom_entries = [];
-		if (!$froxlorhostname) {
+		if (!$librepanelhostname) {
 			// select all entries
 			$sel_stmt = Database::prepare("SELECT * FROM `" . TABLE_DOMAIN_DNS . "` WHERE domain_id = :did ORDER BY id ASC");
 			Database::pexecute($sel_stmt, [
@@ -137,7 +137,7 @@ class Dns
 			self::addRequiredEntry('www', 'AAAA', $required_entries);
 		}
 
-		if (!$froxlorhostname) {
+		if (!$librepanelhostname) {
 			// additional required records for subdomains
 			$subdomains_stmt = Database::prepare("
 				SELECT `domain`, `iswildcarddomain`, `wwwserveralias`, `isemaildomain` FROM `" . TABLE_PANEL_DOMAINS . "`
@@ -295,8 +295,8 @@ class Dns
 		if (!empty($required_entries)) {
 			// A / AAAA records
 			if (array_key_exists("A", $required_entries) || array_key_exists("AAAA", $required_entries)) {
-				if ($froxlorhostname) {
-					// use all available IP's for the froxlor-hostname
+				if ($librepanelhostname) {
+					// use all available IP's for the librepanel-hostname
 					$result_ip_stmt = Database::prepare("
 						SELECT `ip` FROM `" . TABLE_PANEL_IPSANDPORTS . "` GROUP BY `ip`
 					");
@@ -487,7 +487,7 @@ class Dns
 		if (!$isMainButSubTo) {
 			$date = date('Ymd');
 			$domain['bindserial'] = (preg_match('/^' . $date . '/', $domain['bindserial']) ? $domain['bindserial'] + 1 : $date . '00');
-			if (!$froxlorhostname) {
+			if (!$librepanelhostname) {
 				$upd_stmt = Database::prepare("
 					UPDATE `" . TABLE_PANEL_DOMAINS . "` SET
 					`bindserial` = :serial

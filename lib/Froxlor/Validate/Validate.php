@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Validate;
+namespace LibrePanel\Validate;
 
 use Exception;
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\Idna\IdnaWrapper;
-use Froxlor\System\IPTools;
-use Froxlor\UI\Response;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Idna\IdnaWrapper;
+use LibrePanel\System\IPTools;
+use LibrePanel\UI\Response;
 
 class Validate
 {
@@ -89,8 +89,8 @@ class Validate
 				// everything else is removed from the string.
 				$allowed = "/[^a-z0-9\\040\\.\\-\\_\\\\]/i";
 				$str = preg_replace($allowed, "", $str);
-				$log = FroxlorLogger::getInstanceOf();
-				$log->logAction(FroxlorLogger::USR_ACTION, LOG_WARNING, "cleaned bad formatted string (" . $str . ")");
+				$log = LibrePanelLogger::getInstanceOf();
+				$log->logAction(LibrePanelLogger::USR_ACTION, LOG_WARNING, "cleaned bad formatted string (" . $str . ")");
 			}
 		}
 
@@ -109,7 +109,7 @@ class Validate
 	 * Checks whether it is a valid ip
 	 *
 	 * @param string $ip ip-address to check
-	 * @param bool $return_bool whether to return bool or call \Froxlor\UI\Response::standard_error()
+	 * @param bool $return_bool whether to return bool or call \LibrePanel\UI\Response::standard_error()
 	 * @param string $lng index for error-message (if $return_bool is false)
 	 * @param bool $allow_localhost whether to allow 127.0.0.1
 	 * @param bool $allow_priv whether to allow private network addresses

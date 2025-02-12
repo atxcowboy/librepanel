@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,30 +16,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\Php\PhpInterface;
-use Froxlor\Cron\TaskId;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\Domain\Domain;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Http\Directory;
-use Froxlor\Http\Statistics;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
-use Froxlor\System\Crypt;
-use Froxlor\Validate\Validate;
+use LibrePanel\Cron\Http\Php\PhpInterface;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\Domain\Domain;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Http\Directory;
+use LibrePanel\Http\Statistics;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
+use LibrePanel\System\Crypt;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 class Apache extends HttpConfigBase
@@ -75,8 +75,8 @@ class Apache extends HttpConfigBase
 				$ipport = $row_ipsandports['ip'] . ':' . $row_ipsandports['port'];
 			}
 
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'apache::createIpPort: creating ip/port settings for  ' . $ipport);
-			$vhosts_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_froxlor_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'apache::createIpPort: creating ip/port settings for  ' . $ipport);
+			$vhosts_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_vhost') . '/10_librepanel_ipandport_' . trim(str_replace(':', '.', $row_ipsandports['ip']), '.') . '.' . $row_ipsandports['port'] . '.conf');
 
 			if (!isset($this->virtualhosts_data[$vhosts_filename])) {
 				$this->virtualhosts_data[$vhosts_filename] = '';
@@ -84,16 +84,16 @@ class Apache extends HttpConfigBase
 
 			if ($row_ipsandports['listen_statement'] == '1') {
 				$this->virtualhosts_data[$vhosts_filename] .= 'Listen ' . $ipport . "\n";
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted listen-statement');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted listen-statement');
 			}
 
 			if ($row_ipsandports['namevirtualhost_statement'] == '1') {
 				// >=apache-2.4 enabled?
 				if (Settings::Get('system.apache24') == '1') {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, $ipport . ' :: namevirtualhost-statement no longer needed for apache-2.4');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, $ipport . ' :: namevirtualhost-statement no longer needed for apache-2.4');
 				} else {
 					$this->virtualhosts_data[$vhosts_filename] .= 'NameVirtualHost ' . $ipport . "\n";
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted namevirtualhost-statement');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted namevirtualhost-statement');
 				}
 			}
 
@@ -110,11 +110,11 @@ class Apache extends HttpConfigBase
 				if ($row_ipsandports['vhostcontainer_servername_statement'] == '1') {
 					$this->virtualhosts_data[$vhosts_filename] .= ' ServerName ' . Settings::Get('system.hostname') . "\n";
 
-					$froxlor_aliases = Settings::Get('system.froxloraliases');
-					if (!empty($froxlor_aliases)) {
-						$froxlor_aliases = explode(",", $froxlor_aliases);
+					$librepanel_aliases = Settings::Get('system.librepanelaliases');
+					if (!empty($librepanel_aliases)) {
+						$librepanel_aliases = explode(",", $librepanel_aliases);
 						$aliases = "";
-						foreach ($froxlor_aliases as $falias) {
+						foreach ($librepanel_aliases as $falias) {
 							if (Validate::validateDomain(trim($falias))) {
 								$aliases .= trim($falias) . " ";
 							}
@@ -128,11 +128,11 @@ class Apache extends HttpConfigBase
 
 				$is_redirect = false;
 				// check for SSL redirect
-				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_froxlor_redirect') == '1') {
+				if ($row_ipsandports['ssl'] == '0' && Settings::Get('system.le_librepanel_redirect') == '1') {
 					$is_redirect = true;
-					// check whether froxlor uses Let's Encrypt and not cert is being generated yet
+					// check whether librepanel uses Let's Encrypt and not cert is being generated yet
 					// or a renewal is ongoing - disable redirect
-					if (Settings::Get('system.le_froxlor_enabled') && ($this->froxlorVhostHasLetsEncryptCert() == false || $this->froxlorVhostLetsEncryptNeedsRenew())) {
+					if (Settings::Get('system.le_librepanel_enabled') && ($this->librepanelVhostHasLetsEncryptCert() == false || $this->librepanelVhostLetsEncryptNeedsRenew())) {
 						$this->virtualhosts_data[$vhosts_filename] .= '# temp. disabled ssl-redirect due to Let\'s Encrypt certificate generation.' . PHP_EOL;
 						$is_redirect = false;
 						Cronjob::inserttask(TaskId::REBUILD_VHOST);
@@ -147,7 +147,7 @@ class Apache extends HttpConfigBase
 						$this->virtualhosts_data[$vhosts_filename] .= '  <IfModule mod_rewrite.c>' . "\n";
 						$this->virtualhosts_data[$vhosts_filename] .= '    RewriteEngine On' . "\n";
 						$this->virtualhosts_data[$vhosts_filename] .= '    RewriteCond %{HTTPS} off' . "\n";
-						if (Settings::Get('system.le_froxlor_enabled') == '1') {
+						if (Settings::Get('system.le_librepanel_enabled') == '1') {
 							$this->virtualhosts_data[$vhosts_filename] .= '    RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge' . "\n";
 						}
 						$this->virtualhosts_data[$vhosts_filename] .= '    RewriteRule ^/(.*) ' . $mypath . '$1' . $modrew_red . "\n";
@@ -159,10 +159,10 @@ class Apache extends HttpConfigBase
 				}
 
 				if (!$is_redirect) {
-					if (Settings::Get('system.froxlordirectlyviahostname')) {
+					if (Settings::Get('system.librepaneldirectlyviahostname')) {
 						$relpath = "/";
 					} else {
-						$relpath = "/" . basename(Froxlor::getInstallDir());
+						$relpath = "/" . basename(LibrePanel::getInstallDir());
 					}
 					// protect lib/userdata.inc.php
 					$this->virtualhosts_data[$vhosts_filename] .= '  <Directory "' . rtrim($relpath, "/") . '/lib/">' . "\n";
@@ -187,7 +187,7 @@ class Apache extends HttpConfigBase
 
 					// create fcgid <Directory>-Part (starter is created in apache_fcgid)
 					if (Settings::Get('system.mod_fcgid_ownvhost') == '1' && Settings::Get('system.mod_fcgid') == '1') {
-						$configdir = FileDir::makeCorrectDir(Settings::Get('system.mod_fcgid_configdir') . '/froxlor.panel/' . Settings::Get('system.hostname'));
+						$configdir = FileDir::makeCorrectDir(Settings::Get('system.mod_fcgid_configdir') . '/librepanel.panel/' . Settings::Get('system.hostname'));
 						$this->virtualhosts_data[$vhosts_filename] .= '  FcgidIdleTimeout ' . Settings::Get('system.mod_fcgid_idle_timeout') . "\n";
 						if ((int)Settings::Get('system.mod_fcgid_wrapper') == 0) {
 							$this->virtualhosts_data[$vhosts_filename] .= '  SuexecUserGroup "' . Settings::Get('system.mod_fcgid_httpuser') . '" "' . Settings::Get('system.mod_fcgid_httpgroup') . '"' . "\n";
@@ -202,7 +202,7 @@ class Apache extends HttpConfigBase
 								'guid' => Settings::Get('system.mod_fcgid_httpuser'),
 								'openbasedir' => 0,
 								'email' => Settings::Get('panel.adminmail'),
-								'loginname' => 'froxlor.panel',
+								'loginname' => 'librepanel.panel',
 								'documentroot' => $mypath,
 								'customerroot' => $mypath
 							];
@@ -257,7 +257,7 @@ class Apache extends HttpConfigBase
 							'guid' => Settings::Get('phpfpm.vhost_httpuser'),
 							'openbasedir' => 0,
 							'email' => Settings::Get('panel.adminmail'),
-							'loginname' => 'froxlor.panel',
+							'loginname' => 'librepanel.panel',
 							'documentroot' => $mypath,
 							'customerroot' => $mypath,
 							'fpm_config_id' => isset($fpm_config['id']) ? $fpm_config['id'] : 1
@@ -335,17 +335,17 @@ class Apache extends HttpConfigBase
 							'guid' => Settings::Get('system.httpuser'),
 							'openbasedir' => 0,
 							'email' => Settings::Get('panel.adminmail'),
-							'loginname' => 'froxlor.panel',
+							'loginname' => 'librepanel.panel',
 							'documentroot' => $mypath,
 							'customerroot' => $mypath
 						];
 					}
 					// end of ssl-redirect check
 				} else {
-					// fallback of froxlor domain-data for processSpecialConfigTemplate()
+					// fallback of librepanel domain-data for processSpecialConfigTemplate()
 					$domain = [
 						'domain' => Settings::Get('system.hostname'),
-						'loginname' => 'froxlor.panel',
+						'loginname' => 'librepanel.panel',
 						'documentroot' => $mypath,
 						'customerroot' => $mypath
 					];
@@ -377,10 +377,10 @@ class Apache extends HttpConfigBase
 					}
 
 					// check for required fallback
-					if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_froxlor_enabled') == '0' || $this->froxlorVhostHasLetsEncryptCert() == false)) {
+					if (($row_ipsandports['ssl_cert_file'] == '' || !file_exists($row_ipsandports['ssl_cert_file'])) && (Settings::Get('system.le_librepanel_enabled') == '0' || $this->librepanelVhostHasLetsEncryptCert() == false)) {
 						$row_ipsandports['ssl_cert_file'] = Settings::Get('system.ssl_cert_file');
 						if (!file_exists($row_ipsandports['ssl_cert_file'])) {
-							FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
+							LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Creating self-signed certificate...');
 							Crypt::createSelfSignedCertificate();
 						}
 					}
@@ -390,7 +390,7 @@ class Apache extends HttpConfigBase
 						if (!file_exists($row_ipsandports['ssl_key_file'])) {
 							// explicitly disable ssl for this vhost
 							$row_ipsandports['ssl_cert_file'] = "";
-							FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
+							LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . Settings::Get('system.hostname') . '"');
 						}
 					}
 
@@ -407,7 +407,7 @@ class Apache extends HttpConfigBase
 						'id' => 0,
 						'domain' => Settings::Get('system.hostname'),
 						'adminid' => 1, /* first admin-user (superadmin) */
-						'loginname' => 'froxlor.panel',
+						'loginname' => 'librepanel.panel',
 						'documentroot' => $mypath,
 						'customerroot' => $mypath,
 						'parentdomainid' => 0,
@@ -430,7 +430,7 @@ class Apache extends HttpConfigBase
 					if ($domain['ssl_cert_file'] != '') {
 						// check for existence, #1485
 						if (!file_exists($domain['ssl_cert_file'])) {
-							FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate file "' . $domain['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
+							LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate file "' . $domain['ssl_cert_file'] . '" does not exist! Cannot create ssl-directives');
 						} else {
 							$this->virtualhosts_data[$vhosts_filename] .= ' SSLEngine On' . "\n";
 							$this->virtualhosts_data[$vhosts_filename] .= ' SSLProtocol -ALL +' . str_replace(",", " +", Settings::Get('system.ssl_protocols')) . "\n";
@@ -463,7 +463,7 @@ class Apache extends HttpConfigBase
 							if ($domain['ssl_key_file'] != '') {
 								// check for existence, #1485
 								if (!file_exists($domain['ssl_key_file'])) {
-									FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate key file "' . $domain['ssl_key_file'] . '" does not exist! Cannot create ssl-directives');
+									LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate key file "' . $domain['ssl_key_file'] . '" does not exist! Cannot create ssl-directives');
 								} else {
 									$this->virtualhosts_data[$vhosts_filename] .= ' SSLCertificateKeyFile ' . FileDir::makeCorrectFile($domain['ssl_key_file']) . "\n";
 								}
@@ -472,7 +472,7 @@ class Apache extends HttpConfigBase
 							if ($domain['ssl_ca_file'] != '') {
 								// check for existence, #1485
 								if (!file_exists($domain['ssl_ca_file'])) {
-									FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate CA file "' . $domain['ssl_ca_file'] . '" does not exist! Cannot create ssl-directives');
+									LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate CA file "' . $domain['ssl_ca_file'] . '" does not exist! Cannot create ssl-directives');
 								} else {
 									$this->virtualhosts_data[$vhosts_filename] .= ' SSLCACertificateFile ' . FileDir::makeCorrectFile($domain['ssl_ca_file']) . "\n";
 								}
@@ -482,7 +482,7 @@ class Apache extends HttpConfigBase
 							if ($domain['ssl_cert_chainfile'] != '') {
 								// check for existence, #1485
 								if (!file_exists($domain['ssl_cert_chainfile'])) {
-									FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate chain file "' . $domain['ssl_cert_chainfile'] . '" does not exist! Cannot create ssl-directives');
+									LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $ipport . ' :: certificate chain file "' . $domain['ssl_cert_chainfile'] . '" does not exist! Cannot create ssl-directives');
 								} else {
 									$this->virtualhosts_data[$vhosts_filename] .= ' SSLCertificateChainFile ' . FileDir::makeCorrectFile($domain['ssl_cert_chainfile']) . "\n";
 								}
@@ -491,7 +491,7 @@ class Apache extends HttpConfigBase
 					} else {
 						// if there is no cert-file specified but we are generating a ssl-vhost,
 						// we should return an empty string because this vhost would suck dick, ref #1583
-						FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $domain['domain'] . ' :: empty certificate file! Cannot create ssl-directives');
+						LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $domain['domain'] . ' :: empty certificate file! Cannot create ssl-directives');
 						$this->virtualhosts_data[$vhosts_filename] = $without_vhost;
 						$this->virtualhosts_data[$vhosts_filename] .= '# no ssl-certificate was specified for this domain, therefore no explicit vhost-container is being generated';
 						$close_vhost = false;
@@ -501,7 +501,7 @@ class Apache extends HttpConfigBase
 				if ($close_vhost) {
 					$this->virtualhosts_data[$vhosts_filename] .= '</VirtualHost>' . "\n";
 				}
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted vhostcontainer');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, $ipport . ' :: inserted vhostcontainer');
 			}
 			unset($vhosts_filename);
 		}
@@ -522,7 +522,7 @@ class Apache extends HttpConfigBase
 	 */
 	private function createStandardDirectoryEntry()
 	{
-		$vhosts_filename = $this->getCustomVhostFilename('05_froxlor_dirfix_nofcgid.conf');
+		$vhosts_filename = $this->getCustomVhostFilename('05_librepanel_dirfix_nofcgid.conf');
 
 		if (!isset($this->virtualhosts_data[$vhosts_filename])) {
 			$this->virtualhosts_data[$vhosts_filename] = '';
@@ -546,12 +546,12 @@ class Apache extends HttpConfigBase
 		}
 		$this->virtualhosts_data[$vhosts_filename] .= '  </Directory>' . "\n";
 
-		$ocsp_cache_filename = $this->getCustomVhostFilename('03_froxlor_ocsp_cache.conf');
+		$ocsp_cache_filename = $this->getCustomVhostFilename('03_librepanel_ocsp_cache.conf');
 		if (Settings::Get('system.use_ssl') == '1' && Settings::Get('system.apache24') == 1) {
 			$this->virtualhosts_data[$ocsp_cache_filename] = 'SSLStaplingCache ' . Settings::Get('system.apache24_ocsp_cache_path') . "\n";
 		} else {
 			if (file_exists($ocsp_cache_filename)) {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'apache::_createStandardDirectoryEntry: unlinking ' . basename($ocsp_cache_filename));
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'apache::_createStandardDirectoryEntry: unlinking ' . basename($ocsp_cache_filename));
 				unlink(FileDir::makeCorrectFile($ocsp_cache_filename));
 			}
 		}
@@ -563,7 +563,7 @@ class Apache extends HttpConfigBase
 	private function createStandardErrorHandler()
 	{
 		if (Settings::Get('defaultwebsrverrhandler.enabled') == '1' && (Settings::Get('defaultwebsrverrhandler.err401') != '' || Settings::Get('defaultwebsrverrhandler.err403') != '' || Settings::Get('defaultwebsrverrhandler.err404') != '' || Settings::Get('defaultwebsrverrhandler.err500') != '')) {
-			$vhosts_filename = $this->getCustomVhostFilename('05_froxlor_default_errorhandler.conf');
+			$vhosts_filename = $this->getCustomVhostFilename('05_librepanel_default_errorhandler.conf');
 
 			if (!isset($this->virtualhosts_data[$vhosts_filename])) {
 				$this->virtualhosts_data[$vhosts_filename] = '';
@@ -601,7 +601,7 @@ class Apache extends HttpConfigBase
 	{
 		$domains = WebserverBase::getVhostsToCreate();
 		foreach ($domains as $domain) {
-			FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'apache::createVirtualHosts: creating vhost container for domain ' . $domain['id'] . ', customer ' . $domain['loginname']);
+			LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'apache::createVirtualHosts: creating vhost container for domain ' . $domain['id'] . ', customer ' . $domain['loginname']);
 			$vhosts_filename = $this->getVhostFilename($domain);
 
 			// Apply header
@@ -719,7 +719,7 @@ class Apache extends HttpConfigBase
 				if (!file_exists($domain['ssl_cert_file'])) {
 					// explicitly disable ssl for this vhost
 					$domain['ssl_cert_file'] = "";
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate file "' . Settings::Get('system.ssl_cert_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
 				}
 			}
 
@@ -728,7 +728,7 @@ class Apache extends HttpConfigBase
 				if (!file_exists($domain['ssl_key_file'])) {
 					// explicitly disable ssl for this vhost
 					$domain['ssl_cert_file'] = "";
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_DEBUG, 'System certificate key-file "' . Settings::Get('system.ssl_key_file') . '" does not seem to exist. Disabling SSL-vhost for "' . $domain['domain'] . '"');
 				}
 			}
 
@@ -803,7 +803,7 @@ class Apache extends HttpConfigBase
 			} else {
 				// if there is no cert-file specified but we are generating a ssl-vhost,
 				// we should return an empty string because this vhost would suck dick, ref #1583
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_ERR, $domain['domain'] . ' :: empty certificate file! Cannot create ssl-directives');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_ERR, $domain['domain'] . ' :: empty certificate file! Cannot create ssl-directives');
 				return '# no ssl-certificate was specified for this domain, therefore no explicit vhost is being generated';
 			}
 		}
@@ -1194,7 +1194,7 @@ class Apache extends HttpConfigBase
 		foreach ($diroptions as $row_diroptions) {
 			$row_diroptions['path'] = FileDir::makeCorrectDir($row_diroptions['path']);
 			FileDir::mkDirWithCorrectOwnership($row_diroptions['customerroot'], $row_diroptions['path'], $row_diroptions['guid'], $row_diroptions['guid']);
-			$diroptions_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_diroptions') . '/40_froxlor_diroption_' . md5($row_diroptions['path']) . '.conf');
+			$diroptions_filename = FileDir::makeCorrectFile(Settings::Get('system.apacheconf_diroptions') . '/40_librepanel_diroption_' . md5($row_diroptions['path']) . '.conf');
 
 			if (!isset($this->diroptions_data[$diroptions_filename])) {
 				$this->diroptions_data[$diroptions_filename] = '';
@@ -1214,7 +1214,7 @@ class Apache extends HttpConfigBase
 					} else {
 						$this->diroptions_data[$diroptions_filename] .= "\n";
 					}
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Setting Options +Indexes for ' . $row_diroptions['path']);
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Setting Options +Indexes for ' . $row_diroptions['path']);
 				}
 
 				if (isset($row_diroptions['options_indexes']) && $row_diroptions['options_indexes'] == '0') {
@@ -1226,7 +1226,7 @@ class Apache extends HttpConfigBase
 					} else {
 						$this->diroptions_data[$diroptions_filename] .= "\n";
 					}
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Setting Options -Indexes for ' . $row_diroptions['path']);
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Setting Options -Indexes for ' . $row_diroptions['path']);
 				}
 
 				$statusCodes = [
@@ -1262,7 +1262,7 @@ class Apache extends HttpConfigBase
 						$this->diroptions_data[$diroptions_filename] .= '  Order allow,deny' . "\n";
 						$this->diroptions_data[$diroptions_filename] .= '  Allow from all' . "\n";
 					}
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, 'Enabling perl execution for ' . $row_diroptions['path']);
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, 'Enabling perl execution for ' . $row_diroptions['path']);
 
 					// check for suexec-workaround, #319
 					if ((int)Settings::Get('perl.suexecworkaround') == 1) {
@@ -1330,7 +1330,7 @@ class Apache extends HttpConfigBase
 	public function writeConfigs()
 	{
 		// Write diroptions
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_diroptions'));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_diroptions'));
 
 		if (count($this->diroptions_data) > 0) {
 			$optsDir = new Directory(Settings::Get('system.apacheconf_diroptions'));
@@ -1351,7 +1351,7 @@ class Apache extends HttpConfigBase
 				fclose($diroptions_file_handler);
 			} else {
 				if (!file_exists(Settings::Get('system.apacheconf_diroptions'))) {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'apache::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_diroptions'))));
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'apache::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_diroptions'))));
 					FileDir::safe_exec('mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_diroptions'))));
 				}
 
@@ -1369,7 +1369,7 @@ class Apache extends HttpConfigBase
 		}
 
 		// Write htpasswds
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_htpasswddir'));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_htpasswddir'));
 
 		if (count($this->htpasswds_data) > 0) {
 			if (!file_exists(Settings::Get('system.apacheconf_htpasswddir'))) {
@@ -1388,12 +1388,12 @@ class Apache extends HttpConfigBase
 					fclose($htpasswd_file_handler);
 				}
 			} else {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, 'WARNING!!! ' . Settings::Get('system.apacheconf_htpasswddir') . ' is not a directory. htpasswd directory protection is disabled!!!');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, 'WARNING!!! ' . Settings::Get('system.apacheconf_htpasswddir') . ' is not a directory. htpasswd directory protection is disabled!!!');
 			}
 		}
 
 		// Write virtualhosts
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_INFO, "apache::writeConfigs: rebuilding " . Settings::Get('system.apacheconf_vhost'));
 
 		if (count($this->virtualhosts_data) > 0) {
 			$vhostDir = new Directory(Settings::Get('system.apacheconf_vhost'));
@@ -1426,7 +1426,7 @@ class Apache extends HttpConfigBase
 				fclose($vhosts_file_handler);
 			} else {
 				if (!file_exists(Settings::Get('system.apacheconf_vhost'))) {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'apache::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'apache::writeConfigs: mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 					FileDir::safe_exec('mkdir ' . escapeshellarg(FileDir::makeCorrectDir(Settings::Get('system.apacheconf_vhost'))));
 				}
 

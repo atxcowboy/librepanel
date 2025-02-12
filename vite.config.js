@@ -10,11 +10,11 @@ export default defineConfig({
 	plugins: [
 		laravel({
 			input: [
-				'templates/Froxlor/assets/scss/app.scss',
-				'templates/Froxlor/assets/js/app.js',
+				'templates/LibrePanel/assets/scss/app.scss',
+				'templates/LibrePanel/assets/js/app.js',
 			],
-			hotFile: 'templates/Froxlor/hot',
-			buildDirectory: '../templates/Froxlor/build',
+			hotFile: 'templates/LibrePanel/hot',
+			buildDirectory: '../templates/LibrePanel/build',
 			refresh: true,
 		}),
 		vue({

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,25 +16,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Cron\CronConfig;
-use Froxlor\Cron\System\Extrausers;
-use Froxlor\Cron\TaskId;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Cronjob;
+use LibrePanel\Cron\CronConfig;
+use LibrePanel\Cron\System\Extrausers;
+use LibrePanel\Cron\TaskId;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Cronjob;
 use PDO;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,8 +49,8 @@ final class MasterCron extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:cron');
-		$this->setDescription('Regulary perform tasks created by froxlor');
+		$this->setName('librepanel:cron');
+		$this->setDescription('Regulary perform tasks created by librepanel');
 		$this->addArgument('job', InputArgument::IS_ARRAY, 'Job(s) to run');
 		$this->addOption('run-task', 'r', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Run a specific task [1 = re-generate configs, 4 = re-generate dns zones, 9 = re-generate rspamd configs, 10 = re-set quotas, 99 = re-create cron.d-file]')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces given job or, if none given, forces re-generating of config-files (webserver, nameserver, etc.)')
@@ -117,7 +117,7 @@ final class MasterCron extends CliCommand
 
 		$this->validateOwnership($output);
 
-		$this->cronLog = FroxlorLogger::getInstanceOf([
+		$this->cronLog = LibrePanelLogger::getInstanceOf([
 			'loginname' => 'cronjob'
 		]);
 		$this->cronLog->setCronDebugFlag(defined('CRON_DEBUG_FLAG'));
@@ -155,21 +155,21 @@ final class MasterCron extends CliCommand
 		// we have to check the system's last guid with every cron run
 		// in case the admin installed new software which added a new user
 		//so users in the database don't conflict with system users
-		$this->cronLog->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'Checking system\'s last guid');
+		$this->cronLog->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Checking system\'s last guid');
 		Cronjob::checkLastGuid();
 
 		// check for cron.d-generation task and create it if necessary
 		CronConfig::checkCrondConfigurationFile();
 
 		// check for old/compatibility cronjob file
-		if (file_exists(Froxlor::getInstallDir() . '/scripts/froxlor_master_cronjob.php')) {
-			@unlink(Froxlor::getInstallDir() . '/scripts/froxlor_master_cronjob.php');
-			@rmdir(Froxlor::getInstallDir() . '/scripts');
+		if (file_exists(LibrePanel::getInstallDir() . '/scripts/librepanel_master_cronjob.php')) {
+			@unlink(LibrePanel::getInstallDir() . '/scripts/librepanel_master_cronjob.php');
+			@rmdir(LibrePanel::getInstallDir() . '/scripts');
 		}
 
 		// reset cronlog-flag if set to "once"
 		if ((int)Settings::Get('logger.log_cron') == 1) {
-			FroxlorLogger::getInstanceOf()->setCronLog(0);
+			LibrePanelLogger::getInstanceOf()->setCronLog(0);
 		}
 
 		// clean up possible old login-links and 2fa tokens
@@ -184,10 +184,10 @@ final class MasterCron extends CliCommand
 	 */
 	private function validateOwnership(OutputInterface $output)
 	{
-		// when using fcgid or fpm for froxlor-vhost itself, we have to check
+		// when using fcgid or fpm for librepanel-vhost itself, we have to check
 		// whether the permission of the files are still correct
-		$output->write('Checking froxlor file permissions...');
-		$_mypath = FileDir::makeCorrectDir(Froxlor::getInstallDir());
+		$output->write('Checking librepanel file permissions...');
+		$_mypath = FileDir::makeCorrectDir(LibrePanel::getInstallDir());
 
 		if (((int)Settings::Get('system.mod_fcgid') == 1 && (int)Settings::Get('system.mod_fcgid_ownvhost') == 1) || ((int)Settings::Get('phpfpm.enabled') == 1 && (int)Settings::Get('phpfpm.enabled_ownvhost') == 1)) {
 			$user = Settings::Get('system.mod_fcgid_httpuser');
@@ -211,7 +211,7 @@ final class MasterCron extends CliCommand
 	private function lockJob(string $job, OutputInterface $output): bool
 	{
 
-		$this->lockFile = '/run/lock/froxlor_' . $job . '.lock';
+		$this->lockFile = '/run/lock/librepanel_' . $job . '.lock';
 
 		if (file_exists($this->lockFile)) {
 			$jobinfo = json_decode(file_get_contents($this->lockFile), true);

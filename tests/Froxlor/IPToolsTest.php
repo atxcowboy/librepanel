@@ -2,11 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\System\IPTools;
+use LibrePanel\System\IPTools;
 
 /**
  *
- * @covers \Froxlor\System\IPTools
+ * @covers \LibrePanel\System\IPTools
  */
 class IPToolsTest extends TestCase
 {

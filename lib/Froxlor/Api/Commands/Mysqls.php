@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api\Commands;
+namespace LibrePanel\Api\Commands;
 
 use Exception;
-use Froxlor\Api\ApiCommand;
-use Froxlor\Api\ResourceEntity;
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
-use Froxlor\System\Crypt;
-use Froxlor\UI\Response;
-use Froxlor\User;
-use Froxlor\Validate\Validate;
+use LibrePanel\Api\ApiCommand;
+use LibrePanel\Api\ResourceEntity;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
+use LibrePanel\System\Crypt;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
+use LibrePanel\Validate\Validate;
 use PDO;
 
 /**
@@ -123,7 +123,7 @@ class Mysqls extends ApiCommand implements ResourceEntity
 				Response::standardError('passwordshouldnotbeusername', '', true);
 			}
 
-			// add database info to froxlor
+			// add database info to librepanel
 			$stmt = Database::prepare("
 				INSERT INTO `" . TABLE_PANEL_DATABASES . "`
 				SET
@@ -196,13 +196,13 @@ class Mysqls extends ApiCommand implements ResourceEntity
 				}
 
 				if ($_mailerror) {
-					$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
+					$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_ERR, "[API] Error sending mail: " . $mailerr_msg);
 					Response::standardError('errorsendingmail', $userinfo['email'], true);
 				}
 
 				$this->mailer()->clearAddresses();
 			}
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] added mysql-database '" . $username . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] added mysql-database '" . $username . "'");
 
 			$result = $this->apiCall('Mysqls.get', [
 				'dbname' => $username,
@@ -302,7 +302,7 @@ class Mysqls extends ApiCommand implements ResourceEntity
 			$mbdata = $mbdata_stmt->fetch(PDO::FETCH_ASSOC);
 			Database::needRoot(false);
 			$result['size'] = $mbdata['MB'] ?? 0;
-			$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_INFO, "[API] get database '" . $result['databasename'] . "'");
+			$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_INFO, "[API] get database '" . $result['databasename'] . "'");
 			return $this->response($result);
 		}
 		$key = ($id > 0 ? "id #" . $id : "dbname '" . $dbname . "'");
@@ -391,7 +391,7 @@ class Mysqls extends ApiCommand implements ResourceEntity
 		];
 		Database::pexecute($stmt, $params, true, true);
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_NOTICE, "[API] updated mysql-database '" . $result['databasename'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_NOTICE, "[API] updated mysql-database '" . $result['databasename'] . "'");
 		$result = $this->apiCall('Mysqls.get', [
 			'dbname' => $result['databasename']
 		]);
@@ -558,7 +558,7 @@ class Mysqls extends ApiCommand implements ResourceEntity
 		$resetaccnumber = ($mysql_used == '1') ? " , `mysql_lastaccountnumber` = '0' " : '';
 		Customers::decreaseUsage($customer['customerid'], 'mysqls_used', $resetaccnumber);
 
-		$this->logger()->logAction($this->isAdmin() ? FroxlorLogger::ADM_ACTION : FroxlorLogger::USR_ACTION, LOG_WARNING, "[API] deleted database '" . $result['databasename'] . "'");
+		$this->logger()->logAction($this->isAdmin() ? LibrePanelLogger::ADM_ACTION : LibrePanelLogger::USR_ACTION, LOG_WARNING, "[API] deleted database '" . $result['databasename'] . "'");
 		return $this->response($result);
 	}
 

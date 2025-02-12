@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
+ * @author     LibrePanel team <team@librepanel.org>
  * @author     Janos Muzsi <muzsij@hypernics.hu>
  * @author     Ralf Becker <beckerr@php.net>
  * @author     Rasmus Lerdorf <rasmus@php.net>
  * @author     Ilia Alshanetsky <ilia@prohost.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  *
  * Based on https://github.com/krakjoe/apcu/blob/master/apc.php, which is
  * licensed under the PHP licence (version 3.01), which can be viewed
  * online at https://www.php.net/license/3_01.txt
  */
 
-use Froxlor\FroxlorLogger;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\UI\HTML;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\UI\HTML;
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
@@ -45,7 +45,7 @@ $horizontal_bar_size = 950; // 1280px window width
 if ($action == 'delete' && function_exists('apcu_clear_cache') && $userinfo['change_serversettings'] == '1') {
 	if (Request::post('send') == 'send') {
 		apcu_clear_cache();
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_INFO, "cleared APCu cache");
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_INFO, "cleared APCu cache");
 		header('Location: ' . $linker->getLink([
 				'section' => 'apcuinfo',
 				'page' => 'showinfo'
@@ -70,7 +70,7 @@ if ($page == 'showinfo' && $userinfo['change_serversettings'] == '1') {
 	$cache = apcu_cache_info();
 	$mem = apcu_sma_info();
 	$time = time();
-	$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_apcuinfo");
+	$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, "viewed admin_apcuinfo");
 
 	// check for possible empty values that are used in the templates
 	if (!isset($cache['file_upload_progress'])) {

@@ -8,14 +8,14 @@ assignees: ''
 ---
 
 **As a rule of thumb: before reporting an issue**
-* see if it hasn't been [reported](https://github.com/Froxlor/froxlor/issues) (and possibly already been [fixed](https://github.com/Froxlor/froxlor/issues?utf8=✓&q=is:issue%20is:closed)) first
+* see if it hasn't been [reported](https://github.com/LibrePanel/librepanel/issues) (and possibly already been [fixed](https://github.com/LibrePanel/librepanel/issues?utf8=✓&q=is:issue%20is:closed)) first
 * try with the git master
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
 **System information**
-* Froxlor version: $version/$gitSHA1
+* LibrePanel version: $version/$gitSHA1
 * Web server: apache2/nginx/lighttpd
 * DNS server: Bind/PowerDNS (standalone)/PowerDNS (Bind-backend)
 * POP/IMAP server: Courier/Dovecot

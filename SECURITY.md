@@ -1,8 +1,8 @@
-# froxlor's Security Policy
+# librepanel's Security Policy
 
-Welcome and thanks for taking interest in [froxlor](https://www.froxlor.org)!
+Welcome and thanks for taking interest in [librepanel](https://www.librepanel.org)!
 
-We are mostly interested in reports by actual froxlor users but all high quality contributions are welcome.
+We are mostly interested in reports by actual librepanel users but all high quality contributions are welcome.
 
 Please try your best to describe a clear and realistic impact for your report and please don't open any public issues on GitHub or social media, we're doing our best to respond through huntr as quickly as we can.
 
@@ -48,4 +48,4 @@ Only reproducible issues on a default/clean setup from the latest stable release
 
 ## Reporting a Vulnerability
 
-If you think you have found a vulnerability in froxlor, please head over to [https://github.com/Froxlor/Froxlor/security/advisories](https://github.com/Froxlor/Froxlor/security/advisories/new) and use the reporting possibilities there. Also, please give us appropriate time to fix the issue and build update-packages before publishing anything into the wild. Alternatively you can email us to [team@froxlor.org](team@froxlor.org).
+If you think you have found a vulnerability in librepanel, please head over to [https://github.com/LibrePanel/LibrePanel/security/advisories](https://github.com/LibrePanel/LibrePanel/security/advisories/new) and use the reporting possibilities there. Also, please give us appropriate time to fix the issue and build update-packages before publishing anything into the wild. Alternatively you can email us to [team@librepanel.org](team@librepanel.org).

@@ -2,8 +2,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,19 +17,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Froxlor;
+use LibrePanel\LibrePanel;
 use Symfony\Component\Console\Application;
 
 // validate correct php version
 if (version_compare("7.4.0", PHP_VERSION, ">=")) {
-	die('Froxlor requires at least php-7.4. Please validate that your php-cli version is suitable.');
+	die('LibrePanel requires at least php-7.4. Please validate that your php-cli version is suitable.');
 }
 
 // ensure that default timezone is set
@@ -40,7 +40,7 @@ if (function_exists("date_default_timezone_set") && function_exists("date_defaul
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/lib/tables.inc.php';
 
-$application = new Application('froxlor-cli', Froxlor::getFullVersion());
+$application = new Application('librepanel-cli', LibrePanel::getFullVersion());
 
 // files that are no commands
 $fileIgnoreList = [
@@ -50,7 +50,7 @@ $fileIgnoreList = [
 	'install.functions.php',
 ];
 // directory of commands to include
-$cmd_files = glob(Froxlor::getInstallDir() . '/lib/Froxlor/Cli/*.php');
+$cmd_files = glob(LibrePanel::getInstallDir() . '/lib/LibrePanel/Cli/*.php');
 
 // include and add commands
 foreach ($cmd_files as $cmdFile) {
@@ -59,7 +59,7 @@ foreach ($cmd_files as $cmdFile) {
 		// include class-file
 		require $cmdFile;
 		// create class-name including namespace
-		$cmdClass = "\\Froxlor\\Cli\\" . substr(basename($cmdFile), 0, -4);
+		$cmdClass = "\\LibrePanel\\Cli\\" . substr(basename($cmdFile), 0, -4);
 		// check whether it exists
 		if (class_exists($cmdClass) && is_subclass_of($cmdClass, '\Symfony\Component\Console\Command\Command')) {
 			// add to cli application

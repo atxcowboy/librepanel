@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +16,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Froxlor;
+use LibrePanel\LibrePanel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,7 +38,7 @@ final class RunApiCommand extends CliCommand
 
 	protected function configure()
 	{
-		$this->setName('froxlor:api-call');
+		$this->setName('librepanel:api-call');
 		$this->setDescription('Run an API command as given user');
 		$this->addArgument('user', InputArgument::REQUIRED, 'Loginname of the user you want to run the command as')
 			->addArgument('api-command', InputArgument::REQUIRED, 'The command to execute in the form "Module.function"')
@@ -50,11 +50,11 @@ final class RunApiCommand extends CliCommand
 	{
 		$result = $this->validateRequirements($output);
 
-		require Froxlor::getInstallDir() . '/lib/functions.php';
+		require LibrePanel::getInstallDir() . '/lib/functions.php';
 
 		// set error-handler
 		@set_error_handler([
-			'\\Froxlor\\Api\\Api',
+			'\\LibrePanel\\Api\\Api',
 			'phpErrHandler'
 		]);
 
@@ -64,10 +64,10 @@ final class RunApiCommand extends CliCommand
 				$userinfo = $this->getUserByName($loginname);
 				$command = $input->getArgument('api-command');
 				$apicmd = $this->validateCommand($command);
-				$module = "\\Froxlor\\Api\\Commands\\" . $apicmd['class'];
+				$module = "\\LibrePanel\\Api\\Commands\\" . $apicmd['class'];
 				$function = $apicmd['function'];
 				if ($input->getOption('show-params') !== false) {
-					$json_result = \Froxlor\Api\Commands\Froxlor::getLocal($userinfo, ['module' => $apicmd['class'], 'function' => $function])->listFunctions();
+					$json_result = \LibrePanel\Api\Commands\LibrePanel::getLocal($userinfo, ['module' => $apicmd['class'], 'function' => $function])->listFunctions();
 					$io = new SymfonyStyle($input, $output);
 					$result = $this->outputParamsList($json_result, $io);
 				} else {
@@ -118,7 +118,7 @@ final class RunApiCommand extends CliCommand
 		}
 		// simply check for file-existance, as we do not want to use our autoloader because this way
 		// it will recognize non-api classes+methods as valid commands
-		$apiclass = '\\Froxlor\\Api\\Commands\\' . $command[0];
+		$apiclass = '\\LibrePanel\\Api\\Commands\\' . $command[0];
 		if (!class_exists($apiclass) || !@method_exists($apiclass, $command[1])) {
 			throw new Exception("Unknown command");
 		}

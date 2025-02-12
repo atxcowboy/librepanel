@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Settings;
+use LibrePanel\Settings;
 
 return [
 	'groups' => [
@@ -57,7 +57,7 @@ return [
 					'type' => 'select',
 					'default' => PASSWORD_DEFAULT,
 					'option_options_method' => [
-						'\\Froxlor\\System\\Crypt',
+						'\\LibrePanel\\System\\Crypt',
 						'getAvailablePasswordHashes'
 					],
 					'save_method' => 'storeSettingField',
@@ -103,15 +103,15 @@ return [
 					'advanced_mode' => true,
 					'required_otp' => true
 				],
-				'system_froxlorusergroup' => [
-					'label' => lng('serversettings.froxlorusergroup'),
+				'system_librepanelusergroup' => [
+					'label' => lng('serversettings.librepanelusergroup'),
 					'settinggroup' => 'system',
-					'varname' => 'froxlorusergroup',
+					'varname' => 'librepanelusergroup',
 					'type' => 'text',
 					'default' => '',
 					'save_method' => 'storeSettingField',
 					'plausibility_check_method' => [
-						'\\Froxlor\\Validate\\Check',
+						'\\LibrePanel\\Validate\\Check',
 						'checkLocalGroup'
 					],
 					'visible' => Settings::Get('system.nssextrausers'),

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Froxlor;
-use Froxlor\FileDir;
-use Froxlor\Config\ConfigParser;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
+use LibrePanel\LibrePanel;
+use LibrePanel\FileDir;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
 
 $preconfig = [
 	'title' => '2.0.x updates',
@@ -51,7 +51,7 @@ if (Update::versionInUpdate($current_version, '2.0.0-beta1')) {
 
 	$description = 'The configuration page now can preselect a distribution, please select your current distribution';
 	$question = '<strong>Select distribution</strong>';
-	$config_dir = FileDir::makeCorrectDir(Froxlor::getInstallDir() . '/lib/configfiles/');
+	$config_dir = FileDir::makeCorrectDir(LibrePanel::getInstallDir() . '/lib/configfiles/');
 	// show list of available distro's
 	$distros = glob($config_dir . '*.xml');
 	// selection is required $distributions_select[''] = '-';
@@ -75,7 +75,7 @@ if (Update::versionInUpdate($current_version, '2.0.0-beta1')) {
 
 if (Update::versionInUpdate($current_db_version, '202301120')) {
 	$acmesh_challenge_dir = rtrim(FileDir::makeCorrectDir(Settings::Get('system.letsencryptchallengepath')), "/");
-	$recommended = rtrim(FileDir::makeCorrectDir(Froxlor::getInstallDir()), "/");
+	$recommended = rtrim(FileDir::makeCorrectDir(LibrePanel::getInstallDir()), "/");
 	if ((int) Settings::Get('system.leenabled') == 1 && $acmesh_challenge_dir != $recommended) {
 		$has_preconfig = true;
 		$description = 'ACME challenge docroot from settings differs from the current installation directory.';
@@ -94,7 +94,7 @@ if (Update::versionInUpdate($current_db_version, '202301120')) {
 if (Update::versionInUpdate($current_db_version, '202301180')) {
 	if ((int) Settings::Get('system.leenabled') == 1) {
 		$has_preconfig = true;
-		$description = 'Froxlor now supports to set an external DNS resolver for the Let\'s Encrypt pre-check.';
+		$description = 'LibrePanel now supports to set an external DNS resolver for the Let\'s Encrypt pre-check.';
 		$question = '<strong>Specify a DNS resolver IP (recommended value: 1.1.1.1 or similar)</strong>';
 		$return['system_le_domain_dnscheck_resolver'] = [
 			'type' => 'text',

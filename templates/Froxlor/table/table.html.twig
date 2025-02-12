@@ -1,7 +1,7 @@
 {% macro table(listing) %}
 
-	{% import "Froxlor/table/macros.html.twig" as macros %}
-	{% import "Froxlor/table/pagination.html.twig" as pagination %}
+	{% import "LibrePanel/table/macros.html.twig" as macros %}
+	{% import "LibrePanel/table/pagination.html.twig" as pagination %}
 
 	{% if listing.table.tr|length == 0 %}
 		<div class="alert alert-info" role="alert">

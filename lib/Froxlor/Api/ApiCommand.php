@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,41 +16,41 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Api;
+namespace LibrePanel\Api;
 
 use Exception;
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Language;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\System\Mailer;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Language;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\System\Mailer;
 
 abstract class ApiCommand extends ApiParameter
 {
 
 	/**
-	 * froxlor version
+	 * librepanel version
 	 *
 	 * @var string
 	 */
 	protected $version = null;
 	/**
-	 * froxlor dbversion
+	 * librepanel dbversion
 	 *
 	 * @var int
 	 */
 	protected $dbversion = null;
 	/**
-	 * froxlor version-branding
+	 * librepanel version-branding
 	 *
 	 * @var string
 	 */
@@ -76,7 +76,7 @@ abstract class ApiCommand extends ApiParameter
 	/**
 	 * logger interface
 	 *
-	 * @var FroxlorLogger
+	 * @var LibrePanelLogger
 	 */
 	private $logger = null;
 	/**
@@ -109,9 +109,9 @@ abstract class ApiCommand extends ApiParameter
 	{
 		parent::__construct($params);
 
-		$this->version = Froxlor::VERSION;
-		$this->dbversion = Froxlor::DBVERSION;
-		$this->branding = Froxlor::BRANDING;
+		$this->version = LibrePanel::VERSION;
+		$this->dbversion = LibrePanel::DBVERSION;
+		$this->branding = LibrePanel::BRANDING;
 
 		if (!empty($header)) {
 			$this->readUserData($header);
@@ -121,11 +121,11 @@ abstract class ApiCommand extends ApiParameter
 		} else {
 			throw new Exception("Invalid user data", 500);
 		}
-		$this->logger = FroxlorLogger::getInstanceOf($this->user_data);
+		$this->logger = LibrePanelLogger::getInstanceOf($this->user_data);
 
 		// check whether the user is deactivated
 		if ($this->getUserDetail('deactivated') == 1) {
-			$this->logger()->logAction(FroxlorLogger::LOG_ERROR, LOG_INFO, "[API] User '" . $this->getUserDetail('loginnname') . "' tried to use API but is deactivated");
+			$this->logger()->logAction(LibrePanelLogger::LOG_ERROR, LOG_INFO, "[API] User '" . $this->getUserDetail('loginnname') . "' tried to use API but is deactivated");
 			throw new Exception("Account suspended", 406);
 		}
 
@@ -137,7 +137,7 @@ abstract class ApiCommand extends ApiParameter
 		$this->mail = new Mailer(true);
 
 		if ($this->debug) {
-			$this->logger()->logAction(FroxlorLogger::LOG_ERROR, LOG_DEBUG, "[API] " . get_called_class() . ": " . json_encode($params, JSON_UNESCAPED_SLASHES));
+			$this->logger()->logAction(LibrePanelLogger::LOG_ERROR, LOG_DEBUG, "[API] " . get_called_class() . ": " . json_encode($params, JSON_UNESCAPED_SLASHES));
 		}
 
 		// set internal call flag
@@ -201,7 +201,7 @@ abstract class ApiCommand extends ApiParameter
 	/**
 	 * return logger instance
 	 *
-	 * @return FroxlorLogger
+	 * @return LibrePanelLogger
 	 */
 	protected function logger()
 	{

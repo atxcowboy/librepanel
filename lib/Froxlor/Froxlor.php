@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor;
+namespace LibrePanel;
 
-use Froxlor\Database\Database;
+use LibrePanel\Database\Database;
 
-final class Froxlor
+final class LibrePanel
 {
 
 	// Main version variable
@@ -39,11 +39,11 @@ final class Froxlor
 	// Distribution branding-tag (used for Debian etc.)
 	const BRANDING = '';
 
-	const DOCS_URL = 'https://docs.froxlor.org';
+	const DOCS_URL = 'https://docs.librepanel.org';
 
 	/**
-	 * return path to where froxlor is installed, e.g.
-	 * /var/www/froxlor/
+	 * return path to where librepanel is installed, e.g.
+	 * /var/www/librepanel/
 	 *
 	 * @return string
 	 */
@@ -151,7 +151,7 @@ final class Froxlor
 	 */
 	public static function isDatabaseVersion(string $to_check): bool
 	{
-		if (Settings::Get('panel.frontend') == 'froxlor' && Settings::Get('panel.db_version') == $to_check) {
+		if (Settings::Get('panel.frontend') == 'librepanel' && Settings::Get('panel.db_version') == $to_check) {
 			return true;
 		}
 		return false;
@@ -210,33 +210,33 @@ final class Froxlor
 	}
 
 	/**
-	 * Function isFroxlor
+	 * Function isLibrePanel
 	 *
-	 * checks if the panel is froxlor
+	 * checks if the panel is librepanel
 	 *
-	 * @return bool true if panel is froxlor, else false
+	 * @return bool true if panel is librepanel, else false
 	 */
-	public static function isFroxlor(): bool
+	public static function isLibrePanel(): bool
 	{
-		if (Settings::Get('panel.frontend') !== null && Settings::Get('panel.frontend') == 'froxlor') {
+		if (Settings::Get('panel.frontend') !== null && Settings::Get('panel.frontend') == 'librepanel') {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Function isFroxlorVersion
+	 * Function isLibrePanelVersion
 	 *
 	 * checks if a given version is the
-	 * current one (and panel is froxlor)
+	 * current one (and panel is librepanel)
 	 *
 	 * @param string $to_check version to check
 	 *
 	 * @return bool true if version to check matches, else false
 	 */
-	public static function isFroxlorVersion(string $to_check): bool
+	public static function isLibrePanelVersion(string $to_check): bool
 	{
-		if (Settings::Get('panel.frontend') == 'froxlor' && Settings::Get('panel.version') == $to_check) {
+		if (Settings::Get('panel.frontend') == 'librepanel' && Settings::Get('panel.version') == $to_check) {
 			return true;
 		}
 		return false;
@@ -268,7 +268,7 @@ final class Froxlor
 	}
 
 	/**
-	 * compare of froxlor versions
+	 * compare of librepanel versions
 	 *
 	 * @param string $a
 	 * @param string $b

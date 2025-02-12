@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Database\Database;
-use Froxlor\Database\DbManager;
-use Froxlor\Froxlor;
-use Froxlor\FroxlorLogger;
-use Froxlor\Install\Update;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Database\DbManager;
+use LibrePanel\LibrePanel;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Install\Update;
+use LibrePanel\Settings;
 
 if (!defined('_CRON_UPDATE')) {
 	if (!defined('AREA') || (defined('AREA') && AREA != 'admin') || !isset($userinfo['loginname']) || (isset($userinfo['loginname']) && $userinfo['loginname'] == '')) {
@@ -37,7 +37,7 @@ if (!defined('_CRON_UPDATE')) {
 	}
 }
 
-if (Froxlor::isFroxlorVersion('2.1.9')) {
+if (LibrePanel::isLibrePanelVersion('2.1.9')) {
 	Update::showUpdateStep("Enhancing virtual email table");
 	Database::query("ALTER TABLE `" . TABLE_MAIL_VIRTUAL . "` ADD `spam_tag_level` float(4,1) NOT NULL DEFAULT 7.0;");
 	Database::query("ALTER TABLE `" . TABLE_MAIL_VIRTUAL . "` ADD `spam_kill_level` float(4,1) NOT NULL DEFAULT 14.0;");
@@ -49,7 +49,7 @@ if (Froxlor::isFroxlorVersion('2.1.9')) {
 	$antispam_activated = $_POST['antispam_activated'] ?? 0;
 	Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `settinggroup` = 'antispam', `varname` = 'activated', `value` = '" . (int)$antispam_activated . "' WHERE `settinggroup` = 'dkim' AND `varname` = 'use_dkim';");
 	Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `settinggroup` = 'antispam', `varname` = 'reload_command', `value` = 'service rspamd restart' WHERE `settinggroup` = 'dkim' AND `varname` = 'dkimrestart_command';");
-	Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `settinggroup` = 'antispam', `varname` = 'config_file', `value` = '/etc/rspamd/local.d/froxlor_settings.conf' WHERE `settinggroup` = 'dkim' AND `varname` = 'dkim_prefix';");
+	Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `settinggroup` = 'antispam', `varname` = 'config_file', `value` = '/etc/rspamd/local.d/librepanel_settings.conf' WHERE `settinggroup` = 'dkim' AND `varname` = 'dkim_prefix';");
 	Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `settinggroup` = 'antispam' WHERE `settinggroup` = 'dkim' AND `varname` = 'dkim_keylength';");
 	Settings::AddNew("dmarc.use_dmarc", "0");
 	Settings::AddNew("dmarc.dmarc_entry", "v=DMARC1; p=none;");
@@ -79,10 +79,10 @@ if (Froxlor::isFroxlorVersion('2.1.9')) {
 		Update::lastStepStatus(0);
 
 		Update::showUpdateStep("Configure antispam services");
-		$froxlorCliBin = Froxlor::getInstallDir() . '/bin/froxlor-cli';
+		$librepanelCliBin = LibrePanel::getInstallDir() . '/bin/librepanel-cli';
 		$currentDistro = Settings::Get('system.distribution');
 		$manual_command = <<<EOC
-{$froxlorCliBin} froxlor:config-services -a '{"http":"x","dns":"x","smtp":"x","mail":"x","antispam":"rspamd","ftp":"x","distro":"{$currentDistro}","system":[]}'
+{$librepanelCliBin} librepanel:config-services -a '{"http":"x","dns":"x","smtp":"x","mail":"x","antispam":"rspamd","ftp":"x","distro":"{$currentDistro}","system":[]}'
 EOC;
 		Update::lastStepStatus(
 			1,
@@ -106,26 +106,26 @@ EOC;
 	];
 	Update::cleanOldFiles($to_clean);
 
-	Froxlor::updateToDbVersion('202312230');
-	Froxlor::updateToVersion('2.2.0-dev1');
+	LibrePanel::updateToDbVersion('202312230');
+	LibrePanel::updateToVersion('2.2.0-dev1');
 }
 
-if (Froxlor::isDatabaseVersion('202312230')) {
+if (LibrePanel::isDatabaseVersion('202312230')) {
 
 	Update::showUpdateStep("Adding new settings");
 	Settings::AddNew("system.le_renew_services", "");
 	Settings::AddNew("system.le_renew_hook", "systemctl restart postfix dovecot proftpd");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202401090');
+	LibrePanel::updateToDbVersion('202401090');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.0-dev1')) {
+if (LibrePanel::isLibrePanelVersion('2.2.0-dev1')) {
 	Update::showUpdateStep("Updating from 2.2.0-dev1 to 2.2.0-rc1", false);
-	Froxlor::updateToVersion('2.2.0-rc1');
+	LibrePanel::updateToVersion('2.2.0-rc1');
 }
 
-if (Froxlor::isDatabaseVersion('202401090')) {
+if (LibrePanel::isDatabaseVersion('202401090')) {
 
 	Update::showUpdateStep("Adding new table for 2fa tokens");
 	Database::query("DROP TABLE IF EXISTS `panel_2fa_tokens`;");
@@ -140,68 +140,68 @@ if (Froxlor::isDatabaseVersion('202401090')) {
 	Database::query($sql);
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202407200');
+	LibrePanel::updateToDbVersion('202407200');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.0-rc1')) {
+if (LibrePanel::isLibrePanelVersion('2.2.0-rc1')) {
 	Update::showUpdateStep("Updating from 2.2.0-rc1 to 2.2.0-rc2", false);
-	Froxlor::updateToVersion('2.2.0-rc2');
+	LibrePanel::updateToVersion('2.2.0-rc2');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.0-rc2')) {
+if (LibrePanel::isLibrePanelVersion('2.2.0-rc2')) {
 	Update::showUpdateStep("Updating from 2.2.0-rc2 to 2.2.0-rc3", false);
-	Froxlor::updateToVersion('2.2.0-rc3');
+	LibrePanel::updateToVersion('2.2.0-rc3');
 }
 
-if (Froxlor::isDatabaseVersion('202407200')) {
+if (LibrePanel::isDatabaseVersion('202407200')) {
 
 	Update::showUpdateStep("Adjusting field in 2fa-token table");
 	Database::query("ALTER TABLE `panel_2fa_tokens` CHANGE COLUMN `selector` `selector` varchar(200) NOT NULL;");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202408140');
+	LibrePanel::updateToDbVersion('202408140');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.0-rc3')) {
+if (LibrePanel::isLibrePanelVersion('2.2.0-rc3')) {
 	Update::showUpdateStep("Updating from 2.2.0-rc3 to 2.2.0 stable", false);
-	Froxlor::updateToVersion('2.2.0');
+	LibrePanel::updateToVersion('2.2.0');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.0')) {
+if (LibrePanel::isLibrePanelVersion('2.2.0')) {
 	Update::showUpdateStep("Updating from 2.2.0 to 2.2.1", false);
-	Froxlor::updateToVersion('2.2.1');
+	LibrePanel::updateToVersion('2.2.1');
 }
 
-if (Froxlor::isDatabaseVersion('202408140')) {
+if (LibrePanel::isDatabaseVersion('202408140')) {
 
 	Update::showUpdateStep("Adding new rewrite-subject field to email table");
 	Database::query("ALTER TABLE `" . TABLE_MAIL_VIRTUAL . "` ADD `rewrite_subject` tinyint(1) NOT NULL default '1' AFTER `spam_tag_level`;");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202409280');
+	LibrePanel::updateToDbVersion('202409280');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.1')) {
+if (LibrePanel::isLibrePanelVersion('2.2.1')) {
 	Update::showUpdateStep("Updating from 2.2.1 to 2.2.2", false);
-	Froxlor::updateToVersion('2.2.2');
+	LibrePanel::updateToVersion('2.2.2');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.2')) {
+if (LibrePanel::isLibrePanelVersion('2.2.2')) {
 	Update::showUpdateStep("Updating from 2.2.2 to 2.2.3", false);
-	Froxlor::updateToVersion('2.2.3');
+	LibrePanel::updateToVersion('2.2.3');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.3')) {
+if (LibrePanel::isLibrePanelVersion('2.2.3')) {
 	Update::showUpdateStep("Updating from 2.2.3 to 2.2.4", false);
-	Froxlor::updateToVersion('2.2.4');
+	LibrePanel::updateToVersion('2.2.4');
 }
 
-if (Froxlor::isFroxlorVersion('2.2.4')) {
+if (LibrePanel::isLibrePanelVersion('2.2.4')) {
 	Update::showUpdateStep("Updating from 2.2.4 to 2.2.5", false);
-	Froxlor::updateToVersion('2.2.5');
+	LibrePanel::updateToVersion('2.2.5');
 }
 
-if (Froxlor::isDatabaseVersion('202409280')) {
+if (LibrePanel::isDatabaseVersion('202409280')) {
 
 	Update::showUpdateStep("Adding new antispam settings");
 	Settings::AddNew("antispam.default_bypass_spam", "2");
@@ -209,10 +209,10 @@ if (Froxlor::isDatabaseVersion('202409280')) {
 	Settings::AddNew("antispam.default_policy_greylist", "1");
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202411200');
+	LibrePanel::updateToDbVersion('202411200');
 }
 
-if (Froxlor::isDatabaseVersion('202411200')) {
+if (LibrePanel::isDatabaseVersion('202411200')) {
 
 	Update::showUpdateStep("Adjusting customer mysql global user");
 	// get all customers that are not deactivated and that have at least one database (hence a global database-user)
@@ -228,7 +228,7 @@ if (Froxlor::isDatabaseVersion('202411200')) {
 			// require privileged access for target db-server
 			Database::needRoot(true, $dbserver, true);
 			// get DbManager
-			$dbm = new DbManager(FroxlorLogger::getInstanceOf());
+			$dbm = new DbManager(LibrePanelLogger::getInstanceOf());
 			foreach (array_map('trim', explode(',', Settings::Get('system.mysql_access_host'))) as $mysql_access_host) {
 				if ($dbm->getManager()->userExistsOnHost($customer['loginname'], $mysql_access_host)) {
 					// deactivate temporarily
@@ -243,5 +243,5 @@ if (Froxlor::isDatabaseVersion('202411200')) {
 	}
 	Update::lastStepStatus(0);
 
-	Froxlor::updateToDbVersion('202412030');
+	LibrePanel::updateToDbVersion('202412030');
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,27 +16,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Install;
+namespace LibrePanel\Install;
 
 use Exception;
 use ZipArchive;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
-use Froxlor\Http\HttpClient;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
+use LibrePanel\Http\HttpClient;
 
 class AutoUpdate
 {
 	// define update-uri
-	const UPDATE_URI = "https://version.froxlor.org/froxlor/api/v2/";
-	const RELEASE_URI = "https://autoupdate.froxlor.org/froxlor-{version}.zip";
-	const CHECKSUM_URI = "https://autoupdate.froxlor.org/froxlor-{version}.zip.sha256";
+	const UPDATE_URI = "https://version.librepanel.org/librepanel/api/v2/";
+	const RELEASE_URI = "https://autoupdate.librepanel.org/librepanel-{version}.zip";
+	const CHECKSUM_URI = "https://autoupdate.librepanel.org/librepanel-{version}.zip.sha256";
 
 	const ERR_NOZIPEXT = 2;
 	const ERR_COULDNOTSTORE = 4;
@@ -69,13 +69,13 @@ class AutoUpdate
 				if (Settings::Get('system.update_channel') == 'testing') {
 					$channel = '/testing';
 				} elseif (Settings::Get('system.update_channel') == 'nightly') {
-					if (empty(Froxlor::BRANDING) || substr(Froxlor::BRANDING, 0, 1) == '-') {
+					if (empty(LibrePanel::BRANDING) || substr(LibrePanel::BRANDING, 0, 1) == '-') {
 						$channel = '/nightly.0000000';
 					} else {
-						$channel = '/' . substr(Froxlor::BRANDING, 1);
+						$channel = '/' . substr(LibrePanel::BRANDING, 1);
 					}
 				}
-				$latestversion = HttpClient::urlGet(self::UPDATE_URI . Froxlor::VERSION . $channel, true, 3);
+				$latestversion = HttpClient::urlGet(self::UPDATE_URI . LibrePanel::VERSION . $channel, true, 3);
 			} catch (Exception $e) {
 				self::$lasterror = "Version-check currently unavailable, please try again later";
 				return -1;
@@ -102,12 +102,12 @@ class AutoUpdate
 		$toCheck = str_replace('{version}', $newversion, self::CHECKSUM_URI);
 
 		// check for local destination folder
-		if (!is_dir(Froxlor::getInstallDir() . '/updates/')) {
-			mkdir(Froxlor::getInstallDir() . '/updates/');
+		if (!is_dir(LibrePanel::getInstallDir() . '/updates/')) {
+			mkdir(LibrePanel::getInstallDir() . '/updates/');
 		}
 
 		// name archive
-		$localArchive = Froxlor::getInstallDir() . '/updates/' . basename($toLoad);
+		$localArchive = LibrePanel::getInstallDir() . '/updates/' . basename($toLoad);
 
 		// remove old archive
 		if (file_exists($localArchive)) {
@@ -147,7 +147,7 @@ class AutoUpdate
 		$zip = new ZipArchive();
 		$res = $zip->open($localArchive);
 		if ($res === true) {
-			$zip->extractTo(Froxlor::getInstallDir());
+			$zip->extractTo(LibrePanel::getInstallDir());
 			$zip->close();
 			// success - remove unused archive
 			@unlink($localArchive);

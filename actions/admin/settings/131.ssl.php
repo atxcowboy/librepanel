@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,15 +16,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-use Froxlor\Froxlor;
-use Froxlor\Settings;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
 
 return [
 	'groups' => [
@@ -85,7 +85,7 @@ return [
 					'type' => 'text',
 					'string_type' => 'file',
 					'string_emptyallowed' => true,
-					'default' => '/etc/ssl/froxlor_selfsigned.pem',
+					'default' => '/etc/ssl/librepanel_selfsigned.pem',
 					'save_method' => 'storeSettingField'
 				],
 				'system_ssl_key_file' => [
@@ -95,7 +95,7 @@ return [
 					'type' => 'text',
 					'string_type' => 'file',
 					'string_emptyallowed' => true,
-					'default' => '/etc/ssl/froxlor_selfsigned.key',
+					'default' => '/etc/ssl/librepanel_selfsigned.key',
 					'save_method' => 'storeSettingField'
 				],
 				'system_ssl_cert_chainfile' => [
@@ -145,7 +145,7 @@ return [
 					'varname' => 'leenabled',
 					'type' => 'checkbox',
 					'default' => false,
-					'cronmodule' => 'froxlor/letsencrypt',
+					'cronmodule' => 'librepanel/letsencrypt',
 					'save_method' => 'storeSettingField',
 					'requires_reconf' => ['http']
 				],
@@ -193,7 +193,7 @@ return [
 					'varname' => 'letsencryptchallengepath',
 					'type' => 'text',
 					'string_emptyallowed' => false,
-					'default' => Froxlor::getInstallDir(),
+					'default' => LibrePanel::getInstallDir(),
 					'save_method' => 'storeSettingField',
 					'advanced_mode' => true,
 					'requires_reconf' => ['http']

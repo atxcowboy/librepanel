@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 if (!defined('AREA')) {
@@ -28,15 +28,15 @@ if (!defined('AREA')) {
 	exit();
 }
 
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\FroxlorTwoFactorAuth;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\PhpHelper;
-use Froxlor\User;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\LibrePanelTwoFactorAuth;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\PhpHelper;
+use LibrePanel\User;
 
 if (Settings::Get('2fa.enabled') != '1') {
 	Response::dynamicError('2fa.2fa_not_activated');
@@ -53,7 +53,7 @@ if (AREA == 'admin') {
 }
 $success_message = "";
 
-$tfa = new FroxlorTwoFactorAuth('Froxlor ' . Settings::Get('system.hostname'));
+$tfa = new LibrePanelTwoFactorAuth('LibrePanel ' . Settings::Get('system.hostname'));
 
 // do the delete and then just show a success-message
 if ($action == 'delete') {
@@ -130,7 +130,7 @@ if ($action == 'delete') {
 	Response::dynamicError('Invalid/wrong code');
 }
 
-$log->logAction(FroxlorLogger::USR_ACTION, LOG_NOTICE, "viewed 2fa::overview");
+$log->logAction(LibrePanelLogger::USR_ACTION, LOG_NOTICE, "viewed 2fa::overview");
 
 $type_select_values = [];
 $ga_qrcode = '';

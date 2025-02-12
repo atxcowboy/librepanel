@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +16,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Database\Database;
-use Froxlor\FroxlorLogger;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\User;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\User;
 
 $id = (int)Request::any('id');
 
@@ -40,18 +40,18 @@ $note_msg = null;
 
 if ($page == 'message') {
 	if ($action == '') {
-		$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, 'viewed panel_message');
+		$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, 'viewed panel_message');
 
 		if (Request::post('send') == 'send') {
 			if (Request::post('recipient', -1) == 0 && $userinfo['customers_see_all'] == '1') {
-				$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to admins');
+				$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to admins');
 				$result = Database::query('SELECT `name`, `email`  FROM `' . TABLE_PANEL_ADMINS . "`");
 			} elseif (Request::post('recipient', -1) == 1) {
 				if ($userinfo['customers_see_all'] == '1') {
-					$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to ALL customers');
+					$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to ALL customers');
 					$result = Database::query('SELECT `firstname`, `name`, `company`, `email`  FROM `' . TABLE_PANEL_CUSTOMERS . "`");
 				} else {
-					$log->logAction(FroxlorLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to customers');
+					$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_NOTICE, 'sending messages to customers');
 					$result = Database::prepare('
 						SELECT `firstname`, `name`, `company`, `email`  FROM `' . TABLE_PANEL_CUSTOMERS . "`
 						WHERE `adminid` = :adminid");
@@ -89,7 +89,7 @@ if ($page == 'message') {
 							$mailerr_msg = $row['email'];
 						}
 
-						$log->logAction(FroxlorLogger::ADM_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
+						$log->logAction(LibrePanelLogger::ADM_ACTION, LOG_ERR, 'Error sending mail: ' . $mailerr_msg);
 						Response::standardError('errorsendingmail', $row['email']);
 					}
 

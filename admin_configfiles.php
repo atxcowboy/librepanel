@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +16,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 const AREA = 'admin';
 require __DIR__ . '/lib/init.php';
 
-use Froxlor\Config\ConfigParser;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
-use Froxlor\UI\Request;
-use Froxlor\UI\Response;
-use Froxlor\Validate\Validate;
+use LibrePanel\Config\ConfigParser;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
+use LibrePanel\UI\Request;
+use LibrePanel\UI\Response;
+use LibrePanel\Validate\Validate;
 
 if ($userinfo['change_serversettings'] == '1') {
 	if ($action == 'setconfigured') {
@@ -56,7 +56,7 @@ if ($userinfo['change_serversettings'] == '1') {
 	$distributions_select = [];
 
 	$services = [];
-	$config_dir = FileDir::makeCorrectDir(Froxlor::getInstallDir() . '/lib/configfiles/');
+	$config_dir = FileDir::makeCorrectDir(LibrePanel::getInstallDir() . '/lib/configfiles/');
 
 	if (!empty($distribution)) {
 		if (!file_exists($config_dir . '/' . $distribution . ".xml")) {
@@ -118,7 +118,7 @@ if ($userinfo['change_serversettings'] == '1') {
 			}
 		}
 		$params_content = json_encode($params);
-		$params_filename = FileDir::makeCorrectFile(Froxlor::getInstallDir() . 'install/' . Froxlor::genSessionId() . '.json');
+		$params_filename = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . 'install/' . LibrePanel::genSessionId() . '.json');
 		file_put_contents($params_filename, $params_content);
 
 		UI::twigBuffer('settings/configuration-final.html.twig', [
@@ -126,7 +126,7 @@ if ($userinfo['change_serversettings'] == '1') {
 			// alert
 			'type' => 'info',
 			'alert_msg' => lng('admin.configfiles.finishnote'),
-			'basedir' => Froxlor::getInstallDir(),
+			'basedir' => LibrePanel::getInstallDir(),
 			'params_filename' => $params_filename
 		]);
 	} else {

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,26 +16,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\Http;
+namespace LibrePanel\Cron\Http;
 
-use Froxlor\Cron\Http\Php\PhpInterface;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\Http\Directory;
-use Froxlor\Settings;
+use LibrePanel\Cron\Http\Php\PhpInterface;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\Http\Directory;
+use LibrePanel\Settings;
 
 /**
  * @author        Florian Lippert <flo@syscp.org> (2003-2009)
- * @author        Froxlor team <team@froxlor.org> (2010-)
+ * @author        LibrePanel team <team@librepanel.org> (2010-)
  */
 class ApacheFcgi extends Apache
 {
@@ -43,7 +43,7 @@ class ApacheFcgi extends Apache
 	public function createOwnVhostStarter()
 	{
 		if (Settings::Get('system.mod_fcgid_ownvhost') == '1' || (Settings::Get('phpfpm.enabled') == '1' && Settings::Get('phpfpm.enabled_ownvhost') == '1')) {
-			$mypath = Froxlor::getInstallDir();
+			$mypath = LibrePanel::getInstallDir();
 
 			if (Settings::Get('system.mod_fcgid_ownvhost') == '1') {
 				$user = Settings::Get('system.mod_fcgid_httpuser');
@@ -72,7 +72,7 @@ class ApacheFcgi extends Apache
 				'guid' => $user,
 				'openbasedir' => 0,
 				'email' => Settings::Get('panel.adminmail'),
-				'loginname' => 'froxlor.panel',
+				'loginname' => 'librepanel.panel',
 				'documentroot' => $mypath,
 				'customerroot' => $mypath,
 				'fpm_config_id' => isset($fpm_config['id']) ? $fpm_config['id'] : 1

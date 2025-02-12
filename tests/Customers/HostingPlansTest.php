@@ -1,18 +1,18 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Settings;
-use Froxlor\Database\Database;
-use Froxlor\Api\Commands\Admins;
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\HostingPlans;
+use LibrePanel\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\Api\Commands\Admins;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\HostingPlans;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\HostingPlans
- * @covers \Froxlor\Api\Commands\Customers
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\HostingPlans
+ * @covers \LibrePanel\Api\Commands\Customers
  */
 class HostingPlansTest extends TestCase
 {
@@ -283,7 +283,7 @@ class HostingPlansTest extends TestCase
 
 		$data = [
 			'new_loginname' => 'test1hp',
-			'email' => 'team@froxlor.org',
+			'email' => 'team@librepanel.org',
 			'firstname' => 'Test',
 			'name' => 'Testman',
 			'customernumber' => 1337,

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,19 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cli;
+namespace LibrePanel\Cli;
 
 use Exception;
-use Froxlor\Database\Database;
-use Froxlor\Froxlor;
-use Froxlor\Settings;
+use LibrePanel\Database\Database;
+use LibrePanel\LibrePanel;
+use LibrePanel\Settings;
 use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,8 +38,8 @@ class CliCommand extends Command
 
 	protected function validateRequirements(OutputInterface $output, bool $ignore_has_updates = false): int
 	{
-		if (!file_exists(Froxlor::getInstallDir() . '/lib/userdata.inc.php')) {
-			$output->writeln("<error>Could not find froxlor's userdata.inc.php file. You should use this script only with an installed froxlor system.</>");
+		if (!file_exists(LibrePanel::getInstallDir() . '/lib/userdata.inc.php')) {
+			$output->writeln("<error>Could not find librepanel's userdata.inc.php file. You should use this script only with an installed librepanel system.</>");
 			return self::INVALID;
 		}
 		// try database connection
@@ -50,11 +50,11 @@ class CliCommand extends Command
 			$output->writeln("<error>" . $e->getMessage() . "</>");
 			return self::INVALID;
 		}
-		if (!$ignore_has_updates && (Froxlor::hasUpdates() || Froxlor::hasDbUpdates())) {
+		if (!$ignore_has_updates && (LibrePanel::hasUpdates() || LibrePanel::hasDbUpdates())) {
 			if ((int)Settings::Get('system.cron_allowautoupdate') == 1) {
 				return $this->runUpdate($output);
 			} else {
-				$output->writeln("<error>It seems that the froxlor files have been updated. Please login and finish the update procedure.</>");
+				$output->writeln("<error>It seems that the librepanel files have been updated. Please login and finish the update procedure.</>");
 				return self::INVALID;
 			}
 		}
@@ -120,13 +120,13 @@ class CliCommand extends Command
 		if (!$manual) {
 			$output->writeln('<comment>Automatic update is activated and we are going to proceed without any notices</>');
 		}
-		include_once Froxlor::getInstallDir() . '/lib/tables.inc.php';
+		include_once LibrePanel::getInstallDir() . '/lib/tables.inc.php';
 		define('_CRON_UPDATE', 1);
 		ob_start([
 			$this,
 			'cleanUpdateOutput'
 		]);
-		include_once Froxlor::getInstallDir() . '/install/updatesql.php';
+		include_once LibrePanel::getInstallDir() . '/install/updatesql.php';
 		ob_end_flush();
 		$output->writeln('<info>' . ($manual ? 'Database' : 'Automatic') . ' update done - you should check your settings to be sure everything is fine</>');
 		return self::SUCCESS;

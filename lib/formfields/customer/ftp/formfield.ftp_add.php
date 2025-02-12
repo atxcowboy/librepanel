@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * For the full copyright and license information, please view the COPYING
  * file that was distributed with this source code. You can also view the
- * COPYING file online at https://files.froxlor.org/misc/COPYING.txt
+ * COPYING file online at https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  (c) the authors
- * @author         Froxlor team <team@froxlor.org> (2010-)
- * @license        GPLv2 https://files.froxlor.org/misc/COPYING.txt
+ * @author         LibrePanel team <team@librepanel.org> (2010-)
+ * @license        GPLv2 https://files.librepanel.org/misc/COPYING.txt
  * @package        Formfields
  */
 
-use Froxlor\Settings;
-use Froxlor\System\Crypt;
+use LibrePanel\Settings;
+use LibrePanel\System\Crypt;
 
 return [
 	'ftp_add' => [

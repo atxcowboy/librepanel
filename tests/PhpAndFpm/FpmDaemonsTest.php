@@ -1,14 +1,14 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-use Froxlor\Api\Commands\Customers;
-use Froxlor\Api\Commands\FpmDaemons;
+use LibrePanel\Api\Commands\Customers;
+use LibrePanel\Api\Commands\FpmDaemons;
 
 /**
  *
- * @covers \Froxlor\Api\ApiCommand
- * @covers \Froxlor\Api\ApiParameter
- * @covers \Froxlor\Api\Commands\FpmDaemons
+ * @covers \LibrePanel\Api\ApiCommand
+ * @covers \LibrePanel\Api\ApiParameter
+ * @covers \LibrePanel\Api\Commands\FpmDaemons
  */
 class FpmDaemonsTest extends TestCase
 {

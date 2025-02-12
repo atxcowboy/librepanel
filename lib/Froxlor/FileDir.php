@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor;
+namespace LibrePanel;
 
 use Exception;
-use Froxlor\Customer\Customer;
-use Froxlor\Database\Database;
+use LibrePanel\Customer\Customer;
+use LibrePanel\Database\Database;
 use PDO;
 use RecursiveCallbackFilterIterator;
 
@@ -286,14 +286,14 @@ class FileDir
 			$tpl_ext = $template['file_extension'];
 		} else {
 			$tpl_ext = 'html';
-			$unconfiguredPath = FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/templates/misc/unconfigured/index.html');
+			$unconfiguredPath = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/templates/misc/unconfigured/index.html');
 			if (file_exists($unconfiguredPath)) {
 				$tpl_content = file_get_contents($unconfiguredPath);
 			} else {
 				$tpl_content = lng('admin.templates.unconfigured_content_fallback');
 			}
 		}
-		$redirect_file = FileDir::makeCorrectFile(Froxlor::getInstallDir() . '/notice.' . $tpl_ext);
+		$redirect_file = FileDir::makeCorrectFile(LibrePanel::getInstallDir() . '/notice.' . $tpl_ext);
 		file_put_contents($redirect_file, $tpl_content);
 		return basename($redirect_file);
 	}
@@ -303,7 +303,7 @@ class FileDir
 	 *
 	 * @param string $loginname customers loginname
 	 * @param string $destination path where to create the file
-	 * @param object $logger FroxlorLogger object
+	 * @param object $logger LibrePanelLogger object
 	 * @param bool $force force creation whatever the settings say (needed for task #2, create new user)
 	 *
 	 * @return void
@@ -347,7 +347,7 @@ class FileDir
 				fclose($index_html_handler);
 				if ($logger !== null) {
 					$logger->logAction(
-						FroxlorLogger::CRON_ACTION,
+						LibrePanelLogger::CRON_ACTION,
 						LOG_NOTICE,
 						'Creating \'index.' . $template['file_extension'] . '\' for Customer \'' . $template['customer_login'] . '\' based on template in directory ' . escapeshellarg($indexhtmlpath)
 					);
@@ -356,12 +356,12 @@ class FileDir
 				$destination = self::makeCorrectDir($destination);
 				if ($logger !== null) {
 					$logger->logAction(
-						FroxlorLogger::CRON_ACTION,
+						LibrePanelLogger::CRON_ACTION,
 						LOG_NOTICE,
-						'Running: cp -a ' . Froxlor::getInstallDir() . '/templates/misc/standardcustomer/* ' . escapeshellarg($destination)
+						'Running: cp -a ' . LibrePanel::getInstallDir() . '/templates/misc/standardcustomer/* ' . escapeshellarg($destination)
 					);
 				}
-				self::safe_exec('cp -a ' . Froxlor::getInstallDir() . '/templates/misc/standardcustomer/* ' . escapeshellarg($destination));
+				self::safe_exec('cp -a ' . LibrePanel::getInstallDir() . '/templates/misc/standardcustomer/* ' . escapeshellarg($destination));
 			}
 		}
 	}
@@ -378,7 +378,7 @@ class FileDir
 		if (trim($filename) == '') {
 			$error = 'Given filename for function ' . __FUNCTION__ . ' is empty.' . "\n";
 			$error .= 'This is very dangerous and should not happen.' . "\n";
-			$error .= 'Please inform the Froxlor team about this issue so they can fix it.';
+			$error .= 'Please inform the LibrePanel team about this issue so they can fix it.';
 			echo $error;
 			// so we can see WHERE this happened
 			debug_print_backtrace();

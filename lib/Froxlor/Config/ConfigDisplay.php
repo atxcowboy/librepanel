@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,21 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Config;
+namespace LibrePanel\Config;
 
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\Froxlor;
-use Froxlor\PhpHelper;
-use Froxlor\Settings;
-use Froxlor\UI\Panel\UI;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanel;
+use LibrePanel\PhpHelper;
+use LibrePanel\Settings;
+use LibrePanel\UI\Panel\UI;
 
 class ConfigDisplay
 {
@@ -82,7 +82,7 @@ class ConfigDisplay
 				}
 				// ignore invalid responses
 				if (!is_array($nameserver_ips)) {
-					// act like \Froxlor\PhpHelper::gethostbynamel6() and return unmodified hostname on error
+					// act like \LibrePanel\PhpHelper::gethostbynamel6() and return unmodified hostname on error
 					$nameserver_ips = [
 						$nameserver
 					];
@@ -114,7 +114,7 @@ class ConfigDisplay
 
 		self::$replace_arr = [
 			'<SQL_UNPRIVILEGED_USER>' => $sql['user'],
-			'<SQL_UNPRIVILEGED_PASSWORD>' => 'FROXLOR_MYSQL_PASSWORD',
+			'<SQL_UNPRIVILEGED_PASSWORD>' => 'LIBREPANEL_MYSQL_PASSWORD',
 			'<SQL_DB>' => $sql['db'],
 			'<SQL_HOST>' => $sql['host'],
 			'<SQL_SOCKET>' => $sql['socket'] ?? null,
@@ -127,7 +127,7 @@ class ConfigDisplay
 			'<VIRTUAL_GID_MAPS>' => Settings::Get('system.vmail_gid'),
 			'<SSLPROTOCOLS>' => (Settings::Get('system.use_ssl') == '1') ? 'imaps pop3s' : '',
 			'<CUSTOMER_TMP>' => FileDir::makeCorrectDir($customer_tmpdir),
-			'<BASE_PATH>' => Froxlor::getInstallDir(),
+			'<BASE_PATH>' => LibrePanel::getInstallDir(),
 			'<BIND_CONFIG_PATH>' => FileDir::makeCorrectDir(Settings::Get('system.bindconf_directory')),
 			'<WEBSERVER_RELOAD_CMD>' => Settings::Get('system.apachereload_command'),
 			'<CUSTOMER_LOGS>' => FileDir::makeCorrectDir(Settings::Get('system.logfiles_directory')),
@@ -235,7 +235,7 @@ class ConfigDisplay
 			$file_content = strtr($file_content, self::$replace_arr);
 			$file_content = htmlspecialchars($file_content);
 			$numbrows = count(explode("\n", $file_content));
-			//eval("\$files=\"" . \Froxlor\UI\Template::getTemplate("configfiles/configfiles_file") . "\";");
+			//eval("\$files=\"" . \LibrePanel\UI\Template::getTemplate("configfiles/configfiles_file") . "\";");
 			$files = UI::twig()->render(UI::validateThemeTemplate('/settings/conf/file.html.twig', self::$theme), [
 				'distro_editor' => self::$editor,
 				'realname' => $realname,

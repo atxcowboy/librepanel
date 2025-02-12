@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,11 +16,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
 return [
@@ -44,7 +44,7 @@ return [
 		'2fa_add' => 'Aktivovat 2FA',
 		'2fa_delete' => 'Deaktivovat 2FA',
 		'2fa_verify' => 'Ověřit kód',
-		'2fa_overview_desc' => 'Zde můžete aktivovat dvoufaktorové ověřování vašeho účtu.<br><br>Můžete buď použít autentifikátor-aplikaci (jednorázové heslo / TOTP) nebo vám nechat froxlor po každém úspěšném přihlášení pomocí jednorázového hesla poslat e-mail na vaši e-mailovou adresu.',
+		'2fa_overview_desc' => 'Zde můžete aktivovat dvoufaktorové ověřování vašeho účtu.<br><br>Můžete buď použít autentifikátor-aplikaci (jednorázové heslo / TOTP) nebo vám nechat librepanel po každém úspěšném přihlášení pomocí jednorázového hesla poslat e-mail na vaši e-mailovou adresu.',
 		'2fa_email_desc' => 'Váš účet je nastaven pro použití jednorázových hesel e-mailem. Chcete-li deaktivovat, klikněte na "Deaktivovat 2FA"',
 		'2fa_ga_desc' => 'Váš účet je nastaven tak, aby používal jednorázová hesla založená na čase prostřednictvím autentizační aplikace. Naskenujte níže uvedený QR kód pomocí požadované autentizační aplikace pro vygenerování kódů. Chcete-li deaktivovat, klikněte na "Deaktivovat 2FA"',
 		'2fa_not_activated' => 'Dvoufázové ověřování není povoleno',
@@ -55,7 +55,7 @@ return [
 		'overview' => 'Přehled',
 		'ressourcedetails' => 'Využijte zdroje',
 		'systemdetails' => 'Podrobnosti o systému',
-		'froxlordetails' => 'Podrobnosti o Froxloru',
+		'librepaneldetails' => 'Podrobnosti o LibrePanelu',
 		'installedversion' => 'Nainstalovaná verze',
 		'latestversion' => 'Nejnovější verze',
 		'lookfornewversion' => [
@@ -82,7 +82,7 @@ return [
 		'change_serversettings' => 'Může změnit nastavení serveru?',
 		'server' => 'Systém',
 		'serversettings' => 'Nastavení',
-		'serversettings_desc' => 'Spravujte svůj systém froxlor',
+		'serversettings_desc' => 'Spravujte svůj systém librepanel',
 		'rebuildconf' => 'Znovu vytvořit konfigurační soubory',
 		'stdsubdomain' => 'Standardní subdoména',
 		'stdsubdomain_add' => 'Vytvořit standardní subdoménu',
@@ -111,7 +111,7 @@ return [
 			'compactoverview' => 'Kompaktní přehled',
 			'legend' => '<h3>Chystáte se nakonfigurovat službu/daemon</h3>',
 			'commands' => '<span class="text-danger">Příkazy:</span> Tyto příkazy mají být spuštěny po řádku jako uživatel rootu v shellu. Je bezpečné zkopírovat celý blok a vložit ho do konzole.',
-			'files' => '<span class="text-danger">Konfigurační soubory:</span> Příkazy před textovými poli by měly otevřít editor s cílovým souborem. Stačí jen zkopírovat a vložit obsah do editoru a uložit soubor.<br><span class="text-danger">Upozornění:</span> MySQL heslo nebylo z bezpečnostních důvodů nahrazeno. Prosím nahraďte "FROXLOR_MYSQL_PASSWORD" samostatně nebo použijte formulář javascript níže k nahrazení na webu. Pokud jste zapomněli heslo k MySQL, najdete ho v "lib/userdata.inc.php"',
+			'files' => '<span class="text-danger">Konfigurační soubory:</span> Příkazy před textovými poli by měly otevřít editor s cílovým souborem. Stačí jen zkopírovat a vložit obsah do editoru a uložit soubor.<br><span class="text-danger">Upozornění:</span> MySQL heslo nebylo z bezpečnostních důvodů nahrazeno. Prosím nahraďte "LIBREPANEL_MYSQL_PASSWORD" samostatně nebo použijte formulář javascript níže k nahrazení na webu. Pokud jste zapomněli heslo k MySQL, najdete ho v "lib/userdata.inc.php"',
 			'importexport' => 'Importovat/Exportovat',
 			'finishnote' => 'Soubor parametru byl úspěšně vygenerován. Nyní spusťte následující příkaz jako root:',
 			'description' => 'Konfigurace systémových služeb',
@@ -147,7 +147,7 @@ return [
 			'EMAIL_PASSWORD' => 'Nahradí heslem účtu POP3/IMAP.',
 			'index_html' => 'indexový soubor pro nově vytvořené adresáře zákazníků',
 			'unconfigured_html' => 'soubor indexu pro nenastavené/neznámé domény',
-			'unconfigured_content_fallback' => 'Tato doména vyžaduje konfiguraci prostřednictvím panelu pro správu serveru froxlor, protože v současné době není přiřazena žádnému zákazníkovi.',
+			'unconfigured_content_fallback' => 'Tato doména vyžaduje konfiguraci prostřednictvím panelu pro správu serveru librepanel, protože v současné době není přiřazena žádnému zákazníkovi.',
 			'file_extension' => [
 				'description' => 'Přípona souboru pro index musí být v rozmezí 1 až 6 znaků. Rozšíření může obsahovat pouze znaky jako a-z, A-Z a 0-9<br><br>Výchozí: html',
 				'title' => 'Přípona souboru pro šablonu souboru',
@@ -181,7 +181,7 @@ return [
 			'DISKAVAILABLE' => 'Nahrazeno využitím disku, který byl přiřazen zákazníkovi.',
 			'DISKUSED' => 'Nahrazeno využitím disku, který byl zákazníkem vyčerpán.',
 			'LINK' => 'Nahrazeno odkazem na obnovení hesla zákazníka.',
-			'SERVER_HOSTNAME' => 'Nahradí název systémového hostitele (URL do froxlor)',
+			'SERVER_HOSTNAME' => 'Nahradí název systémového hostitele (URL do librepanel)',
 			'SERVER_IP' => 'Nahradí výchozí Ip adresu serveru',
 			'SERVER_PORT' => 'Nahradí výchozí port serveru',
 			'DOMAINNAME' => 'Nahrazuje standardní subdoménu zákazníka (může být prázdná, pokud není vygenerována žádná)',
@@ -215,7 +215,7 @@ return [
 				'description' => 'Většinou CA_Bundle, nebo podobně, to pravděpodobně chcete nastavit, pokud jste si koupili SSL certifikát.',
 			],
 			'docroot' => [
-				'title' => 'Vlastní docroot (prázdný = ukazuje na Froxlor)',
+				'title' => 'Vlastní docroot (prázdný = ukazuje na LibrePanel)',
 				'description' => 'Zde můžete definovat vlastní kořenový adresář dokumentu (cíl požadavku) pro tuto kombinaci IP/port.<br /><strong>POZOR:</strong> Dávejte pozor, co zde zadáváte!',
 			],
 			'ssl_paste_description' => 'Vložte svůj úplný obsah certifikátu do textového pole',
@@ -284,15 +284,15 @@ return [
 		'security_settings' => 'Možnosti zabezpečení',
 		'know_what_youre_doing' => 'Změňte pouze, pokud víte, co děláte!',
 		'show_version_login' => [
-			'title' => 'Zobrazit Froxlor verzi při přihlášení',
-			'description' => 'Zobrazit Froxlor verzi v zápatí na přihlašovací stránce',
+			'title' => 'Zobrazit LibrePanel verzi při přihlášení',
+			'description' => 'Zobrazit LibrePanel verzi v zápatí na přihlašovací stránce',
 		],
 		'show_version_footer' => [
-			'title' => 'Zobrazit Froxlor verzi v zápatí',
-			'description' => 'Zobrazit Froxlor verzi v zápatí na ostatních stránkách',
+			'title' => 'Zobrazit LibrePanel verzi v zápatí',
+			'description' => 'Zobrazit LibrePanel verzi v zápatí na ostatních stránkách',
 		],
-		'froxlor_graphic' => [
-			'title' => 'Grafické záhlaví pro Froxlor',
+		'librepanel_graphic' => [
+			'title' => 'Grafické záhlaví pro LibrePanel',
 			'description' => 'Jaká grafika by měla být zobrazena v záhlaví',
 		],
 		'phpsettings' => [
@@ -349,7 +349,7 @@ return [
 		'accountdata' => 'Údaje o účtu',
 		'contactdata' => 'Kontaktní údaje',
 		'servicedata' => 'Údaje o službě',
-		'newerversionavailable' => 'K dispozici je novější verze Froxloru.',
+		'newerversionavailable' => 'K dispozici je novější verze LibrePanelu.',
 		'newerversiondetails' => 'Aktualizovat na verzi <b>%s</b> nyní?<br/>(Vaše aktuální verze je: %s)',
 		'extractdownloadedzip' => 'Extrahovat stažený archiv "%s"?',
 		'cron' => [
@@ -365,8 +365,8 @@ return [
 		'webserver_group' => 'Název skupiny webserveru',
 		'perlenabled' => 'Perl povolen',
 		'fcgid_settings' => 'FCGID',
-		'mod_fcgid_user' => 'Místní uživatel pro FCGID (Froxlor vHost)',
-		'mod_fcgid_group' => 'Místní skupina k použití pro FCGID (Froxlor vHost)',
+		'mod_fcgid_user' => 'Místní uživatel pro FCGID (LibrePanel vHost)',
+		'mod_fcgid_group' => 'Místní skupina k použití pro FCGID (LibrePanel vHost)',
 		'perl_settings' => 'Perl/CGI',
 		'notgiven' => '[neposkytnuto]',
 		'store_defaultindex' => 'Uložit výchozí indexový soubor zákazníkům docroot',
@@ -398,10 +398,10 @@ return [
 		'phpfpm.ininote' => 'Ne všechny hodnoty, které chcete definovat, mohou být použity v konfiguraci php-fpm poolu',
 		'phpinfo' => 'PHPinfo()',
 		'selectserveralias' => 'Hodnota ServerAlias pro doménu',
-		'selectserveralias_desc' => 'Vyberte, zda by froxlor měl vytvořit wildcard-entry (*.domain.tld), WWW-alias (www.domain.tld) nebo vůbec žádný alias',
+		'selectserveralias_desc' => 'Vyberte, zda by librepanel měl vytvořit wildcard-entry (*.domain.tld), WWW-alias (www.domain.tld) nebo vůbec žádný alias',
 		'show_news_feed' => [
 			'title' => 'Zobrazit novinky na admin nástěnce',
-			'description' => 'Povolením zobrazíte oficiální novinky Froxlor (https://inside.froxlor.org/news/) na vaší nástěnce a nikdy nezmeškejte důležité informace nebo oznámení o vydání.',
+			'description' => 'Povolením zobrazíte oficiální novinky LibrePanel (https://inside.librepanel.org/news/) na vaší nástěnce a nikdy nezmeškejte důležité informace nebo oznámení o vydání.',
 		],
 		'cronsettings' => 'Nastavení Cronjobu',
 		'integritycheck' => 'Ověření databáze',
@@ -411,7 +411,7 @@ return [
 		'customer_show_news_feed' => 'Zobrazit novinky na řídicím panelu zákazníka',
 		'customer_news_feed_url' => [
 			'title' => 'Použít vlastní RSS-feed',
-			'description' => 'Zadejte vlastní RSS kanál, který bude zobrazen vašim zákazníkům na jejich nástěnce.<br /><small>Ponechte prázdné pro použití oficiálního froxlor newsfeed (https://inside.froxlor.org/news/).</small>',
+			'description' => 'Zadejte vlastní RSS kanál, který bude zobrazen vašim zákazníkům na jejich nástěnce.<br /><small>Ponechte prázdné pro použití oficiálního librepanel newsfeed (https://inside.librepanel.org/news/).</small>',
 		],
 		'movetoadmin' => 'Přesunout zákazníka',
 		'movecustomertoadmin' => [
@@ -431,7 +431,7 @@ return [
 		'autoupdate' => 'Automatická aktualizace',
 		'server_php' => 'PHP',
 		'dnsenabled' => 'Povolit DNS editor',
-		'froxlorvhost' => 'Froxlor VirtualHost nastavení',
+		'librepanelvhost' => 'LibrePanel VirtualHost nastavení',
 		'hostname' => 'Název serveru',
 		'memory' => 'Využití paměti',
 		'webserversettings_ssl' => 'Nastavení SSL Webserveru',
@@ -578,7 +578,7 @@ return [
 		'interval' => 'interval',
 		'isactive' => 'povoleno',
 		'description' => 'popis',
-		'changewarning' => 'Změna těchto hodnot může mít negativní příčinu chování Froxlor a jeho automatických úloh.<br />Změňte hodnoty zde pouze pokud jste si jisti, že víte, co děláte.',
+		'changewarning' => 'Změna těchto hodnot může mít negativní příčinu chování LibrePanel a jeho automatických úloh.<br />Změňte hodnoty zde pouze pokud jste si jisti, že víte, co děláte.',
 	],
 	'crondesc' => [
 		'cron_unknown_desc' => 'nebyl zadán žádný popis',
@@ -698,7 +698,7 @@ return [
 		'priority20' => 'Priorita 20',
 		'txtrecords' => 'Definovat TXT záznamy',
 		'txtexample' => 'Příklad (SPF-entry):<br />v=spf1 ip4:xxx.xxx.xx.0/23 -all',
-		'howitworks' => 'Zde můžete spravovat DNS položky pro vaši doménu. Pamatujte, že froxlor automaticky vygeneruje NS/MX/A/AAAA záznamy pro vás. Vlastní položky jsou upřednostňovány, budou automaticky vygenerovány pouze chybějící položky.',
+		'howitworks' => 'Zde můžete spravovat DNS položky pro vaši doménu. Pamatujte, že librepanel automaticky vygeneruje NS/MX/A/AAAA záznamy pro vás. Vlastní položky jsou upřednostňovány, budou automaticky vygenerovány pouze chybějící položky.',
 	],
 	'dnseditor' => [
 		'edit' => 'upravit DNS',
@@ -717,7 +717,7 @@ return [
 			velikost, hp, vp: [0 .. 90000000. 0] (velikost/přesnost v metrech)</code><br>Příklad: <code>52 22 23.000 N 4 53 32.000 E -2,00m 000m 10000m</code>',
 			'MX' => 'Záznam o výměně e-mailů, namapuje doménu na mailserver pro tuto doménu.<br>Příklad: <code>10 mail.example.com</code><br>Poznámka: Pro prioritu použijte pole výše',
 			'NS' => 'Deleguje zónu DNS, aby použil dané autoritativní jmenné servery.',
-			'RP' => 'Záznam odpovědné osoby<br>Struktura: <code>mailbox[nahraďte @ tečkou] txt-record-name</code><br>Příklad: <code>team.froxlor.org. froxlor.org.</code>',
+			'RP' => 'Záznam odpovědné osoby<br>Struktura: <code>mailbox[nahraďte @ tečkou] txt-record-name</code><br>Příklad: <code>team.librepanel.org. librepanel.org.</code>',
 			'SRV' => 'Záznam polohy služby, použitý pro novější protokoly namísto vytváření záznamů specifických pro protokol, jako je MX.<br>Struktura: <code>prioritní váhový port cíl</code><br>Příklad: <code>0 5 5060 sipserver. xample.com.</code><br>Poznámka: Pro prioritu použijte pole výše',
 			'SSHFP' => 'Záznam zdroje SSHFP se používá ke zveřejnění otisků prstů klíče bezpečného shell (SSH) v DNS.<br>Struktura: <code>typ algoritmu</code><br>Algoritmy: <code>0: vyhrazeno, 1: RSA, 2: DSA, 3: ECDSA, 4: Ed25519, 6: Typy Ed448</code><br> <code>0: vyhrazené, 1: SHA-1, 2: SHA-256</code><br>Příklad: <code>2 1 123456789abcdef67890123456789abcdef67890</code>',
 			'TLSA' => 'TLSA (TLS Authentication) záznam slouží ke zveřejnění otisku prstu certifikátu TLS/SSL. Běžně se používá pro DANE.<br>TLSA záznamy mohou být důvěryhodné, pouze pokud je DNSSEC povolena na vaší doméně.<br>Struktura: <code>typ otisku prstu</code><br>využití certifikátu: <code>0: PKIX-T, 1: PKIX-EE, 2: DANE-TA, 3: DANE-EE</code><br>selektor: <code>0: Použijte celý certifikát 1: Používejte podřízený veřejný klíč</code><br>Odpovídající typ: <code>0: Bez Hash, 1: SHA-256 Hash, 2:SHA-512 Hash</code><br>Příklad: <code>3 1 123456789abcdef67890123456789abcdef123456789abcdef123456789abcde</code>',
@@ -745,7 +745,7 @@ return [
 		'hasaliasdomains' => 'Má alias doménu(y)',
 		'statstics' => 'Statistiky využití',
 		'isassigneddomain' => 'Je přiřazena doména',
-		'add_date' => 'Přidáno do Froxloru',
+		'add_date' => 'Přidáno do LibrePanelu',
 		'registration_date' => 'Přidáno do registru',
 		'topleveldomain' => 'Top-Level-Doména',
 		'associated_with_domain' => 'Přidružené',
@@ -770,7 +770,7 @@ return [
 		'import_separator' => 'Oddělovač',
 		'import_offset' => 'Odsazení',
 		'import_file' => 'Soubor CSV',
-		'import_description' => 'Podrobné informace o struktuře importního souboru a o úspěšném importu, navštivte prosím <a href="https://docs.froxlor.org/latest/admin-guide/domain-import/" target="_blank" class="alert-link">https://docs.froxlor.org/latest/admin-guide/domain-import/</a>',
+		'import_description' => 'Podrobné informace o struktuře importního souboru a o úspěšném importu, navštivte prosím <a href="https://docs.librepanel.org/latest/admin-guide/domain-import/" target="_blank" class="alert-link">https://docs.librepanel.org/latest/admin-guide/domain-import/</a>',
 		'ssl_redirect_temporarilydisabled' => '<br>Přesměrování protokolu SSL je dočasně deaktivováno, zatímco je generován nový Let\'s Encrypt certifikát. Bude znovu aktivováno po vygenerování certifikátu.',
 		'termination_date' => 'Datum ukončení',
 		'termination_date_overview' => 'ukončeno dne ',
@@ -954,11 +954,11 @@ return [
 		'sslredirectonlypossiblewithsslipport' => 'Použití Let\'s Encryptí je možné pouze v případě, že doména má přiřazenou alespoň jednu ssl-povolenou kombinaci IP/port.',
 		'fcgidstillenableddeadlock' => 'FCGID je aktuálně aktivní.<br />Prosím deaktivujte ho před přepnutím na jiný webový server než Apache2 nebo lighttpd',
 		'send_report_title' => 'Odeslat zprávu o chybě',
-		'send_report_desc' => 'Děkujeme, že jste nahlásili tuto chybu a pomohli nám vylepšit Froxlor.<br />Toto je e-mail, který bude odeslán Froxlor vývojáři:',
+		'send_report_desc' => 'Děkujeme, že jste nahlásili tuto chybu a pomohli nám vylepšit LibrePanel.<br />Toto je e-mail, který bude odeslán LibrePanel vývojáři:',
 		'send_report' => 'Odeslat hlášení',
 		'send_report_error' => 'Chyba při odesílání hlášení: <br />%s',
 		'notallowedtouseaccounts' => 'Váš účet neumožňuje používat IMAP/POP3. E-mailové účty nelze přidat.',
-		'cannotdeletehostnamephpconfig' => 'Tato konfigurace PHP je používána ve Froxlor-vhost a nelze ji odstranit.',
+		'cannotdeletehostnamephpconfig' => 'Tato konfigurace PHP je používána ve LibrePanel-vhost a nelze ji odstranit.',
 		'cannotdeletedefaultphpconfig' => 'Tato konfigurace PHP je nastavena jako výchozí a nelze ji odstranit.',
 		'passwordshouldnotbeusername' => 'Heslo by nemělo být stejné jako uživatelské jméno.',
 		'no_phpinfo' => 'Je nám líto, phpinfo() nelze přečíst',
@@ -968,13 +968,13 @@ return [
 		'no_apcuinfo' => 'Žádné informace o cache nejsou k dispozici. APCu se nezdá být spuštěna.',
 		'no_opcacheinfo' => 'Žádné informace o OPCache nejsou k dispozici. OPCache se nezdá být načtena.',
 		'inactive_opcacheinfo' => 'OPCache se zdá být nainstalována, ale není aktivováno.',
-		'nowildcardwithletsencrypt' => 'Let\'s Encrypt neumí zpracovávat wildcard domény pomocí ACME ve froxlor (vyžaduje dns-challenge), omlouváme se. Nastavte prosím ServerAlias na WWW nebo jej zcela zakažte',
-		'customized_version' => 'Vypadá to, že vaše instalace Froxlor byla upravena, na úpravy neposkytuijeme podporu, je nám líto.',
+		'nowildcardwithletsencrypt' => 'Let\'s Encrypt neumí zpracovávat wildcard domény pomocí ACME ve librepanel (vyžaduje dns-challenge), omlouváme se. Nastavte prosím ServerAlias na WWW nebo jej zcela zakažte',
+		'customized_version' => 'Vypadá to, že vaše instalace LibrePanel byla upravena, na úpravy neposkytuijeme podporu, je nám líto.',
 		'autoupdate_0' => 'Neznámá chyba',
 		'autoupdate_1' => 'Nastavení PHP allow_url_fopen je zakázáno. Autoupdate musí být povolen v php.ini',
 		'autoupdate_2' => 'PHP zip rozšíření nebylo nalezeno, ujistěte se, že je nainstalováno a aktivováno',
-		'autoupdate_4' => 'Archiv froxlor nemohl být uložen na disk :(',
-		'autoupdate_5' => 'version.froxlor.org vrátil nepřijatelné hodnoty :(',
+		'autoupdate_4' => 'Archiv librepanel nemohl být uložen na disk :(',
+		'autoupdate_5' => 'version.librepanel.org vrátil nepřijatelné hodnoty :(',
 		'autoupdate_6' => 'Jejda, ke stažení nebyla zadána žádná (platná) verze :(',
 		'autoupdate_7' => 'Stažený archiv nebyl nalezen :(',
 		'autoupdate_8' => 'Archiv nelze extrahovat :(',
@@ -1071,7 +1071,7 @@ return [
 		'databaseCharset' => 'Sada znaků databáze (měla by být UTF-8)',
 		'domainIpTable' => 'IP &lt;&dash;&gt; reference domén',
 		'subdomainSslRedirect' => 'Falešný příznak přesměrování SSL pro non-ssl domény',
-		'froxlorLocalGroupMemberForFcgidPhpFpm' => 'froxlor-uživatelve skupinách zákazníků (pro FCGID/php-fpm)',
+		'librepanelLocalGroupMemberForFcgidPhpFpm' => 'librepanel-uživatelve skupinách zákazníků (pro FCGID/php-fpm)',
 		'webserverGroupMemberForFcgidPhpFpm' => 'Webový uživatel ve skupině zákazníků (pro FCGID/php-fpm)',
 		'subdomainLetsencrypt' => 'Hlavní domény bez SSL portu nemají žádné subdomény s aktivním přesměrováním SSL',
 	],
@@ -1125,7 +1125,7 @@ return [
 			'mailbody' => 'Dobrý den, {SALUTATION},\\n\\nje zde váš odkaz pro nastavení nového hesla. Tento odkaz je platný po dobu následujících 24 hodin.\\n\\n{LINK}\\n\\nDěkujeme,\\nváš správce',
 		],
 		'new_database_by_customer' => [
-			'subject' => '[Froxlor] Byla vytvořena nová databáze',
+			'subject' => '[LibrePanel] Byla vytvořena nová databáze',
 			'mailbody' => 'Dobrý den {CUST_NAME},
 
 jste právě přidali novou databázi. Zde jsou zadané informace:
@@ -1159,7 +1159,7 @@ Ach upřímně, váš správce',
 		],
 		'2fa' => [
 			'mailbody' => 'Dobrý den,\\n\\nváš 2FA přihlašovací kód je: {CODE}.\\n\\nToto je automaticky vytvořený\\ne-mail, prosím neodpovídejte na to!\\n\\nVáš správce',
-			'subject' => 'Froxlor - 2FA kód',
+			'subject' => 'LibrePanel - 2FA kód',
 		],
 	],
 	'menue' => [
@@ -1228,7 +1228,7 @@ Ach upřímně, váš správce',
 		'unprivileged_passwd' => 'Heslo pro neoprávněného uživatele',
 		'mysql_ssl_ca_file' => 'Certifikát SSL serveru',
 		'mysql_ssl_verify_server_certificate' => 'Ověřit certifikát SSL serveru',
-		'globaluserinfo' => 'Pro přístup k databázím můžete navíc použít vaše froxlor přihlášení (uživatel: %s), které má automaticky přístup ke všem databázím.<br />Doporučujeme <b>ne</b> použít pro aplikace, pouze pro správu (např. přes phpMyAdmin).',
+		'globaluserinfo' => 'Pro přístup k databázím můžete navíc použít vaše librepanel přihlášení (uživatel: %s), které má automaticky přístup ke všem databázím.<br />Doporučujeme <b>ne</b> použít pro aplikace, pouze pro správu (např. přes phpMyAdmin).',
 		'edit_global_user' => 'Upravit administrátora',
 	],
 	'opcacheinfo' => [
@@ -1379,11 +1379,11 @@ Ach upřímně, váš správce',
 		'use_checkbox_for_unlimited' => 'Hodnota „0“ deaktivuje tento prostředek. Zaškrtávací políčko vpravo umožňuje „neomezené“ použití.',
 	],
 	'phpfpm' => [
-		'vhost_httpuser' => 'Místní uživatel pro PHP-FPM (Froxlor vHost)',
-		'vhost_httpgroup' => 'Místní skupina pro PHP-FPM (Froxlor vHost)',
+		'vhost_httpuser' => 'Místní uživatel pro PHP-FPM (LibrePanel vHost)',
+		'vhost_httpgroup' => 'Místní skupina pro PHP-FPM (LibrePanel vHost)',
 		'ownvhost' => [
-			'title' => 'Povolit PHP-FPM pro Froxlor vHost',
-			'description' => 'Pokud je povoleno, bude Froxlor spuštěn také pod místním uživatelem',
+			'title' => 'Povolit PHP-FPM pro LibrePanel vHost',
+			'description' => 'Pokud je povoleno, bude LibrePanel spuštěn také pod místním uživatelem',
 		],
 		'use_mod_proxy' => [
 			'title' => 'Použít mod_proxy / mod_proxy_fcgi',
@@ -1599,7 +1599,7 @@ Ach upřímně, váš správce',
 		],
 		'mod_fcgid' => [
 			'title' => 'Povolit FCGID',
-			'description' => 'Použijte pro spuštění PHP s odpovídajícím uživatelským účtem.<br /><br /><b>Toto vyžaduje speciální konfiguraci webového serveru pro Apache, viz <a target="_blank" href="https://docs.froxlor.org/latest/admin-guide/configuration/fcgid/">FCGID - příručka</a></b>',
+			'description' => 'Použijte pro spuštění PHP s odpovídajícím uživatelským účtem.<br /><br /><b>Toto vyžaduje speciální konfiguraci webového serveru pro Apache, viz <a target="_blank" href="https://docs.librepanel.org/latest/admin-guide/configuration/fcgid/">FCGID - příručka</a></b>',
 			'configdir' => [
 				'title' => 'Adresář konfigurace',
 				'description' => 'Kde by měly být uloženy všechny fcgid konfigurační soubory? Pokud nepoužíváte vlastní kompilovaný suexec binární, což je normální situace, tato cesta musí být pod /var/www/<br /><br /><div class="text-danger">POZNÁMKA: Obsah této složky je pravidelně smazán, aby se zabránilo ukládání dat v ní manuálně.</div>',
@@ -1625,7 +1625,7 @@ Ach upřímně, váš správce',
 				'description' => 'Kolik požadavků by mělo být povoleno na doménu?',
 			],
 			'defaultini' => 'Výchozí konfigurace PHP pro nové domény',
-			'defaultini_ownvhost' => 'Výchozí konfigurace PHP pro Froxlor-vHost',
+			'defaultini_ownvhost' => 'Výchozí konfigurace PHP pro LibrePanel-vHost',
 			'idle_timeout' => [
 				'title' => 'Časový limit nečinnosti',
 				'description' => 'Časový limit nastavení Mod FastCGI.',
@@ -1664,7 +1664,7 @@ Ach upřímně, váš správce',
 			],
 			'logfile' => [
 				'title' => 'Název souboru pro log',
-				'description' => 'Používá se pouze v případě, že typ logu obsahuje "soubor". Tento soubor bude vytvořen v froxlor/logs/. Tato složka je chráněna před veřejným přístupem.',
+				'description' => 'Používá se pouze v případě, že typ logu obsahuje "soubor". Tento soubor bude vytvořen v librepanel/logs/. Tato složka je chráněna před veřejným přístupem.',
 			],
 			'logcron' => 'Zaznamenávat cronjoby',
 			'logcronoption' => [
@@ -1714,7 +1714,7 @@ Ach upřímně, váš správce',
 		],
 		'apache_globaldiropt' => [
 			'title' => 'Možnosti adresáře pro prefix zákazníka',
-			'description' => 'Obsah tohoto pole bude zahrnut do 05_froxlor_dirfix_nofcgid.conf apache config. Je-li prázdné, použije se výchozí hodnota:<br><br>apache >=2.<br><code>Require all granted<br>AllowOverride All</code><br><br>apache <=2.<br><code>Order allow,deny<br>allow from all</code>',
+			'description' => 'Obsah tohoto pole bude zahrnut do 05_librepanel_dirfix_nofcgid.conf apache config. Je-li prázdné, použije se výchozí hodnota:<br><br>apache >=2.<br><code>Require all granted<br>AllowOverride All</code><br><br>apache <=2.<br><code>Order allow,deny<br>allow from all</code>',
 		],
 		'default_vhostconf_domain' => [
 			'description' => 'Obsah tohoto pole bude přímo zahrnut do vHhost kontejneru. Můžete použít následující proměnné:<br/><code>{DOMAIN}</code>, <code>{DOCROOT}</code>, <code>{CUSTOMER}</code>, <code>{IP}</code>, <code>{PORT}</code>, <code>{SCHEME}</code> <code>{FPMSOCKET}</code> (pokud existuje)<br/> Upozornění: Kód nebude zkontrolován na obsah chyb. Pokud obsahuje chyby, webový server nemusí znovu spustit!',
@@ -1758,7 +1758,7 @@ Ach upřímně, váš správce',
 		],
 		'panel_allow_domain_change_customer' => [
 			'title' => 'Povolit přesouvání domén mezi zákazníky',
-			'description' => 'Pokud je aktivováno, můžete změnit zákazníka domény v nastavení domény.<br /><b>Upozornění:</b> Froxlor změní kořenový adresář dokumentu na výchozí domovský adresář nového zákazníka (+ doménová složka, pokud je aktivována)',
+			'description' => 'Pokud je aktivováno, můžete změnit zákazníka domény v nastavení domény.<br /><b>Upozornění:</b> LibrePanel změní kořenový adresář dokumentu na výchozí domovský adresář nového zákazníka (+ doménová složka, pokud je aktivována)',
 		],
 		'specialsettingsforsubdomains' => [
 			'description' => 'Pokud je zvoleno ano, budou tato vlastní nastavení vHost přidána ke všem subdoménám; pokud ne, budou zvláštní nastavení subdomény odstraněna.',
@@ -1809,7 +1809,7 @@ Ach upřímně, váš správce',
 			'description' => 'Nastavte výchozí kód přesměrování, který by se měl použít, pokud jej zákazník nenastaví sám',
 		],
 		'mail_also_with_mxservers' => 'Vytvořit mail-, imap-, pop3- a smtp-"A record" také s nastavením MX-serverů',
-		'froxlordirectlyviahostname' => 'Přístup k Froxlor přímo prostřednictvím názvu hostitele',
+		'librepaneldirectlyviahostname' => 'Přístup k LibrePanel přímo prostřednictvím názvu hostitele',
 		'panel_password_regex' => [
 			'title' => 'Regulární výraz pro hesla',
 			'description' => 'Zde můžete nastavit regulární výraz pro složitost hesel.<br />Prázdné = žádné specifické požadavky',
@@ -1819,13 +1819,13 @@ Ach upřímně, váš správce',
 			'description' => 'Výchozí je /usr/bin/perl',
 		],
 		'mod_fcgid_ownvhost' => [
-			'title' => 'Povolit FCGID pro Froxlor vHost',
-			'description' => 'Pokud je povoleno, bude Froxlor spuštěn také pod místním uživatelem',
+			'title' => 'Povolit FCGID pro LibrePanel vHost',
+			'description' => 'Pokud je povoleno, bude LibrePanel spuštěn také pod místním uživatelem',
 		],
 		'perl' => [
 			'suexecworkaround' => [
 				'title' => 'Povolit SuExec workaround',
-				'description' => 'Povolit pouze v případě, že zákaznické docrooty nejsou v apache suexec cestě.<br />Pokud je povoleno, Froxlor vygeneruje symbolický odkaz od zákazníků perl-enabled adresáře + /cgi-bin/ k dané cestě.<br />Všimněte si, že perl bude fungovat pouze v podadresáři složek /cgi-bin/ a ne ve složce samotné (jako to dělá bez této opravy!)',
+				'description' => 'Povolit pouze v případě, že zákaznické docrooty nejsou v apache suexec cestě.<br />Pokud je povoleno, LibrePanel vygeneruje symbolický odkaz od zákazníků perl-enabled adresáře + /cgi-bin/ k dané cestě.<br />Všimněte si, že perl bude fungovat pouze v podadresáři složek /cgi-bin/ a ne ve složce samotné (jako to dělá bez této opravy!)',
 			],
 			'suexeccgipath' => [
 				'title' => 'Cesta pro symlinky adresářů zákazníka s povoleným perlem',
@@ -1852,7 +1852,7 @@ Ach upřímně, váš správce',
 		],
 		'phpfpm' => [
 			'title' => 'Povolit php-fpm',
-			'description' => '<b>To vyžaduje speciální konfiguraci webserveru viz <a target="_blank" href="https://docs.froxlor.org/latest/admin-guide/configuration/php-fpm/">PHP-FPM příručka</a></b>',
+			'description' => '<b>To vyžaduje speciální konfiguraci webserveru viz <a target="_blank" href="https://docs.librepanel.org/latest/admin-guide/configuration/php-fpm/">PHP-FPM příručka</a></b>',
 		],
 		'phpfpm_settings' => [
 			'configdir' => 'Adresář konfigurace php-fpm',
@@ -1977,11 +1977,11 @@ Ach upřímně, váš správce',
 			'description' => 'Kde by měly být vytvořeny ssl-certifikáty zadané zákazníkem?<br /><br /><div class="text-danger">POZNÁMKA: Obsah této složky je pravidelně smazán, aby se zabránilo ukládání dat do této složky ručně.</div>',
 		],
 		'allow_error_report_admin' => [
-			'title' => 'Povolit správcům/prodejcům nahlásit chyby databáze Froxlor',
+			'title' => 'Povolit správcům/prodejcům nahlásit chyby databáze LibrePanel',
 			'description' => 'Upozornění: Nikdy nám neposílejte žádné osobní (zákaznické)údaje!',
 		],
 		'allow_error_report_customer' => [
-			'title' => 'Umožnit zákazníkům nahlásit chyby databáze Froxlor',
+			'title' => 'Umožnit zákazníkům nahlásit chyby databáze LibrePanel',
 			'description' => 'Upozornění: Nikdy nám neposílejte žádné osobní (zákaznické)údaje!',
 		],
 		'mailtraffic_enabled' => [
@@ -2006,7 +2006,7 @@ Ach upřímně, váš správce',
 		],
 		'system_cronconfig' => [
 			'title' => 'Konfigurační soubor cronu',
-			'description' => 'Cesta ke konfiguračnímu souboru cron-service. Tento soubor bude pravidelně a automaticky aktualizován froxlorem.<br />Poznámka: <b>Ujistěte se</b>, že používáte stejný název souboru jako pro hlavní froxlor cronjob (výchozí: /etc/cron.d/froxlor)!<br><br>Pokud používáte <b>FreeBSD</b>, zadejte zde <i>/etc/crontab</i>!',
+			'description' => 'Cesta ke konfiguračnímu souboru cron-service. Tento soubor bude pravidelně a automaticky aktualizován librepanelem.<br />Poznámka: <b>Ujistěte se</b>, že používáte stejný název souboru jako pro hlavní librepanel cronjob (výchozí: /etc/cron.d/librepanel)!<br><br>Pokud používáte <b>FreeBSD</b>, zadejte zde <i>/etc/crontab</i>!',
 		],
 		'system_crondreload' => [
 			'title' => 'Příkaz pro opětovné načtení Cron-daemona',
@@ -2018,7 +2018,7 @@ Ach upřímně, váš správce',
 		],
 		'system_cron_allowautoupdate' => [
 			'title' => 'Povolit automatické aktualizace databáze',
-			'description' => '<div class="text-danger"><b>POZOR:</b></div> Toto nastavení umožňuje cronjob obejít kontrolu verzí froxlor souborů a databáze a spustit aktualizace databáze v případě, že dojde k nesouladu verzí.<br><br><div class="text-danger">Automatická aktualizace vždy nastaví výchozí hodnoty pro nová nastavení nebo změny. Toto nemusí vždy vyhovovat vašemu systému. Před aktivací této možnosti</div> prosím dvakrát rozmyslete',
+			'description' => '<div class="text-danger"><b>POZOR:</b></div> Toto nastavení umožňuje cronjob obejít kontrolu verzí librepanel souborů a databáze a spustit aktualizace databáze v případě, že dojde k nesouladu verzí.<br><br><div class="text-danger">Automatická aktualizace vždy nastaví výchozí hodnoty pro nová nastavení nebo změny. Toto nemusí vždy vyhovovat vašemu systému. Před aktivací této možnosti</div> prosím dvakrát rozmyslete',
 		],
 		'dns_createhostnameentry' => 'Vytvořte bind-zone/config pro název hostitele systému',
 		'panel_password_alpha_lower' => [
@@ -2063,7 +2063,7 @@ Ach upřímně, váš správce',
 		],
 		'leenabled' => [
 			'title' => 'Použít Let\'s Encrypt',
-			'description' => 'Pokud je aktivováno, zákazníci mohou nechat froxlor automaticky generovat a obnovit šifrovací certifikáty domén s ssl IP/portem.<br /><br />Nezapomeňte, že musíte procházet konfigurací webserveru, pokud je povoleno, protože tato funkce vyžaduje speciální konfiguraci.',
+			'description' => 'Pokud je aktivováno, zákazníci mohou nechat librepanel automaticky generovat a obnovit šifrovací certifikáty domén s ssl IP/portem.<br /><br />Nezapomeňte, že musíte procházet konfigurací webserveru, pokud je povoleno, protože tato funkce vyžaduje speciální konfiguraci.',
 		],
 		'caa_entry' => [
 			'title' => 'Generovat CAA DNS záznamy',
@@ -2083,7 +2083,7 @@ Ach upřímně, váš správce',
 		],
 		'dns_server' => [
 			'title' => 'Daemon DNS serveru',
-			'description' => 'Nezapomeňte, že "daemons" je třeba konfigurovat pomocí konfiguračních šablon froxloru',
+			'description' => 'Nezapomeňte, že "daemons" je třeba konfigurovat pomocí konfiguračních šablon librepanelu',
 		],
 		'panel_customer_hide_options' => [
 			'title' => 'Skrytí položek nabídek a grafů návštěvnosti v zákaznickém panelu',
@@ -2097,13 +2097,13 @@ Ach upřímně, váš správce',
 			'title' => 'Seznam dostupných příkazů',
 			'description' => 'Čárkami oddělený seznam shellů, z nichž si může zákazník vybrat pro své ftp uživatele.<br><br>Všimněte si, že výchozí shell <strong>/bin/false</strong> bude vždy na výběr (pokud je povolen), i když je toto nastavení prázdné. V každém případě je to výchozí hodnota proftp uživatele',
 		],
-		'le_froxlor_enabled' => [
-			'title' => 'Povolit Let\'s Encrypt pro hostitele froxlor',
-			'description' => 'Pokud je aktivováno, bude vhost froxloru automaticky zabezpečen pomocí Let\'s Encrypt certifikátu.',
+		'le_librepanel_enabled' => [
+			'title' => 'Povolit Let\'s Encrypt pro hostitele librepanel',
+			'description' => 'Pokud je aktivováno, bude vhost librepanelu automaticky zabezpečen pomocí Let\'s Encrypt certifikátu.',
 		],
-		'le_froxlor_redirect' => [
-			'title' => 'Povolit přesměrování SSL pro vhost froxloru',
-			'description' => 'Pokud je aktivováno, všechny požadavky http na váš froxlor budou přesměrovány na příslušný server SSL.',
+		'le_librepanel_redirect' => [
+			'title' => 'Povolit přesměrování SSL pro vhost librepanelu',
+			'description' => 'Pokud je aktivováno, všechny požadavky http na váš librepanel budou přesměrovány na příslušný server SSL.',
 		],
 		'option_unavailable_websrv' => '<br><em class="text-danger">K dispozici pouze pro: %s</em>',
 		'option_unavailable' => '<br><em class="text-danger">Možnost není dostupná kvůli jiným nastavením.</em>',
@@ -2128,11 +2128,11 @@ Ach upřímně, váš správce',
 		],
 		'le_domain_dnscheck' => [
 			'title' => 'Ověřit DNS domén při použití Let\'s Encrypt',
-			'description' => 'Pokud je aktivováno, froxlor ověří, zda se doména, která žádá o certifikát, směřuje alespoň na jednu ze Ip adres systému.',
+			'description' => 'Pokud je aktivováno, librepanel ověří, zda se doména, která žádá o certifikát, směřuje alespoň na jednu ze Ip adres systému.',
 		],
 		'le_domain_dnscheck_resolver' => [
 			'title' => 'Použít externí nameserver pro ověření DNS',
-			'description' => 'Je-li nastaveno, froxlor použije tuto DNS k ověření DNS domén při použití Let\'s Encrypt. Pokud je prázdné, bude použit výchozí překladač DNS systému.',
+			'description' => 'Je-li nastaveno, librepanel použije tuto DNS k ověření DNS domén při použití Let\'s Encrypt. Pokud je prázdné, bude použit výchozí překladač DNS systému.',
 		],
 		'phpsettingsforsubdomains' => [
 			'description' => 'Pokud ano, zvolený php-config bude aktualizován na všechny subdomény',
@@ -2143,7 +2143,7 @@ Ach upřímně, váš správce',
 		],
 		'enable_api' => [
 			'title' => 'Povolit externí použití API',
-			'description' => 'Chcete-li používat froxlor API, musíte aktivovat tuto možnost. Podrobnější informace naleznete v <a href="https://docs.froxlor.org/latest/api-guide/" target="_new">https://docs.froxlor.org/</a>',
+			'description' => 'Chcete-li používat librepanel API, musíte aktivovat tuto možnost. Podrobnější informace naleznete v <a href="https://docs.librepanel.org/latest/api-guide/" target="_new">https://docs.librepanel.org/</a>',
 		],
 		'api_customer_default' => '"Povolit přístup k API" pro nové zákazníky',
 		'dhparams_file' => [
@@ -2158,9 +2158,9 @@ Ach upřímně, váš správce',
 			'title' => 'Vystavit certifikát ESC / certifikát ECDSA',
 			'description' => 'Je-li nastaveno na platnou velikost klíče, vystavený certifikát bude používat ECC / ECDSA',
 		],
-		'froxloraliases' => [
-			'title' => 'Aliasy domén pro froxlor vhost',
-			'description' => 'Čárkami oddělený seznam domén, které mají být přidány jako serverový alias do froxlor vhost',
+		'librepanelaliases' => [
+			'title' => 'Aliasy domén pro librepanel vhost',
+			'description' => 'Čárkami oddělený seznam domén, které mají být přidány jako serverový alias do librepanel vhost',
 		],
 		'default_sslvhostconf' => [
 			'title' => 'Výchozí nastavení SSL vHost-serveru',
@@ -2209,7 +2209,7 @@ Ach upřímně, váš správce',
 			'title' => 'Předvolená hodnota pro "Vytvořit standardní subdoménu" při vytváření zákazníka',
 			'description' => '',
 		],
-		'froxlorusergroup' => [
+		'librepanelusergroup' => [
 			'title' => 'Vlastní systémová skupina pro všechny zákazníky',
 			'description' => 'Použití libnss-extrauser (systémového nastavení) je vyžadováno. Vytváření prázdných hodnot přeskočí nebo odstraní existující skupinu.',
 		],
@@ -2218,8 +2218,8 @@ Ach upřímně, váš správce',
 			'description' => 'Nastavte na místo, kde je acme.sh nainstalován, včetně skriptu acme.sh<br>Výchozí je <b>/root/.acme.sh/acme.sh</b>',
 		],
 		'update_channel' => [
-			'title' => 'froxlor aktualizační-kanál',
-			'description' => 'Vyberte aktualizační kanál froxlor. Výchozí hodnota je "stabilní"',
+			'title' => 'librepanel aktualizační-kanál',
+			'description' => 'Vyberte aktualizační kanál librepanel. Výchozí hodnota je "stabilní"',
 		],
 		'uc_stable' => 'stabilní',
 		'uc_testing' => 'testovací',
@@ -2233,7 +2233,7 @@ Ach upřímně, váš správce',
 		'requires_reconfiguration' => 'Změna tohoto nastavení může vyžadovat změnu konfigurace následujících služeb:<br><strong>%s</strong>',
 		'req_limit_per_interval' => [
 			'title' => 'Počet HTTP požadavků na interval',
-			'description' => 'Omezit počet HTTP požadavků na interval (viz níže) pro froxlor, výchozí hodnota je "60"',
+			'description' => 'Omezit počet HTTP požadavků na interval (viz níže) pro librepanel, výchozí hodnota je "60"',
 		],
 		'req_limit_interval' => [
 			'title' => 'Interval omezení rychlosti',
@@ -2245,7 +2245,7 @@ Ach upřímně, váš správce',
 			'description' => 'Pokud dojde k deaktivaci, levé části menu budou vždy rozšířeny.',
 		],
 		'le_renew_services' => [
-			'title' => 'Pro tyto služby použijte certifikát froxloru Let\'s Encrypt',
+			'title' => 'Pro tyto služby použijte certifikát librepanelu Let\'s Encrypt',
 			'description' => 'Pokud je nastavena hodnota none (nebo je níže uvedený příkaz renew-hook prázdný), nebudou u vybraných služeb provedeny žádné úpravy konfigurace týkající se ssl.<br><br>Příkaz reload-command pro vybrané služby by měl být přidán do příkazu renew-hook, jinak se změny konfigurace nebo obnovené certifikáty nemusí správně použít.',
 		],
 		'le_renew_hook' => [
@@ -2294,7 +2294,7 @@ Ach upřímně, váš správce',
 		'REBUILD_DNS' => 'Obnovení bind konfigurace',
 		'CREATE_FTP' => 'Vytváření adresáře pro nového uživatele ftp-user',
 		'DELETE_CUSTOMER_FILES' => 'Mazání zákaznických souborů %s',
-		'noneoutstanding' => 'V současné době nejsou žádné nevyřízené úkoly pro Froxlor',
+		'noneoutstanding' => 'V současné době nejsou žádné nevyřízené úkoly pro LibrePanel',
 		'DELETE_EMAIL_DATA' => 'Odstranit e-mailová data zákazníka.',
 		'DELETE_FTP_DATA' => 'Odstranit data ftp účtu.',
 		'REBUILD_RSPAMD' => 'Obnovení konfigurace antispamu.',
@@ -2365,18 +2365,18 @@ Ach upřímně, váš správce',
 	],
 	'translator' => '',
 	'update' => [
-		'updateinprogress_onlyadmincanlogin' => 'Byla nainstalována novější verze Froxloru, ale ještě nebyla nastavena.<br />Pouze správce se může přihlásit a dokončit aktualizaci.',
-		'update' => 'Aktualizace Froxloru',
+		'updateinprogress_onlyadmincanlogin' => 'Byla nainstalována novější verze LibrePanelu, ale ještě nebyla nastavena.<br />Pouze správce se může přihlásit a dokončit aktualizaci.',
+		'update' => 'Aktualizace LibrePanelu',
 		'proceed' => 'Pokračovat',
 		'update_information' => [
-			'part_a' => 'Froxlor soubory byly aktualizovány na verzi <strong>%s</strong>. Nainstalovaná verze je <strong>%s</strong>.',
+			'part_a' => 'LibrePanel soubory byly aktualizovány na verzi <strong>%s</strong>. Nainstalovaná verze je <strong>%s</strong>.',
 			'part_b' => '<br /><br />Zákazníci se nebudou moci přihlásit, dokud nebude aktualizace dokončena.<br /><strong>Pokračovat?</strong>',
 		],
-		'noupdatesavail' => 'Již máte nejnovější verzi %sFroxlor nainstalovanou.',
-		'description' => 'Probíhá aktualizace databáze pro vaši instalaci froxlor',
+		'noupdatesavail' => 'Již máte nejnovější verzi %sLibrePanel nainstalovanou.',
+		'description' => 'Probíhá aktualizace databáze pro vaši instalaci librepanel',
 		'uc_newinfo' => 'K dispozici je novější verze %s: "%s" (Vaše aktuální verze je: %s)',
 		'notify_subject' => 'K dispozici je nová aktualizace',
-		'dbupdate_required' => 'Froxlor soubory byly aktualizovány, je vyžadována aktualizace databáze',
+		'dbupdate_required' => 'LibrePanel soubory byly aktualizovány, je vyžadována aktualizace databáze',
 	],
 	'usersettings' => [
 		'custom_notes' => [
@@ -2386,16 +2386,16 @@ Ach upřímně, váš správce',
 		],
 		'api_allowed' => [
 			'title' => 'Povolit přístup k API',
-			'description' => 'Pokud je povoleno v nastavení, může tento uživatel vytvořit API klíče a přistupovat k froxlor API',
+			'description' => 'Pokud je povoleno v nastavení, může tento uživatel vytvořit API klíče a přistupovat k librepanel API',
 			'notice' => 'Přístup k API není povolen pro váš účet.',
 		],
 		'gui_access' => [
 			'title' => 'Povolit přihlášení do WebUI',
-			'description' => 'Pokud je zakázáno, uživatel se nemůže přihlásit do froxlor web-ui, ale všechny služby (web, ftp, mail, databáze, api-přístup atd.) budou fungovat normálně.',
+			'description' => 'Pokud je zakázáno, uživatel se nemůže přihlásit do librepanel web-ui, ale všechny služby (web, ftp, mail, databáze, api-přístup atd.) budou fungovat normálně.',
 		],
 	],
 	'install' => [
-		'slogan' => 'panel pro správu serveru froxlor',
+		'slogan' => 'panel pro správu serveru librepanel',
 		'preflight' => 'Kontrola systému',
 		'critical_error' => 'Kritická chyba',
 		'suggestions' => 'Není vyžadováno, ale doporučuje se',
@@ -2407,13 +2407,13 @@ Ach upřímně, váš správce',
 		'switchmode_advanced' => 'Zobrazit rozšířené možnosti',
 		'switchmode_basic' => 'Skrýt rozšířené možnosti',
 		'dependency_check' => [
-			'title' => 'Vítejte ve froxloru',
-			'description' => 'Zkontrolujeme závislost systému, abychom zajistili, že budou povolena všechna požadovaná php rozšíření a moduly, aby froxlor běžel správně.',
+			'title' => 'Vítejte ve librepanelu',
+			'description' => 'Zkontrolujeme závislost systému, abychom zajistili, že budou povolena všechna požadovaná php rozšíření a moduly, aby librepanel běžel správně.',
 		],
 		'database' => [
 			'top' => 'Databáze',
 			'title' => 'Vytvořit databázi a uživatele',
-			'description' => 'Froxlor vyžaduje databázi a navíc <a href="https://docs.froxlor.org/latest/general/installation/tarball.html#_3-create-privileged-database-user" target="_blank">privilegovaného uživatele</a>, aby mohl vytvářet uživatele a databáze (volba GRANT). Daná databáze a neprivilegovaný databázový uživatel bude vytvořen v tomto procesu. Oprávněný uživatel musí existovat.',
+			'description' => 'LibrePanel vyžaduje databázi a navíc <a href="https://docs.librepanel.org/latest/general/installation/tarball.html#_3-create-privileged-database-user" target="_blank">privilegovaného uživatele</a>, aby mohl vytvářet uživatele a databáze (volba GRANT). Daná databáze a neprivilegovaný databázový uživatel bude vytvořen v tomto procesu. Oprávněný uživatel musí existovat.',
 			'user' => 'Neoprávněný databázový uživatel',
 			'dbname' => 'Název databáze',
 			'force_create' => 'Zálohovat a přepsat databázi, pokud existuje?',
@@ -2428,12 +2428,12 @@ Ach upřímně, váš správce',
 		'system' => [
 			'top' => 'Systémové nastavení',
 			'title' => 'Podrobnosti o Vašem serveru',
-			'description' => 'Nastavte si své prostředí stejně jako data a možnosti související se serverem, aby se froxlor mohl dozvědět o vašem systému. Tyto hodnoty jsou klíčové pro konfiguraci a fungování systému.',
+			'description' => 'Nastavte si své prostředí stejně jako data a možnosti související se serverem, aby se librepanel mohl dozvědět o vašem systému. Tyto hodnoty jsou klíčové pro konfiguraci a fungování systému.',
 			'ipv4' => 'Primární IPv4 adresa (použije-li se)',
 			'ipv6' => 'Primární IPv6 adresa (použije-li se)',
 			'servername' => 'Název serveru (FQDN, žádná ip-adresa)',
 			'phpbackend' => 'PHP backend',
-			'activate_newsfeed' => 'Povolit oficiální novinky<br><small>(externí zdroj: https://inside.froxlor.org/news/)</small>',
+			'activate_newsfeed' => 'Povolit oficiální novinky<br><small>(externí zdroj: https://inside.librepanel.org/news/)</small>',
 		],
 		'install' => [
 			'top' => 'Dokončit nastavení',
@@ -2444,7 +2444,7 @@ Ach upřímně, váš správce',
 			'waitforconfig' => 'Čekání na konfiguraci služeb...',
 		],
 		'errors' => [
-			'wrong_ownership' => 'Ujistěte se, že soubory froxlor jsou vlastněny %s:%s',
+			'wrong_ownership' => 'Ujistěte se, že soubory librepanel jsou vlastněny %s:%s',
 			'missing_extensions' => 'Následující php rozšíření jsou vyžadována a nejsou nainstalována',
 			'suggestedextensions' => 'Následující php rozšíření se nepodařilo najít, ale jsou doporučeny',
 			'databaseexists' => 'Databáze již existuje, prosím nastavte možnost přepsání pro obnovu nebo zvolte jiný název',
@@ -2472,8 +2472,8 @@ Ach upřímně, váš správce',
 		]
 	],
 	'welcome' => [
-		'title' => 'Vítejte ve froxloru!',
-		'config_note' => 'Aby mohl froxlor správně komunikovat se zálohou, musíte ji nakonfigurovat.',
+		'title' => 'Vítejte ve librepanelu!',
+		'config_note' => 'Aby mohl librepanel správně komunikovat se zálohou, musíte ji nakonfigurovat.',
 		'config_now' => 'Nastavit nyní'
 	],
 ];

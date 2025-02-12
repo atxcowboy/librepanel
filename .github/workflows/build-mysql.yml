@@ -1,9 +1,9 @@
-name: Froxlor-CI-MySQL
+name: LibrePanel-CI-MySQL
 on: ['push', 'pull_request', 'create']
 
 jobs:
-  froxlor:
-    name: Froxlor (PHP ${{ matrix.php-versions }}, MySQL ${{ matrix.mysql-version }})
+  librepanel:
+    name: LibrePanel (PHP ${{ matrix.php-versions }}, MySQL ${{ matrix.mysql-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -33,7 +33,7 @@ jobs:
         uses: samin/mysql-action@v1.3
         with:
           mysql version: ${{ matrix.mysql-version }}
-          mysql database: 'froxlor010'
+          mysql database: 'librepanel010'
           mysql root password: 'fr0xl0r.TravisCI'
 
       - name: Wait for database
@@ -41,10 +41,10 @@ jobs:
 
       - name: Setup database
         run: |
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "CREATE USER 'froxlor010'@'%' IDENTIFIED BY 'fr0xl0r.TravisCI';"
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "GRANT ALL ON froxlor010.* TO 'froxlor010'@'%';"
-          php -r "echo include('install/froxlor.sql.php');" > /tmp/froxlor.sql
-          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI froxlor010 < /tmp/froxlor.sql
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "CREATE USER 'librepanel010'@'%' IDENTIFIED BY 'fr0xl0r.TravisCI';"
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI -e "GRANT ALL ON librepanel010.* TO 'librepanel010'@'%';"
+          php -r "echo include('install/librepanel.sql.php');" > /tmp/librepanel.sql
+          mysql -h 127.0.0.1 --protocol=TCP -u root -pfr0xl0r.TravisCI librepanel010 < /tmp/librepanel.sql
 
       - name: Run testing
         run: ant quick-build

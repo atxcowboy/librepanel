@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,28 +16,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Cron\System;
+namespace LibrePanel\Cron\System;
 
-use Froxlor\Cron\FroxlorCron;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Cron\LibrePanelCron;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 use PDO;
 
-class MailboxsizeCron extends FroxlorCron
+class MailboxsizeCron extends LibrePanelCron
 {
 
 	public static function run()
 	{
-		FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'calculating mailspace usage');
+		LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'calculating mailspace usage');
 
 		$maildirs_stmt = Database::query("
 			SELECT `id`, CONCAT(`homedir`, `maildir`) AS `maildirpath` FROM `" . TABLE_MAIL_USERS . "` ORDER BY `id`
@@ -55,7 +55,7 @@ class MailboxsizeCron extends FroxlorCron
 
 				// When quota is enabled and maildirsize file exists, use that to calculate size
 				if (Settings::Get('system.mail_quota_enabled') == 1 && file_exists($maildirsize)) {
-					FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_NOTICE, 'found maildirsize file in ' . $_maildir);
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'found maildirsize file in ' . $_maildir);
 					$file = file($maildirsize, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 					// Remove header
 					array_shift($file);
@@ -95,7 +95,7 @@ class MailboxsizeCron extends FroxlorCron
 					'id' => $maildir['id']
 				]);
 			} else {
-				FroxlorLogger::getInstanceOf()->logAction(FroxlorLogger::CRON_ACTION, LOG_WARNING, 'maildir ' . $_maildir . ' does not exist');
+				LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_WARNING, 'maildir ' . $_maildir . ' does not exist');
 			}
 		}
 	}

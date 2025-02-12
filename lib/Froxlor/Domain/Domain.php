@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Froxlor project.
- * Copyright (c) 2010 the Froxlor Team (see authors).
+ * This file is part of the LibrePanel project.
+ * Copyright (c) 2010 the LibrePanel Team (see authors).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,20 +16,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can also view it online at
- * https://files.froxlor.org/misc/COPYING.txt
+ * https://files.librepanel.org/misc/COPYING.txt
  *
  * @copyright  the authors
- * @author     Froxlor team <team@froxlor.org>
- * @license    https://files.froxlor.org/misc/COPYING.txt GPLv2
+ * @author     LibrePanel team <team@librepanel.org>
+ * @license    https://files.librepanel.org/misc/COPYING.txt GPLv2
  */
 
-namespace Froxlor\Domain;
+namespace LibrePanel\Domain;
 
-use Froxlor\Cron\Http\LetsEncrypt\AcmeSh;
-use Froxlor\Database\Database;
-use Froxlor\FileDir;
-use Froxlor\FroxlorLogger;
-use Froxlor\Settings;
+use LibrePanel\Cron\Http\LetsEncrypt\AcmeSh;
+use LibrePanel\Database\Database;
+use LibrePanel\FileDir;
+use LibrePanel\LibrePanelLogger;
+use LibrePanel\Settings;
 use PDO;
 
 class Domain
@@ -37,7 +37,7 @@ class Domain
 
 	/**
 	 * return all ip addresses associated with given domain,
-	 * returns all ips if domain-id = 0 (froxlor.vhost)
+	 * returns all ips if domain-id = 0 (librepanel.vhost)
 	 *
 	 * @param int $domain_id
 	 * @return array
@@ -56,7 +56,7 @@ class Domain
 				'domainid' => $domain_id
 			];
 		} else {
-			// assuming froxlor.vhost (id = 0)
+			// assuming librepanel.vhost (id = 0)
 			$sel_stmt = Database::prepare("
 				SELECT ip FROM `" . TABLE_PANEL_IPSANDPORTS . "`
 				GROUP BY ip
@@ -314,18 +314,18 @@ class Domain
 
 	/**
 	 * @param int $aliasDestinationDomainID
-	 * @param FroxlorLogger $log
+	 * @param LibrePanelLogger $log
 	 *
 	 * @return void
 	 * @throws \Exception
 	 */
 	public static function triggerLetsEncryptCSRForAliasDestinationDomain(
 		int           $aliasDestinationDomainID,
-		FroxlorLogger $log
+		LibrePanelLogger $log
 	) {
 		if ($aliasDestinationDomainID > 0) {
 			$log->logAction(
-				FroxlorLogger::ADM_ACTION,
+				LibrePanelLogger::ADM_ACTION,
 				LOG_INFO,
 				"LetsEncrypt CSR triggered for domain ID " . $aliasDestinationDomainID
 			);
@@ -348,7 +348,7 @@ class Domain
 	 */
 	public static function doLetsEncryptCleanUp(string $domainname): bool
 	{
-		// @ see \Froxlor\Cron\Http\LetsEncrypt\AcmeSh.php
+		// @ see \LibrePanel\Cron\Http\LetsEncrypt\AcmeSh.php
 		$acmesh = AcmeSh::getAcmeSh();
 		if (file_exists($acmesh)) {
 			$certificate_folder = AcmeSh::getWorkingDirFromEnv($domainname);

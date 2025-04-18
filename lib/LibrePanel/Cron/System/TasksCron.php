@@ -169,6 +169,11 @@ class TasksCron extends LibrePanelCron
 			if (Settings::Get('phpfpm.enabled') == 1) {
 				$websrv .= 'Fcgi';
 			}
+		} elseif (Settings::Get('system.webserver') == "caddy") {
+			$websrv = '\\LibrePanel\\Cron\\Http\\Caddy';
+			if (Settings::Get('phpfpm.enabled') == 1) {
+				$websrv .= 'Fcgi';
+			}
 		}
 
 		// get configuration-I/O object
@@ -344,7 +349,7 @@ class TasksCron extends LibrePanelCron
 				if (file_exists(dirname($logsdir)) && $logsdir != '/' && $logsdir != FileDir::makeCorrectDir(Settings::Get('system.logfiles_directory')) && substr($logsdir, 0, strlen(Settings::Get('system.logfiles_directory'))) == Settings::Get('system.logfiles_directory')) {
 					// build up wildcard for webX-{access,error}.log{*}
 					$logsdir .= '-*.log';
-					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' .FileDir::makeCorrectFile($logsdir));
+					LibrePanelLogger::getInstanceOf()->logAction(LibrePanelLogger::CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . FileDir::makeCorrectFile($logsdir));
 					FileDir::safe_exec('rm -f ' . FileDir::makeCorrectFile($logsdir));
 				}
 			}
@@ -445,3 +450,4 @@ class TasksCron extends LibrePanelCron
 		$antispam->writeConfigs();
 	}
 }
+

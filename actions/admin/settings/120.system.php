@@ -308,6 +308,41 @@ return [
 					'save_method' => 'storeSettingField',
 					'advanced_mode' => true
 				],
+				'system_webserver' => [
+					'label' => lng('serversettings.webserver'),
+					'settinggroup' => 'system',
+					'varname' => 'webserver',
+					'type' => 'select',
+					'select_var' => [
+						'apache2' => 'Apache',
+						'nginx'   => 'Nginx',
+						'caddy'   => 'Caddy'
+					],
+					'default' => 'apache2',
+					'save_method' => 'storeSettingField',
+					'requires_reconf' => ['http']
+				],
+				'system_caddyconf' => [
+					'label' => lng('serversettings.caddy_conf_dir'),
+					'settinggroup' => 'system',
+					'varname' => 'caddyconf',
+					'type' => 'text',
+					'string_type' => 'dir',
+					'default' => '/etc/caddy',
+					'save_method' => 'storeSettingField',
+					'requires_reconf' => ['http'],
+					'advanced_mode' => true
+				],
+				'system_caddyreload_command' => [
+					'label' => lng('serversettings.caddy_reload_command'),
+					'settinggroup' => 'system',
+					'varname' => 'caddyreload_command',
+					'type' => 'text',
+					'default' => 'systemctl reload caddy',
+					'save_method' => 'storeSettingField',
+					'requires_reconf' => ['http'],
+					'advanced_mode' => true
+				],
 			]
 		]
 	]

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>LibrePanel Example Scripts</title>
+</head>
+<body>
+    <h1>LibrePanel Example Scripts</h1>
+    <ul>
+        <li><a href="LibrePanelAPI.php">LibrePanelAPI.php</a> - PHP API client class</li>
+        <li><a href="list_functions.php">list_functions.php</a> - List available API functions</li>
+        <li><a href="create_customer.php">create_customer.php</a> - Create a customer via API</li>
+    </ul>
+
+    <h2>Caddy Integration Example</h2>
+    <p>Generate and reload Caddy virtual host configurations:</p>
+    <pre><code>php bin/librepanel-cli librepanel:cron tasks
+sudo systemctl reload caddy
+</code></pre>
+    <p>Configuration files will be placed in your Caddy config directory (default <code>/etc/caddy</code>).</p>
+</body>
+</html>

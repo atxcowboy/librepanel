@@ -24,122 +24,124 @@
  */
 
 return [
-	'groups' => [
-		'fcgid' => [
-			'title' => lng('admin.fcgid_settings'),
-			'icon' => 'fa-brands fa-php',
-			'websrv_avail' => [
-				'apache2',
-				'lighttpd'
-			],
-			'fields' => [
-				'system_mod_fcgid' => [
-					'label' => lng('serversettings.mod_fcgid'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'plausibility_check_method' => [
-						'\\LibrePanel\\Validate\\Check',
-						'checkFcgidPhpFpm'
-					],
-					'overview_option' => true,
-					'requires_reconf' => ['http', 'system:fcgid']
-				],
-				'system_mod_fcgid_configdir' => [
-					'label' => lng('serversettings.mod_fcgid.configdir'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_configdir',
-					'type' => 'text',
-					'string_type' => 'confdir',
-					'default' => '/var/www/php-fcgi-scripts/',
-					'plausibility_check_method' => [
-						'\\LibrePanel\\Validate\\Check',
-						'checkPathConflicts'
-					],
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['system:fcgid']
-				],
-				'system_mod_fcgid_tmpdir' => [
-					'label' => lng('serversettings.mod_fcgid.tmpdir'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_tmpdir',
-					'type' => 'text',
-					'string_type' => 'dir',
-					'default' => '/var/customers/tmp/',
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['http']
-				],
-				'system_mod_fcgid_peardir' => [
-					'label' => lng('serversettings.mod_fcgid.peardir'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_peardir',
-					'type' => 'text',
-					'string_type' => 'dir',
-					'string_delimiter' => ':',
-					'string_emptyallowed' => true,
-					'default' => '/usr/share/php/:/usr/share/php5/',
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_mod_fcgid_wrapper' => [
-					'label' => lng('serversettings.mod_fcgid.wrapper'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_wrapper',
-					'type' => 'select',
-					'select_var' => [
-						0 => 'ScriptAlias',
-						1 => 'FcgidWrapper'
-					],
-					'default' => 1,
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2'
-					],
-					'advanced_mode' => true
-				],
-				'system_mod_fcgid_starter' => [
-					'label' => lng('serversettings.mod_fcgid.starter'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_starter',
-					'type' => 'number',
-					'min' => 0,
-					'default' => 0,
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_mod_fcgid_maxrequests' => [
-					'label' => lng('serversettings.mod_fcgid.maxrequests'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_maxrequests',
-					'type' => 'number',
-					'default' => 250,
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_mod_fcgid_defaultini' => [
-					'label' => lng('serversettings.mod_fcgid.defaultini'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_defaultini',
-					'type' => 'select',
-					'default' => '1',
-					'option_options_method' => [
-						'\\LibrePanel\\Http\\PhpConfig',
-						'getPhpConfigs'
-					],
-					'save_method' => 'storeSettingField'
-				],
-				'system_mod_fcgid_idle_timeout' => [
-					'label' => lng('serversettings.mod_fcgid.idle_timeout'),
-					'settinggroup' => 'system',
-					'varname' => 'mod_fcgid_idle_timeout',
-					'type' => 'number',
-					'default' => 30,
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				]
-			]
-		]
-	]
+    'groups' => [
+        'fcgid' => [
+            'title'        => lng('admin.fcgid_settings'),
+            'icon'         => 'fa-brands fa-php',
+            'websrv_avail' => [
+                'apache2',
+                'lighttpd',
+                'caddy' // Added Caddy support here
+            ],
+            'fields'       => [
+                'system_mod_fcgid' => [
+                    'label'                      => lng('serversettings.mod_fcgid'),
+                    'settinggroup'               => 'system',
+                    'varname'                    => 'mod_fcgid',
+                    'type'                       => 'checkbox',
+                    'default'                    => false,
+                    'save_method'                => 'storeSettingField',
+                    'plausibility_check_method'  => [
+                        '\\LibrePanel\\Validate\\Check',
+                        'checkFcgidPhpFpm'
+                    ],
+                    'overview_option'            => true,
+                    'requires_reconf'            => ['http', 'system:fcgid']
+                ],
+                'system_mod_fcgid_configdir' => [
+                    'label'                      => lng('serversettings.mod_fcgid.configdir'),
+                    'settinggroup'               => 'system',
+                    'varname'                    => 'mod_fcgid_configdir',
+                    'type'                       => 'text',
+                    'string_type'                => 'confdir',
+                    'default'                    => '/var/www/php-fcgi-scripts/',
+                    'plausibility_check_method'  => [
+                        '\\LibrePanel\\Validate\\Check',
+                        'checkPathConflicts'
+                    ],
+                    'save_method'                => 'storeSettingField',
+                    'requires_reconf'            => ['system:fcgid']
+                ],
+                'system_mod_fcgid_tmpdir' => [
+                    'label'           => lng('serversettings.mod_fcgid.tmpdir'),
+                    'settinggroup'    => 'system',
+                    'varname'         => 'mod_fcgid_tmpdir',
+                    'type'            => 'text',
+                    'string_type'     => 'dir',
+                    'default'         => '/var/customers/tmp/',
+                    'save_method'     => 'storeSettingField',
+                    'requires_reconf' => ['http']
+                ],
+                'system_mod_fcgid_peardir' => [
+                    'label'                  => lng('serversettings.mod_fcgid.peardir'),
+                    'settinggroup'           => 'system',
+                    'varname'                => 'mod_fcgid_peardir',
+                    'type'                   => 'text',
+                    'string_type'            => 'dir',
+                    'string_delimiter'       => ':',
+                    'string_emptyallowed'    => true,
+                    'default'                => '/usr/share/php/:/usr/share/php5/',
+                    'save_method'            => 'storeSettingField',
+                    'advanced_mode'          => true
+                ],
+                'system_mod_fcgid_wrapper' => [
+                    'label'         => lng('serversettings.mod_fcgid.wrapper'),
+                    'settinggroup'  => 'system',
+                    'varname'       => 'mod_fcgid_wrapper',
+                    'type'          => 'select',
+                    'select_var'    => [
+                        0 => 'ScriptAlias',
+                        1 => 'FcgidWrapper'
+                    ],
+                    'default'       => 1,
+                    'save_method'   => 'storeSettingField',
+                    'websrv_avail'  => [
+                        'apache2'
+                    ],
+                    'advanced_mode' => true
+                ],
+                'system_mod_fcgid_starter' => [
+                    'label'         => lng('serversettings.mod_fcgid.starter'),
+                    'settinggroup'  => 'system',
+                    'varname'       => 'mod_fcgid_starter',
+                    'type'          => 'number',
+                    'min'           => 0,
+                    'default'       => 0,
+                    'save_method'   => 'storeSettingField',
+                    'advanced_mode' => true
+                ],
+                'system_mod_fcgid_maxrequests' => [
+                    'label'         => lng('serversettings.mod_fcgid.maxrequests'),
+                    'settinggroup'  => 'system',
+                    'varname'       => 'mod_fcgid_maxrequests',
+                    'type'          => 'number',
+                    'default'       => 250,
+                    'save_method'   => 'storeSettingField',
+                    'advanced_mode' => true
+                ],
+                'system_mod_fcgid_defaultini' => [
+                    'label'                     => lng('serversettings.mod_fcgid.defaultini'),
+                    'settinggroup'              => 'system',
+                    'varname'                   => 'mod_fcgid_defaultini',
+                    'type'                      => 'select',
+                    'default'                   => '1',
+                    'option_options_method'     => [
+                        '\\LibrePanel\\Http\\PhpConfig',
+                        'getPhpConfigs'
+                    ],
+                    'save_method'               => 'storeSettingField'
+                ],
+                'system_mod_fcgid_idle_timeout' => [
+                    'label'         => lng('serversettings.mod_fcgid.idle_timeout'),
+                    'settinggroup'  => 'system',
+                    'varname'       => 'mod_fcgid_idle_timeout',
+                    'type'          => 'number',
+                    'default'       => 30,
+                    'save_method'   => 'storeSettingField',
+                    'advanced_mode' => true
+                ]
+            ]
+        ]
+    ]
 ];
+

@@ -27,401 +27,276 @@ use LibrePanel\Settings;
 
 return [
 	'groups' => [
-		'webserver' => [
-			'title' => lng('admin.webserversettings'),
-			'icon' => 'fa-solid fa-server',
+		'librepanelvhost' => [
+			'title' => lng('admin.librepanelvhost') . (call_user_func([
+				'\LibrePanel\Settings\LibrePanelVhostSettings',
+				'hasVhostContainerEnabled'
+			]) == false ? lng('admin.novhostcontainer') : ''),
+			'icon' => 'fa-solid fa-wrench',
 			'fields' => [
-				'system_webserver' => [
-					'label' => lng('admin.webserver'),
+				/**
+				 * Webserver-Vhost
+				 */
+				'system_librepaneldirectlyviahostname' => [
+					'label'        => lng('serversettings.librepaneldirectlyviahostname'),
 					'settinggroup' => 'system',
-					'varname' => 'webserver',
-					'type' => 'select',
-					'default' => 'apache2',
-					'select_var' => [
-						'apache2' => 'Apache 2',
-						'lighttpd' => 'ligHTTPd',
-						'nginx' => 'Nginx'
-					],
-					'save_method' => 'storeSettingField',
-					'plausibility_check_method' => [
-						'\\LibrePanel\\Validate\\Check',
-						'checkPhpInterfaceSetting'
-					],
+					'varname'      => 'librepaneldirectlyviahostname',
+					'type'         => 'checkbox',
+					'default'      => true,
+					'save_method'  => 'storeSettingField'
+				],
+				'system_librepanelaliases' => [
+					'label'                 => lng('serversettings.librepanelaliases'),
+					'settinggroup'          => 'system',
+					'varname'               => 'librepanelaliases',
+					'type'                  => 'text',
+					'string_regexp'         => '/^(([a-z0-9\-\._]+, ?)*[a-z0-9\-\._]+)?$/i',
+					'string_emptyallowed'   => true,
+					'default'               => '',
+					'save_method'           => 'storeSettingClearCertificates',
+					'advanced_mode'         => true
+				],
+				/**
+				 * SSL / Let's Encrypt
+				 */
+				'system_le_librepanel_enabled' => [
+					'label'        => lng('serversettings.le_librepanel_enabled'),
+					'settinggroup' => 'system',
+					'varname'      => 'le_librepanel_enabled',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingClearCertificates',
+					'visible'      => Settings::Get('system.leenabled') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
 					'requires_reconf' => ['http']
 				],
-				'system_apache24' => [
-					'label' => lng('serversettings.apache_24'),
+				'system_le_librepanel_redirect' => [
+					'label'        => lng('serversettings.le_librepanel_redirect'),
 					'settinggroup' => 'system',
-					'varname' => 'apache24',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2'
-					]
+					'varname'      => 'le_librepanel_redirect',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true)
 				],
-				'system_apacheitksupport' => [
-					'label' => lng('serversettings.apache_itksupport'),
+				'system_hsts_maxage' => [
+					'label'        => lng('admin.domain_hsts_maxage'),
 					'settinggroup' => 'system',
-					'varname' => 'apacheitksupport',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'visible' => (Settings::Get('system.mod_fcgid') == 0 && Settings::Get('phpfpm.enabled') == 0),
-					'websrv_avail' => [
-						'apache2'
-					],
-					'advanced_mode' => true
+					'varname'      => 'hsts_maxage',
+					'type'         => 'number',
+					'min'          => 0,
+					'max'          => 94608000, // 3-years
+					'default'      => 10368000,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
+					'advanced_mode'=> true
 				],
-				'system_http2_support' => [
-					'label' => lng('serversettings.http2_support'),
+				'system_hsts_incsub' => [
+					'label'        => lng('admin.domain_hsts_incsub'),
 					'settinggroup' => 'system',
-					'varname' => 'http2_support',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					],
-					'visible' => Settings::Get('system.use_ssl')
+					'varname'      => 'hsts_incsub',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
+					'advanced_mode'=> true
 				],
-				'system_dhparams_file' => [
-					'label' => lng('serversettings.dhparams_file'),
+				'system_hsts_preload' => [
+					'label'        => lng('admin.domain_hsts_preload'),
 					'settinggroup' => 'system',
-					'varname' => 'dhparams_file',
-					'type' => 'text',
-					'string_type' => 'file',
-					'string_emptyallowed' => true,
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'visible' => Settings::Get('system.use_ssl'),
-					'advanced_mode' => true
+					'varname'      => 'hsts_preload',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
+					'advanced_mode'=> true
 				],
-				'system_httpuser' => [
-					'label' => lng('admin.webserver_user'),
+				'system_honorcipherorder' => [
+					'label'        => lng('admin.domain_honorcipherorder'),
 					'settinggroup' => 'system',
-					'varname' => 'httpuser',
-					'type' => 'text',
-					'default' => 'www-data',
-					'save_method' => 'storeSettingWebserverFcgidFpmUser'
+					'varname'      => 'honorcipherorder',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
+					'advanced_mode'=> true
 				],
-				'system_httpgroup' => [
-					'label' => lng('admin.webserver_group'),
+				'system_sessiontickets' => [
+					'label'        => lng('admin.domain_sessiontickets'),
 					'settinggroup' => 'system',
-					'varname' => 'httpgroup',
-					'type' => 'text',
-					'default' => 'www-data',
-					'save_method' => 'storeSettingField'
+					'varname'      => 'sessiontickets',
+					'type'         => 'checkbox',
+					'default'      => true,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.use_ssl') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					], true),
+					'advanced_mode'=> true
 				],
-				'system_apacheconf_vhost' => [
-					'label' => lng('serversettings.apacheconf_vhost'),
+				/**
+				 * FCGID (Remains Apache‑specific)
+				 */
+				'system_mod_fcgid_ownvhost' => [
+					'label'        => lng('serversettings.mod_fcgid_ownvhost'),
 					'settinggroup' => 'system',
-					'varname' => 'apacheconf_vhost',
-					'type' => 'text',
-					'string_type' => 'filedir',
-					'default' => '/etc/apache2/sites-enabled/',
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['http']
-				],
-				'system_apacheconf_diroptions' => [
-					'label' => lng('serversettings.apacheconf_diroptions'),
-					'settinggroup' => 'system',
-					'varname' => 'apacheconf_diroptions',
-					'type' => 'text',
-					'string_type' => 'filedir',
-					'default' => '/etc/apache2/sites-enabled/',
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['http']
-				],
-				'system_apacheconf_htpasswddir' => [
-					'label' => lng('serversettings.apacheconf_htpasswddir'),
-					'settinggroup' => 'system',
-					'varname' => 'apacheconf_htpasswddir',
-					'type' => 'text',
-					'string_type' => 'confdir',
-					'default' => '/etc/apache2/htpasswd/',
-					'save_method' => 'storeSettingField'
-				],
-				'system_logfiles_directory' => [
-					'label' => lng('serversettings.logfiles_directory'),
-					'settinggroup' => 'system',
-					'varname' => 'logfiles_directory',
-					'type' => 'text',
-					'string_type' => 'dir',
-					'default' => '/var/customers/logs/',
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['http']
-				],
-				'system_logfiles_script' => [
-					'label' => lng('serversettings.logfiles_script'),
-					'settinggroup' => 'system',
-					'varname' => 'logfiles_script',
-					'type' => 'text',
-					'default' => '',
-					'save_method' => 'storeSettingField',
+					'varname'      => 'mod_fcgid_ownvhost',
+					'type'         => 'checkbox',
+					'default'      => true,
+					'save_method'  => 'storeSettingField',
 					'websrv_avail' => [
 						'apache2'
 					],
-					'advanced_mode' => true
+					'visible'      => Settings::Get('system.mod_fcgid') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:fcgid']
 				],
-				'system_logfiles_piped' => [
-					'label' => lng('serversettings.logfiles_piped'),
+				'system_mod_fcgid_httpuser' => [
+					'label'        => lng('admin.mod_fcgid_user'),
 					'settinggroup' => 'system',
-					'varname' => 'logfiles_piped',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
+					'varname'      => 'mod_fcgid_httpuser',
+					'type'         => 'text',
+					'default'      => 'librepanellocal',
+					'string_emptyallowed' => false,
+					'save_method'  => 'storeSettingWebserverFcgidFpmUser',
 					'websrv_avail' => [
 						'apache2'
 					],
-					'advanced_mode' => true
+					'visible'      => Settings::Get('system.mod_fcgid') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:fcgid']
 				],
-				'system_logfiles_format' => [
-					'label' => lng('serversettings.logfiles_format'),
+				'system_mod_fcgid_httpgroup' => [
+					'label'        => lng('admin.mod_fcgid_group'),
 					'settinggroup' => 'system',
-					'varname' => 'logfiles_format',
-					'type' => (strpos(Settings::Get('system.logfiles_format'), '"') !== false ? 'textarea' : 'text'),
-					'string_regexp' => '/^[^\0\r\n<>]*$/i',
-					'default' => '',
-					'string_emptyallowed' => true,
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					],
-					'visible' => Settings::Get('system.traffictool') != 'webalizer',
-					'advanced_mode' => true
-				],
-				'system_logfiles_type' => [
-					'label' => lng('serversettings.logfiles_type'),
-					'settinggroup' => 'system',
-					'varname' => 'logfiles_type',
-					'type' => 'select',
-					'default' => '1',
-					'select_var' => [
-						'1' => 'combined',
-						'2' => 'vhost_combined'
-					],
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2'
-					]
-				],
-				'system_errorlog_level' => [
-					'label' => lng('serversettings.errorlog_level'),
-					'settinggroup' => 'system',
-					'varname' => 'errorlog_level',
-					'type' => 'select',
-					'default' => (Settings::Get('system.webserver') == 'nginx' ? 'error' : 'warn'),
-					'select_var' => [
-						'emerg' => 'emerg',
-						'alert' => 'alert',
-						'crit' => 'crit',
-						'error' => 'error',
-						'warn' => 'warn',
-						'notice' => 'notice',
-						'info' => 'info',
-						'debug' => 'debug'
-					],
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					]
-				],
-				'system_customer_ssl_path' => [
-					'label' => lng('serversettings.customerssl_directory'),
-					'settinggroup' => 'system',
-					'varname' => 'customer_ssl_path',
-					'type' => 'text',
-					'string_type' => 'confdir',
-					'default' => '/etc/ssl/librepanel-custom/',
-					'save_method' => 'storeSettingField'
-				],
-				'system_phpappendopenbasedir' => [
-					'label' => lng('serversettings.phpappendopenbasedir'),
-					'settinggroup' => 'system',
-					'varname' => 'phpappendopenbasedir',
-					'type' => 'text',
-					'string_emptyallowed' => true,
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_deactivateddocroot' => [
-					'label' => lng('serversettings.deactivateddocroot'),
-					'settinggroup' => 'system',
-					'varname' => 'deactivateddocroot',
-					'type' => 'text',
-					'string_type' => 'dir',
-					'string_emptyallowed' => true,
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'requires_reconf' => ['http']
-				],
-				'system_default_vhostconf' => [
-					'label' => lng('serversettings.default_vhostconf'),
-					'settinggroup' => 'system',
-					'varname' => 'default_vhostconf',
-					'type' => 'textarea',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_default_sslvhostconf' => [
-					'label' => lng('serversettings.default_sslvhostconf'),
-					'settinggroup' => 'system',
-					'varname' => 'default_sslvhostconf',
-					'type' => 'textarea',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'visible' => Settings::Get('system.use_ssl') == 1,
-					'advanced_mode' => true
-				],
-				'system_include_default_vhostconf' => [
-					'label' => lng('serversettings.includedefault_sslvhostconf'),
-					'settinggroup' => 'system',
-					'varname' => 'include_default_vhostconf',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'system_apacheglobaldiropt' => [
-					'label' => lng('serversettings.apache_globaldiropt'),
-					'settinggroup' => 'system',
-					'varname' => 'apacheglobaldiropt',
-					'type' => 'textarea',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'visible' => (Settings::Get('system.mod_fcgid') == 0 && Settings::Get('phpfpm.enabled') == 0),
+					'varname'      => 'mod_fcgid_httpgroup',
+					'type'         => 'text',
+					'default'      => 'librepanellocal',
+					'save_method'  => 'storeSettingField',
+					'string_emptyallowed' => false,
 					'websrv_avail' => [
 						'apache2'
 					],
-					'advanced_mode' => true
+					'visible'      => Settings::Get('system.mod_fcgid') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:fcgid']
 				],
-				'system_apachereload_command' => [
-					'label' => lng('serversettings.apachereload_command'),
+				'system_mod_fcgid_defaultini_ownvhost' => [
+					'label'        => lng('serversettings.mod_fcgid.defaultini_ownvhost'),
 					'settinggroup' => 'system',
-					'varname' => 'apachereload_command',
-					'type' => 'text',
-					'string_regexp' => '/^[a-z0-9\/\._\- ]+$/i',
-					'default' => '/etc/init.d/apache2 reload',
-					'save_method' => 'storeSettingField',
-					'required_otp' => true
+					'varname'      => 'mod_fcgid_defaultini_ownvhost',
+					'type'         => 'select',
+					'default'      => '2',
+					'option_options_method' => [
+						'\\LibrePanel\\Http\\PhpConfig',
+						'getPhpConfigs'
+					],
+					'save_method'  => 'storeSettingField',
+					'websrv_avail' => [
+						'apache2'
+					],
+					'visible'      => Settings::Get('system.mod_fcgid') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					])
 				],
-				'system_phpreload_command' => [
-					'label' => lng('serversettings.phpreload_command'),
+				/**
+				 * php-fpm
+				 */
+				'phpfpm_enabled_ownvhost' => [
+					'label'        => lng('phpfpm.ownvhost'),
+					'settinggroup' => 'phpfpm',
+					'varname'      => 'enabled_ownvhost',
+					'type'         => 'checkbox',
+					'default'      => true,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('phpfpm.enabled') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:php-fpm']
+				],
+				'phpfpm_vhost_httpuser' => [
+					'label'        => lng('phpfpm.vhost_httpuser'),
+					'settinggroup' => 'phpfpm',
+					'varname'      => 'vhost_httpuser',
+					'type'         => 'text',
+					'default'      => 'librepanellocal',
+					'string_emptyallowed' => false,
+					'save_method'  => 'storeSettingWebserverFcgidFpmUser',
+					'visible'      => Settings::Get('phpfpm.enabled') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:php-fpm']
+				],
+				'phpfpm_vhost_httpgroup' => [
+					'label'        => lng('phpfpm.vhost_httpgroup'),
+					'settinggroup' => 'phpfpm',
+					'varname'      => 'vhost_httpgroup',
+					'type'         => 'text',
+					'default'      => 'librepanellocal',
+					'string_emptyallowed' => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('phpfpm.enabled') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					]),
+					'requires_reconf' => ['system:php-fpm']
+				],
+				'phpfpm_vhost_defaultini' => [
+					'label'        => lng('serversettings.mod_fcgid.defaultini_ownvhost'),
+					'settinggroup' => 'phpfpm',
+					'varname'      => 'vhost_defaultini',
+					'type'         => 'select',
+					'default'      => '2',
+					'option_options_method' => [
+						'\\LibrePanel\\Http\\PhpConfig',
+						'getPhpConfigs'
+					],
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('phpfpm.enabled') && call_user_func([
+						'\LibrePanel\Settings\LibrePanelVhostSettings',
+						'hasVhostContainerEnabled'
+					])
+				],
+				/**
+				 * DNS
+				 */
+				'system_dns_createhostnameentry' => [
+					'label'        => lng('serversettings.dns_createhostnameentry'),
 					'settinggroup' => 'system',
-					'varname' => 'phpreload_command',
-					'type' => 'text',
-					'string_regexp' => '/^[a-z0-9\/\._\- ]+$/i',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'nginx'
-					],
-					'required_otp' => true
-				],
-				'system_nginx_php_backend' => [
-					'label' => lng('serversettings.nginx_php_backend'),
-					'settinggroup' => 'system',
-					'varname' => 'nginx_php_backend',
-					'type' => 'text',
-					'default' => '127.0.0.1:8888',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'nginx'
-					]
-				],
-				'nginx_fastcgiparams' => [
-					'label' => lng('serversettings.nginx_fastcgiparams'),
-					'settinggroup' => 'nginx',
-					'varname' => 'fastcgiparams',
-					'type' => 'text',
-					'string_type' => 'file',
-					'default' => '/etc/nginx/fastcgi_params',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'nginx'
-					]
-				],
-				'defaultwebsrverrhandler_enabled' => [
-					'label' => lng('serversettings.defaultwebsrverrhandler_enabled'),
-					'settinggroup' => 'defaultwebsrverrhandler',
-					'varname' => 'enabled',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'defaultwebsrverrhandler_err401' => [
-					'label' => lng('serversettings.defaultwebsrverrhandler_err401'),
-					'settinggroup' => 'defaultwebsrverrhandler',
-					'varname' => 'err401',
-					'type' => 'text',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					],
-					'advanced_mode' => true
-				],
-				'defaultwebsrverrhandler_err403' => [
-					'label' => lng('serversettings.defaultwebsrverrhandler_err403'),
-					'settinggroup' => 'defaultwebsrverrhandler',
-					'varname' => 'err403',
-					'type' => 'text',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					],
-					'advanced_mode' => true
-				],
-				'defaultwebsrverrhandler_err404' => [
-					'label' => lng('serversettings.defaultwebsrverrhandler_err404'),
-					'settinggroup' => 'defaultwebsrverrhandler',
-					'varname' => 'err404',
-					'type' => 'text',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'advanced_mode' => true
-				],
-				'defaultwebsrverrhandler_err500' => [
-					'label' => lng('serversettings.defaultwebsrverrhandler_err500'),
-					'settinggroup' => 'defaultwebsrverrhandler',
-					'varname' => 'err500',
-					'type' => 'text',
-					'default' => '',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2',
-						'nginx'
-					],
-					'advanced_mode' => true
-				],
-				'customredirect_enabled' => [
-					'label' => lng('serversettings.customredirect_enabled'),
-					'settinggroup' => 'customredirect',
-					'varname' => 'enabled',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField'
-				],
-				'customredirect_default' => [
-					'label' => lng('serversettings.customredirect_default'),
-					'settinggroup' => 'customredirect',
-					'varname' => 'default',
-					'type' => 'select',
-					'default' => '1',
-					'option_options_method' => ['\\LibrePanel\\Domain\\Domain', 'getRedirectCodes'],
-					'save_method' => 'storeSettingField'
+					'varname'      => 'dns_createhostnameentry',
+					'type'         => 'checkbox',
+					'default'      => false,
+					'save_method'  => 'storeSettingField',
+					'visible'      => Settings::Get('system.bind_enable')
 				]
 			]
 		]
 	]
 ];
+

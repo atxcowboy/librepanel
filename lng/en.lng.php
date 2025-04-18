@@ -811,7 +811,7 @@ return [
 		'email_only' => 'Email only',
 	],
 	'emails' => [
-		'description' => 'Here you can create and change your email addresses.<br />An account is like your letterbox in front of your house. If someone sends you an email, it will be dropped into the account.<br /><br />To download your emails use the following settings in your mailprogram: (The data in <i>italics</i> has to be changed to the equivalents you typed in!)<br />Hostname: <b><i>domainname</i></b><br />Username: <b><i>account name / e-mail address</i></b><br />password: <b><i>the password you\'ve chosen</i></b>',
+		'description' => 'Here you can create and change your email addresses.<br />An account is like your letterbox in front of your house. If someone sends you an email, it will be dropped into the account.<br /><br />To download your emails use the following settings in your mailprogram: (The data in <i>italics</i> have to be changed into the equivalents you typed in!)<br />Hostname: <b><i>domainname</i></b><br />Username: <b><i>account name / e-mail address</i></b><br />password: <b><i>the password you\'ve chosen</i></b>',
 		'emailaddress' => 'Email-address',
 		'emails_add' => 'Create email-address',
 		'emails_edit' => 'Edit email-address',
@@ -1528,6 +1528,10 @@ Yours sincerely, your administrator',
 		'apachereload_command' => [
 			'title' => 'Webserver reload command',
 			'description' => 'What\'s the webserver command to reload configfiles?',
+		],
+		'caddyreload_command' => [
+			'title' => 'Caddy reload command',
+			'description' => 'What\'s the Caddy command to reload configfiles?',
 		],
 		'bindenable' => [
 			'title' => 'Enable Nameserver',

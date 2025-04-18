@@ -245,6 +245,12 @@ class ConfigIO
 			$configdirs[] = FileDir::makeCorrectDir($dir);
 		}
 
+		// include Caddy config directory
+		$dir = $this->getFile('system', 'caddyconf');
+		if ($dir !== false) {
+			$configdirs[] = FileDir::makeCorrectDir($dir);
+		}
+
 		// file pattern
 		$pattern = "/^([0-9]){2}_(librepanel|syscp)_(.+)\.conf$/";
 

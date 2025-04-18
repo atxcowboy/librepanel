@@ -38,6 +38,29 @@ Issues and discussions can be found at our GitHub repository:
 
 *(Community forums, a dedicated Discord, or other support channels may be added as LibrePanel grows.)*
 
+## Caddy Web Server Support
+
+LibrePanel supports Caddy as an alternative to Apache or Nginx. To enable and configure Caddy:
+
+1. In **System > Settings**, set **Webserver** to `Caddy`.
+2. (Optional) Adjust **Caddy config directory** (`system_caddyconf`, default `/etc/caddy`).
+3. (Optional) Adjust **Caddy reload command** (`system_caddyreload_command`, default `systemctl reload caddy`).
+4. Ensure **PHP-FPM** is installed and enabled; Caddy will automatically use the socket defined in PHP-FPM settings.
+5. Cron jobs will generate one `.caddy.conf` file per domain under your Caddy config directory.
+
+Each Caddy vhost file includes:
+
+- `tls <cert_file> <key_file>` for SSL/TLS
+- `root * <documentroot>` to serve files
+- `php_fastcgi unix/<fpm_socket>` when PHP-FPM is enabled
+- `file_server` to enable static file serving
+
+After configuration changes, run:
+```bash
+php bin/librepanel-cli librepanel:cron tasks
+```
+to rebuild and reload your Caddy configs.
+
 ## License
 
 LibrePanel is open-source software. See the [COPYING](COPYING) file for license details.
@@ -55,4 +78,3 @@ LibrePanel is open-source software. See the [COPYING](COPYING) file for license 
 ## Contributing
 
 We welcome contributions! Check out our [CONTRIBUTING.md](.github/CONTRIBUTING.md) (to be updated) or open an issue/PR on GitHub.
-

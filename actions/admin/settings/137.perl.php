@@ -24,57 +24,60 @@
  */
 
 return [
-	'groups' => [
-		'perl' => [
-			'title' => lng('admin.perl_settings'),
-			'icon' => 'fa-solid fa-code',
-			'fields' => [
-				'system_perl_path' => [
-					'label' => lng('serversettings.perl_path'),
-					'settinggroup' => 'system',
-					'varname' => 'perl_path',
-					'type' => 'text',
-					'default' => '/usr/bin/perl',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'lighttpd'
-					]
-				],
-				'perl_suexecworkaround' => [
-					'label' => lng('serversettings.perl.suexecworkaround'),
-					'settinggroup' => 'perl',
-					'varname' => 'suexecworkaround',
-					'type' => 'checkbox',
-					'default' => false,
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2'
-					]
-				],
-				'perl_suexecpath' => [
-					'label' => lng('serversettings.perl.suexeccgipath'),
-					'settinggroup' => 'perl',
-					'varname' => 'suexecpath',
-					'type' => 'text',
-					'string_type' => 'dir',
-					'default' => '/var/www/cgi-bin/',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'apache2'
-					]
-				],
-				'serversettings_perl_server' => [
-					'label' => lng('serversettings.perl_server'),
-					'settinggroup' => 'serversettings',
-					'varname' => 'perl_server',
-					'type' => 'text',
-					'default' => 'unix:/var/run/nginx/cgiwrap-dispatch.sock',
-					'save_method' => 'storeSettingField',
-					'websrv_avail' => [
-						'nginx'
-					]
-				]
-			]
-		]
-	]
+    'groups' => [
+        'perl' => [
+            'title' => lng('admin.perl_settings'),
+            'icon'  => 'fa-solid fa-code',
+            'fields' => [
+                'system_perl_path' => [
+                    'label'         => lng('serversettings.perl_path'),
+                    'settinggroup'  => 'system',
+                    'varname'       => 'perl_path',
+                    'type'          => 'text',
+                    'default'       => '/usr/bin/perl',
+                    'save_method'   => 'storeSettingField',
+                    'websrv_avail'  => [
+                        'lighttpd',
+                        'caddy' // Added Caddy support here
+                    ]
+                ],
+                'perl_suexecworkaround' => [
+                    'label'         => lng('serversettings.perl.suexecworkaround'),
+                    'settinggroup'  => 'perl',
+                    'varname'       => 'suexecworkaround',
+                    'type'          => 'checkbox',
+                    'default'       => false,
+                    'save_method'   => 'storeSettingField',
+                    'websrv_avail'  => [
+                        'apache2'
+                    ]
+                ],
+                'perl_suexecpath' => [
+                    'label'         => lng('serversettings.perl.suexeccgipath'),
+                    'settinggroup'  => 'perl',
+                    'varname'       => 'suexecpath',
+                    'type'          => 'text',
+                    'string_type'   => 'dir',
+                    'default'       => '/var/www/cgi-bin/',
+                    'save_method'   => 'storeSettingField',
+                    'websrv_avail'  => [
+                        'apache2'
+                    ]
+                ],
+                'serversettings_perl_server' => [
+                    'label'         => lng('serversettings.perl_server'),
+                    'settinggroup'  => 'serversettings',
+                    'varname'       => 'perl_server',
+                    'type'          => 'text',
+                    'default'       => 'unix:/var/run/nginx/cgiwrap-dispatch.sock',
+                    'save_method'   => 'storeSettingField',
+                    'websrv_avail'  => [
+                        'nginx',
+                        'caddy' // Added Caddy support here
+                    ]
+                ]
+            ]
+        ]
+    ]
 ];
+

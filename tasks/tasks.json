@@ -1,0 +1,77 @@
+{
+    "version": "1.0.0",
+    "tasks": [
+        {
+            "id": "1",
+            "title": "Rebranding Froxlor to LibrePanel",
+            "description": "Complete rebranding of Froxlor to LibrePanel",
+            "status": "pending",
+            "subtasks": [
+                {
+                    "id": "1.1",
+                    "title": "Update Branding References",
+                    "description": "Replace all Froxlor references with LibrePanel in codebase",
+                    "status": "done"
+                },
+                {
+                    "id": "1.2",
+                    "title": "Update Documentation",
+                    "description": "Update all documentation files to reflect LibrePanel branding",
+                    "status": "done"
+                },
+                {
+                    "id": "1.3",
+                    "title": "Update UI Elements",
+                    "description": "Update all UI elements, logos, and branding in the web interface",
+                    "status": "done"
+                },
+                {
+                    "id": "1.4",
+                    "title": "Update Configuration Files",
+                    "description": "Update all configuration files to use LibrePanel namespace",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "title": "Caddy Webserver Support",
+            "description": "Complete implementation of Caddy webserver support",
+            "status": "pending",
+            "subtasks": [
+                {
+                    "id": "2.1",
+                    "title": "Complete Caddy Configuration",
+                    "description": "Implement complete Caddy configuration system",
+                    "status": "done",
+                    "dependencies": "1.4"
+                },
+                {
+                    "id": "2.2",
+                    "title": "SSL/TLS Support",
+                    "description": "Implement SSL/TLS certificate management for Caddy",
+                    "status": "done"
+                },
+                {
+                    "id": "2.3",
+                    "title": "Virtual Host Management",
+                    "description": "Implement virtual host management for Caddy",
+                    "status": "done"
+                },
+                {
+                    "id": "2.4",
+                    "title": "PHP-FPM Integration",
+                    "description": "Complete PHP-FPM integration with Caddy",
+                    "status": "done"
+                },
+                {
+                    "id": "2.5",
+                    "title": "Testing and Validation",
+                    "description": "Test Caddy implementation thoroughly",
+                    "status": "done",
+                    "dependencies": "2.1,2.2,2.3,2.4"
+                }
+            ]
+        }
+    ]
+}

@@ -102,8 +102,8 @@ class DomainSSL
 				$ssl_files['ssl_ca_file'] = FileDir::makeCorrectFile($sslcertpath . '/' . ($parent_certificate ? $dom_certs['domain'] : $domain['domain']) . '_CA.pem');
 			}
 			if ($dom_certs['ssl_cert_chainfile'] != '') {
-				if (Settings::Get('system.webserver') == 'nginx') {
-					// put ca.crt in my.crt, as nginx does not support a separate chain file.
+				// For nginx and caddy, combine the chain with the certificate
+				if (Settings::Get('system.webserver') == 'nginx' || Settings::Get('system.webserver') == 'caddy') {
 					$dom_certs['ssl_cert_file'] = trim($dom_certs['ssl_cert_file']) . "\n" . trim($dom_certs['ssl_cert_chainfile']) . "\n";
 				} else {
 					$ssl_files['ssl_cert_chainfile'] = FileDir::makeCorrectFile($sslcertpath . '/' . ($parent_certificate ? $dom_certs['domain'] : $domain['domain']) . '_chain.pem');
@@ -142,3 +142,4 @@ class DomainSSL
 		return openssl_x509_check_private_key($dom_certs['ssl_cert_file'], $dom_certs['ssl_key_file']);
 	}
 }
+

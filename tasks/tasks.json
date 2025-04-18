@@ -3,14 +3,14 @@
     "tasks": [
         {
             "id": "1",
-            "title": "Rebranding Froxlor to LibrePanel",
-            "description": "Complete rebranding of Froxlor to LibrePanel",
+            "title": "Rebranding LibrePanel to LibrePanel",
+            "description": "Complete rebranding of LibrePanel to LibrePanel",
             "status": "pending",
             "subtasks": [
                 {
                     "id": "1.1",
                     "title": "Update Branding References",
-                    "description": "Replace all Froxlor references with LibrePanel in codebase",
+                    "description": "Replace all LibrePanel references with LibrePanel in codebase",
                     "status": "done"
                 },
                 {

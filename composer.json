@@ -55,7 +55,8 @@
 		"symfony/console": "^5.4",
 		"pear/net_dns2": "^1.5",
 		"amnuts/opcache-gui": "^3.4",
-		"league/commonmark": "^2.4"
+		"league/commonmark": "^2.4",
+		"algo26-matthias/idna-convert": "^3.2"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^9",

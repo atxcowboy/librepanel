@@ -20,7 +20,7 @@ class MysqlServerTest extends TestCase
 
 		$data = [
 			'mysql_host' => '192.168.1.254',
-			'privileged_user' => 'froxroot',
+			'privileged_user' => 'libreroot',
 			'privileged_password' => 'p4ssw0rd',
 			'description' => 'Second mysql-server',
 			'test_connection' => false

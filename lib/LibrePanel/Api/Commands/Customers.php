@@ -470,7 +470,7 @@ class Customers extends ApiCommand implements ResourceEntity
 						$login_blacklist = [
 							'root',
 							'admin',
-							'froxroot',
+							'libreroot',
 							'librepanel',
 							$sqldata['user'],
 							$sqldata['db'],

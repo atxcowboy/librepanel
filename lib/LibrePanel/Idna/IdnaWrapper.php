@@ -25,7 +25,8 @@
 
 namespace LibrePanel\Idna;
 
-use Algo26\IdnaConvert\IdnaConvert;
+use Algo26\IdnaConvert\ToIdn;
+use Algo26\IdnaConvert\ToUnicode;
 use InvalidArgumentException;
 
 /**
@@ -37,20 +38,22 @@ class IdnaWrapper
 {
 
 	/**
-	 * idna converter we use
+	 * idna converters we use
 	 *
 	 * @var object
 	 */
-	private $idna_converter;
+	private $to_idn;
+	private $to_unicode;
 
 	/**
 	 * Class constructor.
-	 * Creates a new idna converter
+	 * Creates a new idna converters
 	 */
 	public function __construct()
 	{
-		// Instantiate it
-		$this->idna_converter = new IdnaConvert();
+		// Instantiate converters
+		$this->to_idn = new ToIdn();
+		$this->to_unicode = new ToUnicode();
 	}
 
 	/**
@@ -66,7 +69,7 @@ class IdnaWrapper
 	{
 		$to_encode = $this->isUtf8($to_encode) ? $to_encode : mb_convert_encoding($to_encode, 'UTF-8');
 		try {
-			return $this->idna_converter->encode($to_encode);
+			return $this->to_idn->convert($to_encode);
 		} catch (InvalidArgumentException $iae) {
 			if ($iae->getCode() == 100) {
 				return $to_encode;
@@ -128,6 +131,6 @@ class IdnaWrapper
 	 */
 	public function decode(string $to_decode): string
 	{
-		return $this->idna_converter->decode($to_decode);
+		return $this->to_unicode->convert($to_decode);
 	}
 }

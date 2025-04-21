@@ -220,6 +220,7 @@ class Domains extends ApiCommand implements ResourceEntity
 			$honorcipherorder = $this->getBoolParam('honorcipherorder', true, 0);
 			$sessiontickets = $this->getBoolParam('sessiontickets', true, 1);
 			$override_tls = $this->getBoolParam('override_tls', true, 0);
+			$sslenabled = $this->getBoolParam('sslenabled', true, 1);
 			$p_ssl_protocols = $this->getParam('ssl_protocols', true, explode(',', Settings::Get('system.ssl_protocols')));
 			$ssl_cipher_list = $this->getParam('ssl_cipher_list', true, Settings::Get('system.ssl_cipher_list'));
 			$tlsv13_cipher_list = $this->getParam('tlsv13_cipher_list', true, Settings::Get('system.tlsv13_cipher_list'));
@@ -1026,7 +1027,7 @@ class Domains extends ApiCommand implements ResourceEntity
 					AND (`subdomains_used` + :subdomains <= `subdomains` OR `subdomains` = '-1' )
 					AND (`emails_used` + :emails <= `emails` OR `emails` = '-1' )
 					AND (`email_forwarders_used` + :forwarders <= `email_forwarders` OR `email_forwarders` = '-1' )
-					AND (`email_accounts_used` + :accounts <= `email_accounts` OR `email_accounts` = '-1' ) " . ($this->getUserDetail('customers_see_all') ? '' : " AND `adminid` = :adminid");
+					AND (`email_accounts_used` + :accounts <= `email_accounts` OR `email_accounts` = '-1' ) " . ($this->getUserDetail('customers_see_all') ? '' : " AND `adminid` = :adminid"));
 				$params = [
 					'customerid' => $customerid,
 					'subdomains' => $subdomains,

@@ -66,7 +66,7 @@ return [
 						'placeholder' => lng('mysql.privileged_user'),
 						'type' => 'text',
 						'mandatory' => true,
-						'value' => old('mysql_root_user', 'froxroot', 'installation'),
+						'value' => old('mysql_root_user', 'libreroot', 'installation'),
 					],
 					'mysql_root_pass' => [
 						'label' => lng('mysql.privileged_passwd'),
